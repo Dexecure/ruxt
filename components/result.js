@@ -95,51 +95,52 @@ class ResultComponent extends React.Component {
                 return { options: json };
             });
     }
-    handleUpdateNumbers(url, device, connection) {
+    async handleUpdateNumbers(url, device, connection) {
         this.setState({
             loading: true,
         });
         console.log("loading!");
-        // response = await fetch(`http://54.234.121.156/content`, {
-        //     method: "post",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         'origin': url,
-        //         'device': device,
-        //         'connection': connection
-        //     }),
-        // });
-        var responseJSON = {
-            "bam": {
-                "fcp": {
-                    "1": 0.47369999999999995,
-                    "2": 0.7875,
-                    "3": 0.8946,
-                    "4": 0.9372,
-                    "5": 0.9563999999999999,
-                    "6": 0.9672,
-                    "7": 0.9742,
-                    "8": 0.9797,
-                    "9": 0.9832000000000001,
-                    "10": 0.9858
-                },
-                "onload": {
-                    "1": 0.0625874825034993,
-                    "2": 0.27844431113777246,
-                    "3": 0.48040391921615677,
-                    "4": 0.626874625074985,
-                    "5": 0.7245550889822036,
-                    "6": 0.7895420915816838,
-                    "7": 0.8348330333933213,
-                    "8": 0.8674265146970606,
-                    "9": 0.8918216356728655,
-                    "10": 0.9111177764447111
-                }
-            }
-        };
-        // responseJSON = response.json();
+        response = await fetch(`http://54.234.121.156/content`, {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                'origin': url,
+                'device': device,
+                'connection': connection
+            }),
+        });
+        console.log("finished fetching");
+        // var responseJSON = {
+        //     "bam": {
+        //         "fcp": {
+        //             "1": 0.47369999999999995,
+        //             "2": 0.7875,
+        //             "3": 0.8946,
+        //             "4": 0.9372,
+        //             "5": 0.9563999999999999,
+        //             "6": 0.9672,
+        //             "7": 0.9742,
+        //             "8": 0.9797,
+        //             "9": 0.9832000000000001,
+        //             "10": 0.9858
+        //         },
+        //         "onload": {
+        //             "1": 0.0625874825034993,
+        //             "2": 0.27844431113777246,
+        //             "3": 0.48040391921615677,
+        //             "4": 0.626874625074985,
+        //             "5": 0.7245550889822036,
+        //             "6": 0.7895420915816838,
+        //             "7": 0.8348330333933213,
+        //             "8": 0.8674265146970606,
+        //             "9": 0.8918216356728655,
+        //             "10": 0.9111177764447111
+        //         }
+        //     }
+        // };
+        responseJSON = await response.json();
         this.setState({
             fcp: responseJSON.bam.fcp,
             onload: responseJSON.bam.onload,
@@ -249,7 +250,7 @@ class ResultComponent extends React.Component {
                             FCP Probability
                         </span>
                         <span className="table__content">
-                            {((this.state.fcp === null) || (this.state.time=="0")) ? 0 
+                            {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0 
                                 : this.state.fcp[this.state.time].toFixed(4)}
                         </span>
                     </div>
@@ -258,7 +259,7 @@ class ResultComponent extends React.Component {
                             Onload Probability
                         </span>
                         <span className="table__content">
-                            {((this.state.onload === null) || (this.state.time == "0")) ? 0
+                            {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0
                                 : this.state.onload[this.state.time].toFixed(4)}
                         </span>
                     </div>
