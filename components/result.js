@@ -160,7 +160,7 @@ class ResultComponent extends React.Component {
         var onload_prob = onload[time];
         var onloadHumanCount = Math.floor(onload_prob*humanCount);
         var fcpHumanCount = Math.floor((fcp_prob-onload_prob)*humanCount);
-        var loadingHumanCount = humanCount-onloadHumanCount-fcpHumanCount;
+        var loadingHumanCount = Math.floor(humanCount - fcp_prob*humanCount);
         this.setState({
             onloadHumanCount: onloadHumanCount,
             fcpHumanCount: fcpHumanCount,
@@ -241,7 +241,7 @@ class ResultComponent extends React.Component {
                         </span>
                         <span className="table__content">
                             {this.state.fcp === null ? 0 
-                                : this.state.fcp["1"].toFixed(2)}
+                                : this.state.fcp["1"].toFixed(4)}
                         </span>
                     </div>
                     <div className="fcpProb__wrapper">
@@ -250,7 +250,7 @@ class ResultComponent extends React.Component {
                         </span>
                         <span className="table__content">
                             {((this.state.fcp === null) || (this.state.time=="0")) ? 0 
-                                : this.state.fcp[this.state.time].toFixed(2)}
+                                : this.state.fcp[this.state.time].toFixed(4)}
                         </span>
                     </div>
                     <div className="onloadProb__wrapper">
@@ -259,7 +259,7 @@ class ResultComponent extends React.Component {
                         </span>
                         <span className="table__content">
                             {((this.state.onload === null) || (this.state.time == "0")) ? 0
-                                : this.state.onload[this.state.time].toFixed(2)}
+                                : this.state.onload[this.state.time].toFixed(4)}
                         </span>
                     </div>
                 </div>
@@ -272,14 +272,6 @@ class ResultComponent extends React.Component {
                     .URLInput__wrapper .Select {
                         cursor: text;
                     }
-                    @media all and (min-width: 50em) {
-                        .DeviceConnection__wrapper {
-                            display: flex;
-                        }
-                        .DeviceInput__wrapper, .ConnectionInput__wrapper {
-                            width: 50%;
-                        }
-                    }
                     .table__wrapper {                        
                         display: flex;
                         justify-content: space-around;
@@ -290,6 +282,7 @@ class ResultComponent extends React.Component {
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
+                        padding: .3em;
                     }
                     .table__header {
                         color: #153B58;
@@ -298,6 +291,21 @@ class ResultComponent extends React.Component {
                     .table__content {
                         font-size: 3em;
                         color: #db3340;
+                    }
+                    @media all and (max-width: 40em) {
+                        .table__wrapper {
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                    @media all and (min-width: 50em) {
+                        .DeviceConnection__wrapper {
+                            display: flex;
+                        }
+                        .DeviceInput__wrapper, .ConnectionInput__wrapper {
+                            width: 50%;
+                        }
                     }
                 `}
                 </style>
