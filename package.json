@@ -1,0 +1,27 @@
+{
+  "name": "RUXtest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "create-react-class": "^15.6.2",
+    "next": "^4.2.1",
+    "react": "^16.2.0",
+    "react-autosuggest": "^9.3.2",
+    "react-dom": "^16.2.0",
+    "react-ga": "^2.3.5",
+    "react-select": "^1.1.0",
+    "react-spinners": "^0.2.5",
+    "react-typekit": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint-loader": "^1.9.0"
+  }
+}
