@@ -21,7 +21,7 @@ const Meta = () => (
                 margin: 0;
                 font-family: "source-sans-pro", sans-serif;
                 font-size: 1em;
-                background-color: #fff;
+                background-color: #f2f2f2;
             }
             img {
                 max-width:100%;
@@ -90,11 +90,10 @@ const Meta = () => (
                 align-items: center;
                 z-index: -999;
                 padding: 1em;
-                margin-top: 3em;
             }
             .container {
                 padding: 1.5em 2em;
-                max-width: 20em;
+                width: 80%;
                 box-shadow: 0 5px 5px 0 rgba(0,0,0,0.4),
                             0 3px 1px -2px rgba(0,0,0,0.12),
                             0 1px 5px 0 rgba(0,0,0,0.4);

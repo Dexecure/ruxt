@@ -1,16 +1,28 @@
 import React from "react";
+import Human from "../components/human";
 
 class Visual extends React.Component {
     constructor(props) {
         super(props);
     }
-
     render() {
         return (
             <div>
-                URL: { this.props.url.origin } <br></br>
-                device: { this.props.device.value } <br></br>
-                connection: {this.props.connection.value} <br></br>
+                {Array.apply(null, Array(this.props.onloadHumanCount)).map(function (item, i) {
+                    return (
+                        <Human color="#153B58" />
+                    );
+                }, this)}
+                {Array.apply(null, Array(this.props.fcpHumanCount)).map(function (item, i) {
+                    return (
+                        <Human color="#5486AA" />
+                    );
+                }, this)}
+                {Array.apply(null, Array(this.props.loadingHumanCount)).map(function (item, i) {
+                    return (
+                        <Human color="#ffffff" />
+                    );
+                }, this)}
             </div>
         );
     }

@@ -50,9 +50,20 @@ class RUXtestApp extends React.Component {
                 <div className="outer l">
                     <ResultComponent />
                 </div>
+                <div className="footer--content l">
+                    <p>SEB (Site Experience Benchmark) is between 0 and 1. The more the better user experience.</p>
+                    <p>FCP (First Contentful Paint) and onload probabilities indicate the fraction of users with FCP and onload finished.</p>
+                    <p>1,241,019 websites. Real User Experience for Google Chrome users.</p>
+                    <p>Backed by <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{color: "#db3340"}}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>
+                </div>
                 <Typekit kitId="rgu6gkq" />
                 <style jsx>
                     {`
+                        a {
+                            color: #db3340;
+                            border-bottom: 1px dotted;
+                            text-decoration: none;
+                        }
                         .dashboard--header {
                         background-color: #153B58;
                         }
@@ -65,23 +76,6 @@ class RUXtestApp extends React.Component {
                         .header--logo {
                         max-width: 8em;
                         display: inline-block;
-                        }
-                        .dashboard--logout-image {
-                        max-width: 25px;
-                        }
-                        .dashboard--logout {
-                        background-color: #153B58;
-                        border: 1px solid #153B58;
-                        }
-                        .dashboard--logout {
-                        cursor: pointer;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        }
-                        .dashboard--logout-text {
-                        color: #ffffff;
-                        padding: .3em .5em;
                         }
                         .svg-background {
                             position: absolute;
@@ -98,14 +92,11 @@ class RUXtestApp extends React.Component {
                             width: 100%;
                             position: relative;
                         }
-                        .outer {
-                            display: flex;
-                            justify-content: center;
-                            flex-direction: column;
-                            align-items: center;
-                            z-index: -999;
-                            padding: 1em;
-                            margin-top: 3em;
+                        .footer--content {
+                            padding: 2em 1em;
+                            margin: 0 auto;
+                            text-align: center;
+                            max-width: 40em;
                         }
                         `}
                 </style>
