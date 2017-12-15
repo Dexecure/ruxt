@@ -1,6 +1,7 @@
 import React from "react";
 import Select from 'react-select'; 
 import { Async } from 'react-select';
+import Slider from 'react-rangeslider'
 import Visual from '../components/visual';
 
 class ResultComponent extends React.Component {
@@ -17,6 +18,7 @@ class ResultComponent extends React.Component {
         this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
         this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
         this.handleGetOrigins = this.handleGetOrigins.bind(this);
+        this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     }
     // When an URL from the dropdown is selected
     handleOnURLChange(selectedOption) {
@@ -32,6 +34,11 @@ class ResultComponent extends React.Component {
     handleOnConnectionChange(selectedOption) {
         this.setState({
             connection: selectedOption,
+        });
+    }
+    handleOnTimeChange(selectedOption) {
+        this.setState({
+            time: selectedOption,
         });
     }
     // To get the list of origin given a term input
@@ -69,6 +76,11 @@ class ResultComponent extends React.Component {
             { value: "slow-2G", label: "slow-2G" },
             { value: "offline", label: "offline" }
         ];
+        const sliderLabels = {
+            1: 'Fast',
+            3: 'Medium',
+            5: 'Slow'
+        }
         return (
             <div className="container">
                 <div className="URLInput__wrapper">
@@ -95,6 +107,17 @@ class ResultComponent extends React.Component {
                             options={connectionList}
                         />
                     </div>
+                </div>
+                <div className="TimeInput__wrapper">
+                    <Slider
+                        min={0}
+                        max={10}
+                        value={this.state.time}
+                        labels={sliderLabels}
+                        format={formatkg}
+                        handleLabel={horizontal}
+                        onChange={this.handleOnTimeChange}
+                    />
                 </div>
                 <div visual__wrapper>
                     URL: {this.state.url.origin} <br></br>
