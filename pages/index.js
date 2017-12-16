@@ -79,6 +79,7 @@ class RUXtestApp extends React.Component {
               .header--logo {
               max-width: 8em;
               display: inline-block;
+              border-bottom: none;
               }
               .svg-background {
                   position: absolute;

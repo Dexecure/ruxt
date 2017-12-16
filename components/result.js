@@ -17,8 +17,8 @@ class ResultComponent extends React.Component {
       fcp: null,
       onload: null,
       fcpHumanCount: 0,
-      onloadHumanCount: 0,
       loadingHumanCount: humanCount,
+      onloadHumanCount: 0,
       loading: false,
     };
 
@@ -164,9 +164,11 @@ class ResultComponent extends React.Component {
     }
     const fcp_prob = fcp[time];
     const onload_prob = onload[time];
-    const onloadHumanCount = Math.floor(onload_prob*humanCount);
-    const fcpHumanCount = Math.floor((fcp_prob-onload_prob)*humanCount);
-    const loadingHumanCount = Math.floor(humanCount - fcp_prob*humanCount);
+    console.log(fcp_prob, onload_prob);
+    const onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
+    const fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+    const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
+    console.log(onloadHumanCount, fcpHumanCount, loadingHumanCount);
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
@@ -253,7 +255,7 @@ class ResultComponent extends React.Component {
             SEB score
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0 
+              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
                   : this.state.fcp["1"].toFixed(3)}
             </span>
           </div>
@@ -262,7 +264,7 @@ class ResultComponent extends React.Component {
               FCP Probability
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0 
+              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
                   : this.state.fcp[this.state.time].toFixed(3)}
             </span>
           </div>
@@ -271,7 +273,7 @@ class ResultComponent extends React.Component {
                 Onload Probability
               </span>
               <span className="table__content">
-                {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0
+                {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
                     : this.state.onload[this.state.time].toFixed(3)}
               </span>
           </div>
@@ -281,9 +283,6 @@ class ResultComponent extends React.Component {
           .ConnectionInput__wrapper, .TimeInput__wrapper,
           .visual__wrapper, .time__wrapper {
               margin: 1em .5em;
-          }
-          .URLInput__wrapper .Select {
-              cursor: text;
           }
           .table__wrapper {                        
               display: flex;
