@@ -7,6 +7,7 @@
   "rules": {
         "react/jsx-filename-extension": 0,
         "no-else-return": 0,
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "linebreak-style": ["error","windows"]
     }
 }

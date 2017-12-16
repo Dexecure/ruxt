@@ -1,9 +1,10 @@
 import React from "react";
 import Select, { Async } from "react-select";
 import Slider from "react-rangeslider";
+import debounce from "es6-promise-debounce";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
-import debounce from "es6-promise-debounce";
+import Human from "../components/human";
 
 const humanCount = 1000;
 
@@ -31,7 +32,7 @@ class ResultComponent extends React.Component {
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
   }
-  // When an URL from the dropdown is selected
+
   handleOnURLChange(selectedOption) {
     this.setState({
       url: selectedOption,
@@ -78,7 +79,6 @@ class ResultComponent extends React.Component {
     this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
   }
 
-  // To get the list of origin given a term input
   handleGetOrigins(input) {
     if (!input) {
       return Promise.resolve({ options: [] });
@@ -94,7 +94,6 @@ class ResultComponent extends React.Component {
     })
       .then(response => response.json())
       .then((json) => {
-        console.log(json);
         return { options: json };
       });
   }
@@ -103,8 +102,6 @@ class ResultComponent extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log("loading!");
-    console.log(url, device, connection);
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
@@ -116,35 +113,6 @@ class ResultComponent extends React.Component {
         connection,
       }),
     });
-    console.log("finished fetching");
-    // var responseJSON = {
-    //     "bam": {
-    //         "fcp": {
-    //             "1": 0.47369999999999995,
-    //             "2": 0.7875,
-    //             "3": 0.8946,
-    //             "4": 0.9372,
-    //             "5": 0.9563999999999999,
-    //             "6": 0.9672,
-    //             "7": 0.9742,
-    //             "8": 0.9797,
-    //             "9": 0.9832000000000001,
-    //             "10": 0.9858
-    //         },
-    //         "onload": {
-    //             "1": 0.0625874825034993,
-    //             "2": 0.27844431113777246,
-    //             "3": 0.48040391921615677,
-    //             "4": 0.626874625074985,
-    //             "5": 0.7245550889822036,
-    //             "6": 0.7895420915816838,
-    //             "7": 0.8348330333933213,
-    //             "8": 0.8674265146970606,
-    //             "9": 0.8918216356728655,
-    //             "10": 0.9111177764447111
-    //         }
-    //     }
-    // };
     const responseJSON = await response.json();
     this.setState({
       fcp: responseJSON.bam.fcp,
@@ -165,11 +133,9 @@ class ResultComponent extends React.Component {
     }
     const fcp_prob = fcp[time];
     const onload_prob = onload[time];
-    console.log(fcp_prob, onload_prob);
     const onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
     const fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
     const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
-    console.log(onloadHumanCount, fcpHumanCount, loadingHumanCount);
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
@@ -178,21 +144,21 @@ class ResultComponent extends React.Component {
   }
 
   render() {
-    var deviceList = [
+    const deviceList = [
       { value: "all", label: "All device types" },
       { value: "phone", label: "Phone" },
       { value: "tablet", label: "Tablet" },
-      { value: "desktop", label: "Desktop" }
+      { value: "desktop", label: "Desktop" },
     ];
-    var connectionList = [
+    const connectionList = [
       { value: "all", label: "All connection types" },
       { value: "4G", label: "4G" },
       { value: "3G", label: "3G" },
       { value: "2G", label: "2G" },
       { value: "slow-2G", label: "slow-2G" },
-      { value: "offline", label: "offline" }
+      { value: "offline", label: "offline" },
     ];
-    const formatsecond = value => value + ' s';
+    const formatsecond = value => value + " s";
     return (
       <div className="container">
         <div className="loader">
@@ -270,19 +236,48 @@ class ResultComponent extends React.Component {
             </span>
           </div>
           <div className="onloadProb__wrapper">
-              <span className="table__header">
-                Onload Probability
+            <span className="table__header">
+              Onload Probability
+            </span>
+            <span className="table__content">
+              {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
+                  : this.state.onload[this.state.time].toFixed(3)}
+            </span>
+          </div>
+        </div>
+        <div className="explanation__wrapper">
+          <div className="explanation__header">
+            <span className="explanation__text">
+              How to use the tool
+            </span>
+          </div>
+          <div className="explanation__content">
+            <div className="explanation__section">
+              <span className="explanation__text">
+               Select a website using the autocomplete.
+               Optionally, select a device and connection type.
+               Try the time slider to select a time (in seconds).
               </span>
-              <span className="table__content">
-                {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
-                    : this.state.onload[this.state.time].toFixed(3)}
+            </div>
+            <div className="explanation__section">
+              <span className="explanation__text">
+                Imagine 1000 people visit the website. Each visitor is represented as a figure <Human color="#5486AA" />.
               </span>
+            </div>
+            <div className="explanation__section">
+              <span className="explanation__text">
+                When the user opens the website,
+                (1) either nothing is loaded yet (represented as the figure <Human color="#ffffff" />),
+                or (2) some content on the screen (represented as the figure <Human color="#5486AA" />),
+                or (3) document loaded (represented as the figure <Human color="#153B58" />).
+              </span>
+            </div>
           </div>
         </div>
         <style jsx>{`
           .URLInput__wrapper, .DeviceInput__wrapper,
           .ConnectionInput__wrapper, .TimeInput__wrapper,
-          .visual__wrapper, .time__wrapper {
+          .visual__wrapper, .time__wrapper, .explanation__wrapper {
               margin: 1em .5em;
           }
           .table__wrapper {                        
@@ -295,7 +290,7 @@ class ResultComponent extends React.Component {
               flex-direction: column;
               justify-content: center;
               align-items: center;
-              padding: .3em;
+              padding: 1em .3em;
           }
           .table__header {
               color: #153B58;
@@ -304,6 +299,11 @@ class ResultComponent extends React.Component {
           .table__content {
               font-size: 3em;
               color: #db3340;
+          }
+          .explanation__header {
+              color: #153B58;
+              font-size: 1.2em;
+              padding-bottom: 1em;
           }
           @media all and (max-width: 40em) {
               .table__wrapper {
@@ -322,16 +322,16 @@ class ResultComponent extends React.Component {
           }
           .loader {                        
               position: absolute;
-              // opacity: 0.3;
-              // background-color: #000;
               top: 0;
               bottom: 0;
               left: 0;
               right: 0;
-              // z-index: 10;
               display: flex;
               justify-content: center;
               align-items: center;
+          }
+          .explanation__section {
+            padding: .3em 0;
           }
         `}
         </style>
