@@ -10,17 +10,17 @@ class Visual extends React.Component {
             <div>
                 {Array.apply(null, Array(this.props.onloadHumanCount)).map(function (item, i) {
                     return (
-                        <Human color="#153B58" />
+                        <Human key={`onload-${i}`} color="#153B58" />
                     );
                 }, this)}
                 {Array.apply(null, Array(this.props.fcpHumanCount)).map(function (item, i) {
                     return (
-                        <Human color="#5486AA" />
+                        <Human key={`fcp-${i}`} color="#5486AA" />
                     );
                 }, this)}
                 {Array.apply(null, Array(this.props.loadingHumanCount)).map(function (item, i) {
                     return (
-                        <Human color="#ffffff" />
+                        <Human key={`loading-${i}`} color="#ffffff" />
                     );
                 }, this)}
             </div>

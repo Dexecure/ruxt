@@ -227,7 +227,7 @@ class ResultComponent extends React.Component {
                     <Slider
                         min={0}
                         max={10}
-                        value={this.state.time}
+                        value={Number(this.state.time)}
                         format={formatsecond}
                         handleLabel={this.state.time}
                         onChange={this.handleOnTimeChange}
