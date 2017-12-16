@@ -270,7 +270,6 @@ class ResultComponent extends React.Component {
               </div>
               <div className="explanation__section">
                 <span className="explanation__text">
-                  Each visitor is represented as follows:<br></br>
                   - <Human color="#ffffff" /> : no content loaded,<br></br>
                   - <Human color="#5486AA" /> : some content loaded,<br></br>
                   - <Human color="#153B58" /> : document loaded.
@@ -347,6 +346,14 @@ class ResultComponent extends React.Component {
               }
               .DeviceInput__wrapper, .ConnectionInput__wrapper {
                   width: 50%;
+              }
+              .explanation__row {            
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+              }
+              .explanation__item {
+                padding-right: 2em;
               }
           }
           .visual__wrapper {
