@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { Async } from 'react-select';
 import Slider from 'react-rangeslider'
 import Visual from '../components/visual';
+import {PulseLoader } from 'react-spinners';
 
 const humanCount = 1000;
 
@@ -34,40 +35,37 @@ class ResultComponent extends React.Component {
         this.setState({
             url: selectedOption,
         });
-        if (!(selectedOption)) {
-            return;
+        if (selectedOption) {           
+            this.handleUpdateNumbers(
+                selectedOption.origin,
+                this.state.device.value,
+                this.state.connection.value
+            );
         }
-        this.handleUpdateNumbers(
-            selectedOption,
-            this.state.device,
-            this.state.connection
-        );
     }
     handleOnDeviceChange(selectedOption) {
         this.setState({
             device: selectedOption,
         });
-        if (!(this.state.url.origin) || (this.state.url.origin = "Enter website URL")) {
-            return;
+        if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+            this.handleUpdateNumbers(
+                this.state.url.origin,
+                selectedOption.value,
+                this.state.connection.value
+            );
         }
-        this.handleUpdateNumbers(
-            this.state.url,
-            selectedOption,
-            this.state.connection
-        );
     }
     handleOnConnectionChange(selectedOption) {
         this.setState({
             connection: selectedOption,
         });
-        if (!(this.state.url.origin) || (this.state.url.origin = "Enter website URL")) {
-            return;
+        if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+            this.handleUpdateNumbers(
+                this.state.url.origin,
+                this.state.device.value,
+                selectedOption.value
+            );
         }
-        this.handleUpdateNumbers(
-            this.state.url,
-            this.state.device,
-            selectedOption
-        );
     }
     handleOnTimeChange(selectedOption) {
         this.setState({
@@ -100,7 +98,8 @@ class ResultComponent extends React.Component {
             loading: true,
         });
         console.log("loading!");
-        response = await fetch(`http://54.234.121.156/content`, {
+        console.log(url, device, connection);
+        const response = await fetch(`http://54.234.121.156/content`, {
             method: "post",
             headers: {
                 "Content-Type": "application/json"
@@ -140,7 +139,7 @@ class ResultComponent extends React.Component {
         //         }
         //     }
         // };
-        responseJSON = await response.json();
+        const responseJSON = await response.json();
         this.setState({
             fcp: responseJSON.bam.fcp,
             onload: responseJSON.bam.onload,
@@ -186,6 +185,12 @@ class ResultComponent extends React.Component {
         const formatsecond = value => value + ' s';
         return (
             <div className="container">
+                <div className="loader">
+                    <PulseLoader
+                        color={'#db3340'}
+                        loading={this.state.loading}
+                        size={30} />
+                </div>
                 <div className="URLInput__wrapper">
                     <Async
                         placeholder="Enter website URL"
@@ -241,8 +246,8 @@ class ResultComponent extends React.Component {
                         SEB score
                         </span>
                         <span className="table__content">
-                            {this.state.fcp === null ? 0 
-                                : this.state.fcp["1"].toFixed(4)}
+                            {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0 
+                                : this.state.fcp["1"].toFixed(3)}
                         </span>
                     </div>
                     <div className="fcpProb__wrapper">
@@ -251,7 +256,7 @@ class ResultComponent extends React.Component {
                         </span>
                         <span className="table__content">
                             {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0 
-                                : this.state.fcp[this.state.time].toFixed(4)}
+                                : this.state.fcp[this.state.time].toFixed(3)}
                         </span>
                     </div>
                     <div className="onloadProb__wrapper">
@@ -260,7 +265,7 @@ class ResultComponent extends React.Component {
                         </span>
                         <span className="table__content">
                             {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? 0
-                                : this.state.onload[this.state.time].toFixed(4)}
+                                : this.state.onload[this.state.time].toFixed(3)}
                         </span>
                     </div>
                 </div>
@@ -307,6 +312,19 @@ class ResultComponent extends React.Component {
                         .DeviceInput__wrapper, .ConnectionInput__wrapper {
                             width: 50%;
                         }
+                    }
+                    .loader {                        
+                        position: absolute;
+                        // opacity: 0.3;
+                        // background-color: #000;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        // z-index: 10;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
                     }
                 `}
                 </style>
