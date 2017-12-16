@@ -1,24 +1,24 @@
 import React from "react";
 
 class wrapperHeader extends React.Component {
-    render() {
-        return (
-            <header className="dashboard--header">
-                <div className="l">
-                    <div className="header--left">
-                        <a className="header--logo" href="/dashboard">
-                            <img src="static/full-logo-white.png" alt="Dexecure Dashboard" />
-                        </a>
-                    </div>
-                    <div className="header--right">
-                        <button className="dashboard--logout">
-                            <span className="dashboard--logout-text">Sign out</span>
-                            <img className="dashboard--logout-image" src="/static/exit.png" alt="logout" />
-                        </button>
-                    </div>
-                </div>
-                <style jsx>
-                    {`
+  render() {
+    return (
+      <header className="dashboard--header">
+        <div className="l">
+          <div className="header--left">
+            <a className="header--logo" href="/dashboard">
+              <img src="static/full-logo-white.png" alt="Dexecure Dashboard" />
+            </a>
+          </div>
+          <div className="header--right">
+            <button className="dashboard--logout">
+              <span className="dashboard--logout-text">Sign out</span>
+              <img className="dashboard--logout-image" src="/static/exit.png" alt="logout" />
+            </button>
+          </div>
+        </div>
+        <style jsx>
+          {`
             .dashboard--header {
               background-color: #153B58;
             }
@@ -50,10 +50,10 @@ class wrapperHeader extends React.Component {
               padding: .3em .5em;
             }
           `}
-                </style>
-            </header>
-        );
-    }
+        </style>
+      </header>
+    );
+  }
 }
 
 export default wrapperHeader;
