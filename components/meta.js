@@ -93,7 +93,6 @@ const Meta = () => (
           padding: 1em;
       }
       .container {
-          position: relative;
           padding: 1.5em 2em;
           width: 80%;
           box-shadow: 0 5px 5px 0 rgba(0,0,0,0.4),

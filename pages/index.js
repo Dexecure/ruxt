@@ -40,9 +40,7 @@ class RUXtestApp extends React.Component {
           <ResultComponent />
         </div>
         <div className="footer--content l">
-          <p>SEB (Site Experience Benchmark) is between 0 and 1. The more the better user experience.</p>
-          <p>FCP (First Contentful Paint) and onload probabilities indicate the fraction of users with FCP and onload finished. For more details, read the announcement at perfplanet and the <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">introductory article</a>.</p>
-          <p>Backed by <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{ color: "#db3340" }}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>
+          <p>Data from <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{ color: "#db3340" }}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>
         </div>
         <Typekit kitId="rgu6gkq" />
         <style jsx>

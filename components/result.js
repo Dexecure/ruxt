@@ -161,12 +161,6 @@ class ResultComponent extends React.Component {
     const formatsecond = value => value + " s";
     return (
       <div className="container">
-        <div className="loader">
-          <PulseLoader
-              color={'#db3340'}
-              loading={this.state.loading}
-              size={30} />
-        </div>
         <div className="URLInput__wrapper">
           <Async
             placeholder="Enter website URL"
@@ -200,6 +194,7 @@ class ResultComponent extends React.Component {
           </div>
         </div>
         <div className="TimeInput__wrapper">
+          <span className="TimeInput__label">Time (in seconds):</span>
           <Slider
             min={0}
             max={10}
@@ -210,6 +205,12 @@ class ResultComponent extends React.Component {
           />
         </div>
         <div className="visual__wrapper">
+          <div className="loader">
+            <PulseLoader
+              color={'#db3340'}
+              loading={this.state.loading}
+              size={30} />
+          </div>
           <Visual
             fcpHumanCount={this.state.fcpHumanCount}
             onloadHumanCount={this.state.onloadHumanCount}
@@ -246,32 +247,60 @@ class ResultComponent extends React.Component {
           </div>
         </div>
         <div className="explanation__wrapper">
+          <div className="explanation__row">
+            <div className="explanation__item">
+              <div className="explanation__header">
+                <span className="explanation__text">
+                  How to use the tool
+                </span>
+              </div>
+              <div className="explanation__section">
+                <span className="explanation__text">
+                  - Select a website using the autocomplete.<br></br>
+                  - (Optional) select a device and connection type. <br></br>
+                  - Use the time slider to select the user wait time.
+                </span>
+              </div>
+            </div>
+            <div className="explanation__item">
+              <div className="explanation__header">
+                <span className="explanation__text">
+                  Assume 1000 website visitors
+                </span>
+              </div>
+              <div className="explanation__section">
+                <span className="explanation__text">
+                  Each visitor is represented as follows:<br></br>
+                  - <Human color="#ffffff" /> : no content loaded,<br></br>
+                  - <Human color="#5486AA" /> : some content loaded,<br></br>
+                  - <Human color="#153B58" /> : document loaded.
+                </span>
+              </div>
+            </div>
+          </div>
           <div className="explanation__header">
             <span className="explanation__text">
-              How to use the tool
+              Metrics
             </span>
           </div>
-          <div className="explanation__content">
-            <div className="explanation__section">
-              <span className="explanation__text">
-               Select a website using the autocomplete.
-               Optionally, select a device and connection type.
-               Try the time slider to select a time (in seconds).
-              </span>
-            </div>
-            <div className="explanation__section">
-              <span className="explanation__text">
-                Imagine 1000 people visit the website. Each visitor is represented as a figure <Human color="#5486AA" />.
-              </span>
-            </div>
-            <div className="explanation__section">
-              <span className="explanation__text">
-                When the user opens the website,
-                (1) either nothing is loaded yet (represented as the figure <Human color="#ffffff" />),
-                or (2) some content on the screen (represented as the figure <Human color="#5486AA" />),
-                or (3) document loaded (represented as the figure <Human color="#153B58" />).
-              </span>
-            </div>
+          <div className="explanation__section">
+            <span className="explanation__text">
+              - Site Experience Benchmark (SEB) : the fraction of users completing first contentful paint within first second.<br></br>
+              - First Contentful Pain (FCP) probability: the fraction of users completing first contentful paint within given time.<br></br>
+              - Onload probability: the fraction of users completing document load within given time.<br></br>
+            </span>
+          </div>
+          <div className="explanation__header">
+            <span className="explanation__text">
+              Learn more
+            </span>
+          </div>
+          <div className="explanation__section">
+            <span className="explanation__text">
+              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br></br>
+              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br></br>
+              - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
+            </span>
           </div>
         </div>
         <style jsx>{`
@@ -303,7 +332,7 @@ class ResultComponent extends React.Component {
           .explanation__header {
               color: #153B58;
               font-size: 1.2em;
-              padding-bottom: 1em;
+              padding: 1em 0 .5em 0;
           }
           @media all and (max-width: 40em) {
               .table__wrapper {
@@ -320,6 +349,9 @@ class ResultComponent extends React.Component {
                   width: 50%;
               }
           }
+          .visual__wrapper {
+            position: relative;
+          }
           .loader {                        
               position: absolute;
               top: 0;
@@ -332,6 +364,16 @@ class ResultComponent extends React.Component {
           }
           .explanation__section {
             padding: .3em 0;
+          }
+          .TimeInput__wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .TimeInput__label {
+            max-width: 150px;
+            width:100%;
+            margin-right: 5px;
           }
         `}
         </style>

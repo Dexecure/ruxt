@@ -7,6 +7,8 @@
   background: #e6e6e6;
   -ms-touch-action: none;
   touch-action: none;
+  max-width: 300px;
+  width: 100%;
 }
 .rangeslider,
 .rangeslider .rangeslider__fill {
