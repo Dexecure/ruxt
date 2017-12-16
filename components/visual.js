@@ -1,28 +1,34 @@
 import React from "react";
 import Human from "../components/human";
 
+function OnloadHumans(props) {
+    return Array
+        .from(Array(props.count).keys())
+        .map((item, i) => <Human key={`onload-${i}`} color="#153B58" />);
+}
+
+function FcpHumans(props) {
+    return Array
+        .from(Array(props.count).keys())
+        .map((item, i) => <Human key={`onload-${i}`} color="#5486AA" />);
+}
+
+function LoadingHumans(props) {
+    return Array
+        .from(Array(props.count).keys())
+        .map((item, i) => <Human key={`onload-${i}`} color="#ffffff" />);
+}
+
 class Visual extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+
     render() {
+        const { onloadHumanCount, fcpHumanCount, loadingHumanCount } = this.props;
+
         return (
             <div>
-                {Array.apply(null, Array(this.props.onloadHumanCount)).map(function (item, i) {
-                    return (
-                        <Human key={`onload-${i}`} color="#153B58" />
-                    );
-                }, this)}
-                {Array.apply(null, Array(this.props.fcpHumanCount)).map(function (item, i) {
-                    return (
-                        <Human key={`fcp-${i}`} color="#5486AA" />
-                    );
-                }, this)}
-                {Array.apply(null, Array(this.props.loadingHumanCount)).map(function (item, i) {
-                    return (
-                        <Human key={`loading-${i}`} color="#ffffff" />
-                    );
-                }, this)}
+                <OnloadHumans count={onloadHumanCount} />
+                <FcpHumans count={fcpHumanCount} />
+                <LoadingHumans count={loadingHumanCount} />
             </div>
         );
     }

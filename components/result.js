@@ -22,6 +22,7 @@ class ResultComponent extends React.Component {
             loadingHumanCount: humanCount,
             loading: false
         }
+
         this.handleOnURLChange = this.handleOnURLChange.bind(this);
         this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
         this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
@@ -43,6 +44,7 @@ class ResultComponent extends React.Component {
             );
         }
     }
+
     handleOnDeviceChange(selectedOption) {
         this.setState({
             device: selectedOption,
@@ -55,6 +57,7 @@ class ResultComponent extends React.Component {
             );
         }
     }
+
     handleOnConnectionChange(selectedOption) {
         this.setState({
             connection: selectedOption,
@@ -67,12 +70,14 @@ class ResultComponent extends React.Component {
             );
         }
     }
+
     handleOnTimeChange(selectedOption) {
         this.setState({
             time: selectedOption,
         });
         this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
     }
+
     // To get the list of origin given a term input
     handleGetOrigins(input) {
         if (!input) {
@@ -93,6 +98,7 @@ class ResultComponent extends React.Component {
                 return { options: json };
             });
     }
+
     async handleUpdateNumbers(url, device, connection) {
         this.setState({
             loading: true,
@@ -147,6 +153,7 @@ class ResultComponent extends React.Component {
         });
         this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
     }
+
     handleUpdateHumanCount(fcp, onload, time) {
         if (time=="0") {
             this.setState({
@@ -162,11 +169,12 @@ class ResultComponent extends React.Component {
         var fcpHumanCount = Math.floor((fcp_prob-onload_prob)*humanCount);
         var loadingHumanCount = Math.floor(humanCount - fcp_prob*humanCount);
         this.setState({
-            onloadHumanCount: onloadHumanCount,
-            fcpHumanCount: fcpHumanCount,
-            loadingHumanCount: loadingHumanCount,
+            onloadHumanCount,
+            fcpHumanCount,
+            loadingHumanCount,
         })
     }
+
     render() {
         var deviceList = [
             { value: "all", label: "All device types" },
