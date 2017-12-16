@@ -24,7 +24,7 @@ class URLInput extends React.Component {
       return Promise.resolve({ options: [] });
     }
 
-    return fetch(`http://54.234.121.156/search`, {
+    return fetch(`${process.env.BACKEND_URL}/search`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
