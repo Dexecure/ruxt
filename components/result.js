@@ -82,7 +82,7 @@ class ResultComponent extends React.Component {
     if (!input) {
       return Promise.resolve({ options: [] });
     }
-    return fetch(`http://54.234.121.156/search`, {
+    return fetch(`${process.env.BACKEND_URL}/search`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ class ResultComponent extends React.Component {
     });
     console.log("loading!");
     console.log(url, device, connection);
-    const response = await fetch(`http://54.234.121.156/content`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
