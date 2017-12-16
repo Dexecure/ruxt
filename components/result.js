@@ -200,6 +200,7 @@ class ResultComponent extends React.Component {
             max={10}
             value={Number(this.state.time)}
             format={formatsecond}
+            tooltip={false}
             handleLabel={this.state.time}
             onChange={this.handleOnTimeChange}
           />
@@ -207,9 +208,10 @@ class ResultComponent extends React.Component {
         <div className="visual__wrapper">
           <div className="loader">
             <PulseLoader
-              color={'#db3340'}
+              color="#db3340"
               loading={this.state.loading}
-              size={30} />
+              size={30}
+            />
           </div>
           <Visual
             fcpHumanCount={this.state.fcpHumanCount}
