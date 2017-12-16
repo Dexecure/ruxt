@@ -3,6 +3,7 @@ import Select, { Async } from "react-select";
 import Slider from "react-rangeslider";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
+import debounce from "es6-promise-debounce";
 
 const humanCount = 1000;
 
@@ -35,7 +36,7 @@ class ResultComponent extends React.Component {
     this.setState({
       url: selectedOption,
     });
-    if (selectedOption) {    
+    if (selectedOption) {  
       this.handleUpdateNumbers(
         selectedOption.origin,
         this.state.device.value,
@@ -59,7 +60,7 @@ class ResultComponent extends React.Component {
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
-        connection: selectedOption,
+      connection: selectedOption,
     });
     if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
       this.handleUpdateNumbers(
@@ -202,19 +203,19 @@ class ResultComponent extends React.Component {
           <Async
             placeholder="Enter website URL"
             value={this.state.url}
-            onChange={this.handleOnURLChange}
+            onChange={debounce(this.handleOnURLChange, 500)}
             valueKey="origin"
             labelKey="origin"
             clearable={false}
             backspaceRemoves={true}
-            loadOptions={this.handleGetOrigins}
+            loadOptions={debounce(this.handleGetOrigins, 500)}
           />
         </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
               value={this.state.device.value}
-              onChange={this.handleOnDeviceChange}
+              onChange={debounce(this.handleOnDeviceChange, 500)}
               clearable={false}
               options={deviceList}
               searchable={false}
@@ -223,7 +224,7 @@ class ResultComponent extends React.Component {
           <div className="ConnectionInput__wrapper">
             <Select
               value={this.state.connection.value}
-              onChange={this.handleOnConnectionChange}
+              onChange={debounce(this.handleOnConnectionChange, 500)}
               clearable={false}
               searchable={false}
               options={connectionList}
