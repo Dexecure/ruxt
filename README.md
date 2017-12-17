@@ -20,9 +20,9 @@ Assume 1000 website visitors. You can think of the actual number of visitors sca
 
 # Metrics
 
-- **Site Experience Benchmark (SEB):** the fraction of users completing first contentful paint within first second.
-- **First Contentful Pain (FCP) probability**: the percentage of users completing p[first contentful paint](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint) within given time.
-- **Onload probability**: the percentage of users completing document load within given time.
+- [Site Experience Benchmark (SEB)](https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee) score: the fraction of users completing first contentful paint within first second.
+- The percentage of users completing [first contentful paint](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint) within given time.
+- The percentage of users completing document load within given time.
 
 # Learn more
 - Read more on CrUX and the metrics for user experience in the [introductory article on CrUX](https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/).
