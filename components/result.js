@@ -231,7 +231,7 @@ class ResultComponent extends React.Component {
           </div>
           <div className="fcpProb__wrapper">
             <span className="table__header">
-              users with FCP {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? ""
+              Users with FCP {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
@@ -241,7 +241,7 @@ class ResultComponent extends React.Component {
           </div>
           <div className="onloadProb__wrapper">
             <span className="table__header">
-              users with onload {((this.state.onload === null) || (this.state.time === "0") || this.state.onload[this.state.time] === null) ? ""
+              Users with onload {((this.state.onload === null) || (this.state.time === "0") || this.state.onload[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">

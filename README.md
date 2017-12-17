@@ -24,6 +24,13 @@ Assume 1000 website visitors. You can think of the actual number of visitors sca
 - The percentage of users completing [first contentful paint](https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint) within given time.
 - The percentage of users completing document load within given time.
 
+# How to install rUXt
+
+We use [Next.js](https://github.com/zeit/next.js/) for the frontend.
+
+- `npm install` to install all dependencies.
+- `npm run dev` to run locally.
+
 # Learn more
 - Read more on CrUX and the metrics for user experience in the [introductory article on CrUX](https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/).
 - This is the repo for the frontend. The repo for backend is [here](https://github.com/Dexecure/ruxt-backend). Feedback and pull requests welcome.
