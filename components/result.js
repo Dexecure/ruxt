@@ -225,7 +225,7 @@ class ResultComponent extends React.Component {
             SEB score
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
                   : this.state.fcp["1"].toFixed(3)}
             </span>
           </div>
@@ -234,8 +234,8 @@ class ResultComponent extends React.Component {
               FCP Probability
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
-                  : this.state.fcp[this.state.time].toFixed(3)}
+              {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
+                : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
             </span>
           </div>
           <div className="onloadProb__wrapper">
@@ -243,8 +243,8 @@ class ResultComponent extends React.Component {
               Onload Probability
             </span>
             <span className="table__content">
-              {((this.state.onload === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
-                  : this.state.onload[this.state.time].toFixed(3)}
+              {((this.state.onload === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
+                : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
             </span>
           </div>
         </div>
@@ -287,8 +287,8 @@ class ResultComponent extends React.Component {
           <div className="explanation__section">
             <span className="explanation__text">
               - Site Experience Benchmark (SEB) : the fraction of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within first second.<br></br>
-              - First Contentful Paint (FCP) probability: the fraction of users completing first contentful paint within given time.<br></br>
-              - Onload probability: the fraction of users completing document onload within given time.<br></br>
+              - First Contentful Paint (FCP) probability: the % of users completing first contentful paint within given time.<br></br>
+              - Onload probability: the % of users completing document onload within given time.<br></br>
             </span>
           </div>
           <div className="explanation__header">
