@@ -235,7 +235,7 @@ class ResultComponent extends React.Component {
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
                 : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
             </span>
           </div>
@@ -245,7 +245,7 @@ class ResultComponent extends React.Component {
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.onload === null) || (this.state.time === "0") || this.state.onload[this.state.time] === null) ? "-"
+              {((this.state.onload === null) || (this.state.time == "0") || this.state.onload[this.state.time] === null) ? "-"
                 : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
             </span>
           </div>
