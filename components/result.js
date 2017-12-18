@@ -39,9 +39,9 @@ class ResultComponent extends React.Component {
     });
     if (selectedOption) {  
       this.handleUpdateNumbers(
-        selectedOption.origin,
-        this.state.device.value,
-        this.state.connection.value,
+        selectedOption,
+        this.state.device,
+        this.state.connection,
       );
     }
   }
@@ -50,11 +50,11 @@ class ResultComponent extends React.Component {
     this.setState({
       device: selectedOption,
     });
-    if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
       this.handleUpdateNumbers(
-        this.state.url.origin,
+        this.state.url,
         selectedOption.value,
-        this.state.connection.value,
+        this.state.connection,
       );
     }
   }
@@ -63,10 +63,10 @@ class ResultComponent extends React.Component {
     this.setState({
       connection: selectedOption,
     });
-    if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
       this.handleUpdateNumbers(
-        this.state.url.origin,
-        this.state.device.value,
+        this.state.url,
+        this.state.device,
         selectedOption.value,
       );
     }
@@ -165,7 +165,7 @@ class ResultComponent extends React.Component {
       <div className="container">
         <div className="URLInput__wrapper">
           <Async
-            placeholder="Enter website URL"
+            placeholder={this.state.url}
             value={this.state.url}
             onChange={debounce(this.handleOnURLChange, 500)}
             valueKey="origin"
@@ -178,7 +178,7 @@ class ResultComponent extends React.Component {
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
-              value={this.state.device.value}
+              value={this.state.device}
               onChange={debounce(this.handleOnDeviceChange, 500)}
               clearable={false}
               options={deviceList}
@@ -187,7 +187,7 @@ class ResultComponent extends React.Component {
           </div>
           <div className="ConnectionInput__wrapper">
             <Select
-              value={this.state.connection.value}
+              value={this.state.connection}
               onChange={debounce(this.handleOnConnectionChange, 500)}
               clearable={false}
               searchable={false}
