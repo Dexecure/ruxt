@@ -104,13 +104,14 @@ class ResultComponent extends React.Component {
     this.setState({
       loading: true,
     });
+    const origin = url.origin;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        origin: url,
+        origin,
         device,
         connection,
       }),
@@ -146,6 +147,7 @@ class ResultComponent extends React.Component {
   }
 
   render() {
+    const urlPlaceholder = "https://google.com";
     const deviceList = [
       { value: "all", label: "All device types" },
       { value: "phone", label: "Phone" },
@@ -165,7 +167,7 @@ class ResultComponent extends React.Component {
       <div className="container">
         <div className="URLInput__wrapper">
           <Async
-            placeholder={this.state.url}
+            placeholder={urlPlaceholder}
             value={this.state.url}
             onChange={debounce(this.handleOnURLChange, 500)}
             valueKey="origin"
