@@ -12,10 +12,10 @@ class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: { origin: "Enter website URL" },
-      device: { label: "All device types", value: "all" },
-      connection: { label: "All connection types", value: "all" },
-      time: "1",
+      url: "https://google.com",
+      device:"all",
+      connection: "all",
+      time: 1,
       fcp: null,
       onload: null,
       fcpHumanCount: 0,
@@ -73,9 +73,11 @@ class ResultComponent extends React.Component {
   }
 
   handleOnTimeChange(selectedOption) {
-    this.setState({
-      time: selectedOption,
-    });
+    if(typeof(selectedOption) === "number") {
+      this.setState({
+        time: selectedOption,
+      });
+    }
     this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
   }
 
@@ -123,7 +125,7 @@ class ResultComponent extends React.Component {
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
-    if (time=="0") {
+    if (time === 0) {
       this.setState({
         onloadHumanCount: 0,
         fcpHumanCount: 0,
@@ -201,7 +203,7 @@ class ResultComponent extends React.Component {
             value={Number(this.state.time)}
             format={formatsecond}
             tooltip={false}
-            handleLabel={this.state.time}
+            handleLabel={this.state.time.toString()}
             onChange={this.handleOnTimeChange}
           />
         </div>
@@ -225,27 +227,27 @@ class ResultComponent extends React.Component {
             SEB score
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
                   : this.state.fcp["1"].toFixed(3)}
             </span>
           </div>
           <div className="fcpProb__wrapper">
             <span className="table__header">
-              Users with FCP {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? ""
+              Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
                 : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
             </span>
           </div>
           <div className="onloadProb__wrapper">
             <span className="table__header">
-              Users with onload {((this.state.onload === null) || (this.state.time === "0") || this.state.onload[this.state.time] === null) ? ""
+              Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.onload === null) || (this.state.time == "0") || this.state.onload[this.state.time] === null) ? "-"
+              {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
                 : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
             </span>
           </div>
