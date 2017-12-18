@@ -12,10 +12,10 @@ class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: { origin: "Enter website URL" },
-      device: { label: "All device types", value: "all" },
-      connection: { label: "All connection types", value: "all" },
-      time: "1",
+      url: "https://google.com",
+      device:"all",
+      connection: "all",
+      time: 1,
       fcp: null,
       onload: null,
       fcpHumanCount: 0,
@@ -39,9 +39,9 @@ class ResultComponent extends React.Component {
     });
     if (selectedOption) {  
       this.handleUpdateNumbers(
-        selectedOption.origin,
-        this.state.device.value,
-        this.state.connection.value,
+        selectedOption,
+        this.state.device,
+        this.state.connection,
       );
     }
   }
@@ -50,11 +50,11 @@ class ResultComponent extends React.Component {
     this.setState({
       device: selectedOption,
     });
-    if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
       this.handleUpdateNumbers(
-        this.state.url.origin,
+        this.state.url,
         selectedOption.value,
-        this.state.connection.value,
+        this.state.connection,
       );
     }
   }
@@ -63,19 +63,21 @@ class ResultComponent extends React.Component {
     this.setState({
       connection: selectedOption,
     });
-    if ((this.state.url.origin) || (!(this.state.url.origin = "Enter website URL"))) {
+    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
       this.handleUpdateNumbers(
-        this.state.url.origin,
-        this.state.device.value,
+        this.state.url,
+        this.state.device,
         selectedOption.value,
       );
     }
   }
 
   handleOnTimeChange(selectedOption) {
-    this.setState({
-      time: selectedOption,
-    });
+    if(typeof(selectedOption) === "number") {
+      this.setState({
+        time: selectedOption,
+      });
+    }
     this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
   }
 
@@ -123,7 +125,7 @@ class ResultComponent extends React.Component {
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
-    if (time=="0") {
+    if (time === 0) {
       this.setState({
         onloadHumanCount: 0,
         fcpHumanCount: 0,
@@ -163,7 +165,7 @@ class ResultComponent extends React.Component {
       <div className="container">
         <div className="URLInput__wrapper">
           <Async
-            placeholder="Enter website URL"
+            placeholder={this.state.url}
             value={this.state.url}
             onChange={debounce(this.handleOnURLChange, 500)}
             valueKey="origin"
@@ -176,7 +178,7 @@ class ResultComponent extends React.Component {
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
-              value={this.state.device.value}
+              value={this.state.device}
               onChange={debounce(this.handleOnDeviceChange, 500)}
               clearable={false}
               options={deviceList}
@@ -185,7 +187,7 @@ class ResultComponent extends React.Component {
           </div>
           <div className="ConnectionInput__wrapper">
             <Select
-              value={this.state.connection.value}
+              value={this.state.connection}
               onChange={debounce(this.handleOnConnectionChange, 500)}
               clearable={false}
               searchable={false}
@@ -201,7 +203,7 @@ class ResultComponent extends React.Component {
             value={Number(this.state.time)}
             format={formatsecond}
             tooltip={false}
-            handleLabel={this.state.time}
+            handleLabel={this.state.time.toString()}
             onChange={this.handleOnTimeChange}
           />
         </div>
@@ -225,27 +227,27 @@ class ResultComponent extends React.Component {
             SEB score
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
                   : this.state.fcp["1"].toFixed(3)}
             </span>
           </div>
           <div className="fcpProb__wrapper">
             <span className="table__header">
-              Users with FCP {((this.state.fcp === null) || (this.state.time === "0") || this.state.fcp[this.state.time] === null) ? ""
+              Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time == "0") || this.state.fcp[this.state.time] === null) ? "-"
+              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
                 : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
             </span>
           </div>
           <div className="onloadProb__wrapper">
             <span className="table__header">
-              Users with onload {((this.state.onload === null) || (this.state.time === "0") || this.state.onload[this.state.time] === null) ? ""
+              Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
             <span className="table__content">
-              {((this.state.onload === null) || (this.state.time == "0") || this.state.onload[this.state.time] === null) ? "-"
+              {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
                 : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
             </span>
           </div>
