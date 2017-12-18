@@ -105,7 +105,6 @@ class ResultComponent extends React.Component {
       loading: true,
     });
     const origin = url.origin;
-    console.log(url)
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
