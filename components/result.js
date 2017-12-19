@@ -225,7 +225,7 @@ class ResultComponent extends React.Component {
         </div>
         <div className="table__wrapper">
           <div className="seb__wrapper">
-            <span className="table__header">
+            <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
             SEB score
             </span>
             <span className="table__content">
@@ -234,7 +234,7 @@ class ResultComponent extends React.Component {
             </span>
           </div>
           <div className="fcpProb__wrapper">
-            <span className="table__header">
+            <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
               Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
@@ -244,7 +244,7 @@ class ResultComponent extends React.Component {
             </span>
           </div>
           <div className="onloadProb__wrapper">
-            <span className="table__header">
+            <span className="table__header" title="The percentage of users completing document load within given time.">
               Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
                 : "<" + this.state.time + "s"}
             </span>
