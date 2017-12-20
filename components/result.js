@@ -1,4 +1,6 @@
 import React from "react";
+import qs from "qs";
+import Router from "next/router";
 import Select, { Async } from "react-select";
 import Slider from "react-rangeslider";
 import debounce from "es6-promise-debounce";
@@ -7,14 +9,30 @@ import Visual from "../components/visual";
 import Human from "../components/human";
 
 const humanCount = 1000;
+const defaultUrl = "https://google.com";
+const devAndconDefault = "all";
+const deviceList = [
+  { value: "all", label: "All device types" },
+  { value: "phone", label: "Phone" },
+  { value: "tablet", label: "Tablet" },
+  { value: "desktop", label: "Desktop" },
+];
+const connectionList = [
+  { value: "all", label: "All connection types" },
+  { value: "4G", label: "4G" },
+  { value: "3G", label: "3G" },
+  { value: "2G", label: "2G" },
+  { value: "slow-2G", label: "slow-2G" },
+  { value: "offline", label: "offline" },
+];
 
 class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: "https://google.com",
-      device:"all",
-      connection: "all",
+      url: defaultUrl,
+      device: devAndconDefault,
+      connection: devAndconDefault,
       time: 1,
       fcp: null,
       onload: null,
@@ -33,43 +51,64 @@ class ResultComponent extends React.Component {
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
   }
 
+  componentDidMount() {
+    const { device, connection, url, time } = Router.query;
+    const newURL = window.location.pathname + "?" +
+      qs.stringify({ url: defaultUrl, device: devAndconDefault,
+        connection: devAndconDefault }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
+  }
+
   handleOnURLChange(selectedOption) {
     this.setState({
       url: selectedOption,
     });
-    if (selectedOption) {  
+    if (selectedOption) {
       this.handleUpdateNumbers(
         selectedOption,
         this.state.device,
         this.state.connection,
       );
     }
+    const { device, connection, url, time } = Router.query;
+    const newURL = window.location.pathname + "?" +
+      qs.stringify({ url: selectedOption.origin, device: device ? device : devAndconDefault,
+        connection: connection ? connection : devAndconDefault }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
       device: selectedOption,
     });
-    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
+    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
       this.handleUpdateNumbers(
         this.state.url,
         selectedOption.value,
         this.state.connection,
       );
     }
+    const { device, connection, url, time } = Router.query;
+    const newURL = window.location.pathname + "?" +
+      qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
       connection: selectedOption,
     });
-    if ((this.state.url) || (!(this.state.url = "https://google.com"))) {
+    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
         selectedOption.value,
       );
     }
+    const { device, connection, url, time } = Router.query;
+    const newURL = window.location.pathname + "?" +
+      qs.stringify({ url, device, connection: selectedOption.value }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
@@ -147,21 +186,7 @@ class ResultComponent extends React.Component {
   }
 
   render() {
-    const urlPlaceholder = "https://google.com";
-    const deviceList = [
-      { value: "all", label: "All device types" },
-      { value: "phone", label: "Phone" },
-      { value: "tablet", label: "Tablet" },
-      { value: "desktop", label: "Desktop" },
-    ];
-    const connectionList = [
-      { value: "all", label: "All connection types" },
-      { value: "4G", label: "4G" },
-      { value: "3G", label: "3G" },
-      { value: "2G", label: "2G" },
-      { value: "slow-2G", label: "slow-2G" },
-      { value: "offline", label: "offline" },
-    ];
+    const urlPlaceholder = defaultUrl;
     const formatsecond = value => value + " s";
     return (
       <div className="container">
