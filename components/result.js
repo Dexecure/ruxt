@@ -54,9 +54,14 @@ class ResultComponent extends React.Component {
   componentDidMount() {
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: defaultUrl, device: devAndconDefault,
-        connection: devAndconDefault }, { encode: false });
+      qs.stringify({ url: url ? url : defaultUrl, device: device ? device : devAndconDefault,
+        connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
+    this.handleUpdateNumbers(
+      url,
+      device,
+      connection,
+    );
   }
 
   handleOnURLChange(selectedOption) {
@@ -143,7 +148,7 @@ class ResultComponent extends React.Component {
     this.setState({
       loading: true,
     });
-    const origin = url.origin;
+    const origin = url.origin || url;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
