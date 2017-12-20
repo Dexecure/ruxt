@@ -52,16 +52,26 @@ class ResultComponent extends React.Component {
   }
 
   componentDidMount() {
-    const { device, connection, url, time } = Router.query;
-    const newURL = window.location.pathname + "?" +
+    const { device, connection, url  } = Router.query;
+    if (url === undefined && device === undefined && connection === undefined) {
+      const basicURL = window.location.pathname;
+      Router.push(basicURL, basicURL, { shallow: true });
+    } else {
+      const newURL = window.location.pathname + "?" +
       qs.stringify({ url: url ? url : defaultUrl, device: device ? device : devAndconDefault,
         connection: connection ? connection : devAndconDefault }, { encode: false });
-    Router.push(newURL, newURL, { shallow: true });
-    this.handleUpdateNumbers(
-      url,
-      device,
-      connection,
-    );
+      Router.push(newURL, newURL, { shallow: true });
+      this.setState({
+        url: url,
+        device: device,
+        connection: connection
+      });
+      this.handleUpdateNumbers(
+        url,
+        device,
+        connection,
+      );
+    }
   }
 
   handleOnURLChange(selectedOption) {
