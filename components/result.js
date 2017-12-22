@@ -7,6 +7,8 @@ import debounce from "es6-promise-debounce";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Human from "../components/human";
+import { isArray } from "util";
+import Autocomplete from 'react-autocomplete';
 
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
@@ -205,6 +207,17 @@ class ResultComponent extends React.Component {
     const formatsecond = value => value + " s";
     return (
       <div className="container">
+        <Autocomplete
+          getItemValue={(url) => url.origin}
+          items={debounce(this.handleOnURLChange, 500)}
+          renderItem={(url, isHighlighted) =>
+            <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+              {url.origin}
+            </div>
+          }
+          value={this.state.url}
+          onChange={debounce(this.handleOnURLChange, 500)}
+        />
         <div className="URLInput__wrapper">
           <Async
             placeholder={urlPlaceholder}
