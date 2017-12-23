@@ -214,7 +214,7 @@ class ResultComponent extends React.Component {
     });
   };
 
-  onUrlSuggestionsFetchRequested = () => {
+  onSuggestionsClearRequested = () => {
     this.setState({
       urlSuggestions: []
     });
@@ -237,6 +237,7 @@ class ResultComponent extends React.Component {
     const inputProps = {
       placeholder: urlPlaceholder,
       value,
+      onFocus: () => {this.setState({url: ''})},
       onChange: debounce(this.handleOnURLChange, 500)
     };
     return (
@@ -245,7 +246,7 @@ class ResultComponent extends React.Component {
         <Autosuggest 
           suggestions={this.state.urlSuggestions}
           onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onUrlSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={this.getUrlSuggestionValue}
           renderSuggestion={this.renderUrlSuggestion}
           inputProps={inputProps}
