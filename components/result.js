@@ -1,9 +1,10 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Select, { Async } from "react-select";
+import Autosuggest from 'react-autosuggest';
+import Select from "react-select";
 import Slider from "react-rangeslider";
-import debounce from "es6-promise-debounce";
+import _ from "underscore";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Human from "../components/human";
@@ -30,6 +31,7 @@ class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      urlSuggestions: [],
       url: defaultUrl,
       device: devAndconDefault,
       connection: devAndconDefault,
@@ -49,6 +51,7 @@ class ResultComponent extends React.Component {
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
+    this.debouncedLoadSuggestions = _.debounce(this.loadSuggestionsFromServer, 1000);
   }
 
   componentDidMount() {
@@ -74,20 +77,23 @@ class ResultComponent extends React.Component {
     }
   }
 
-  handleOnURLChange(selectedOption) {
+  handleOnURLChange(event, { newValue }) {
+    console.log('handle url change');
+    const originUrl = { newValue };
     this.setState({
-      url: selectedOption,
+      url: originUrl.newValue,
     });
-    if (selectedOption) {
-      this.handleUpdateNumbers(
-        selectedOption,
-        this.state.device,
-        this.state.connection,
-      );
-    }
+    // if (originUrl) {
+    //   this.handleUpdateNumbers(
+    //     originUrl.newValue,
+    //     this.state.device,
+    //     this.state.connection,
+    //   );
+    // }
+
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: selectedOption.origin, device: device ? device : devAndconDefault,
+      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
         connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -171,12 +177,14 @@ class ResultComponent extends React.Component {
       }),
     });
     const responseJSON = await response.json();
-    this.setState({
-      fcp: responseJSON.bam.fcp,
-      onload: responseJSON.bam.onload,
-      loading: false,
-    });
-    this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    if(responseJSON.bam.fcp && responseJSON.bam.onload) {
+      this.setState({
+        fcp: responseJSON.bam.fcp,
+        onload: responseJSON.bam.onload,
+        loading: false,
+      });
+      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    }
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -199,29 +207,64 @@ class ResultComponent extends React.Component {
       loadingHumanCount,
     });
   }
+    
+  async loadSuggestionsFromServer(value) {
+    console.log(value);
+    const urls = await this.handleGetOrigins(value);
+    console.log(urls.options);
+    this.setState({
+      urlSuggestions: urls.options,
+    });
+  };
+
+  onUrlSuggestionsFetchRequested = ({ value }) => {
+    this.debouncedLoadSuggestions(value);
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      urlSuggestions: []
+    });
+  };
+
+  getUrlSuggestionValue(url) {
+    return url.origin;
+  }
+  
+  renderUrlSuggestion(url) {
+    return (
+      <span>{url.origin}</span>
+    );
+  }
 
   render() {
     const urlPlaceholder = defaultUrl;
     const formatsecond = value => value + " s";
+    const value = this.state.url
+    const inputProps = {
+      placeholder: urlPlaceholder,
+      value,
+      onFocus: () => {this.setState({url: ''})},
+      onChange: this.handleOnURLChange,
+    };
+
     return (
       <div className="container">
         <div className="URLInput__wrapper">
-          <Async
-            placeholder={urlPlaceholder}
-            value={this.state.url}
-            onChange={debounce(this.handleOnURLChange, 500)}
-            valueKey="origin"
-            labelKey="origin"
-            clearable={false}
-            backspaceRemoves={true}
-            loadOptions={debounce(this.handleGetOrigins, 500)}
-          />
+        <Autosuggest 
+          suggestions={this.state.urlSuggestions}
+          onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={this.getUrlSuggestionValue}
+          renderSuggestion={this.renderUrlSuggestion}
+          inputProps={inputProps}
+        />
         </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
               value={this.state.device}
-              onChange={debounce(this.handleOnDeviceChange, 500)}
+              onChange={this.handleOnDeviceChange}
               clearable={false}
               options={deviceList}
               searchable={false}
@@ -230,7 +273,7 @@ class ResultComponent extends React.Component {
           <div className="ConnectionInput__wrapper">
             <Select
               value={this.state.connection}
-              onChange={debounce(this.handleOnConnectionChange, 500)}
+              onChange={this.handleOnConnectionChange}
               clearable={false}
               searchable={false}
               options={connectionList}
