@@ -18,13 +18,15 @@
     "es6-promise-debounce": "^1.0.1",
     "next": "^4.2.1",
     "react": "^16.2.0",
+    "react-autocomplete": "^1.7.2",
     "react-autosuggest": "^9.3.2",
     "react-dom": "^16.2.0",
     "react-ga": "^2.3.5",
     "react-rangeslider": "^2.2.0",
     "react-select": "^1.1.0",
     "react-spinners": "^0.2.5",
-    "react-typekit": "^1.1.0"
+    "react-typekit": "^1.1.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "eslint": "^4.13.1",

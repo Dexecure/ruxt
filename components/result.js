@@ -4,7 +4,7 @@ import Router from "next/router";
 import Autosuggest from 'react-autosuggest';
 import Select from "react-select";
 import Slider from "react-rangeslider";
-import debounce from "es6-promise-debounce";
+import _ from "underscore";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Human from "../components/human";
@@ -51,6 +51,7 @@ class ResultComponent extends React.Component {
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
+    this.debouncedLoadSuggestions = _.debounce(this.loadSuggestionsFromServer, 1000);
   }
 
   componentDidMount() {
@@ -77,17 +78,18 @@ class ResultComponent extends React.Component {
   }
 
   handleOnURLChange(event, { newValue }) {
+    console.log('handle url change');
     const originUrl = { newValue };
     this.setState({
       url: originUrl.newValue,
     });
-    if (originUrl) {
-      this.handleUpdateNumbers(
-        originUrl.newValue,
-        this.state.device,
-        this.state.connection,
-      );
-    }
+    // if (originUrl) {
+    //   this.handleUpdateNumbers(
+    //     originUrl.newValue,
+    //     this.state.device,
+    //     this.state.connection,
+    //   );
+    // }
 
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
@@ -206,12 +208,17 @@ class ResultComponent extends React.Component {
     });
   }
     
-  onUrlSuggestionsFetchRequested = ({ value }) => {
-    this.handleGetOrigins(value).then((urls) => {
-      this.setState({
-        urlSuggestions: urls.options
-      })
+  async loadSuggestionsFromServer(value) {
+    console.log(value);
+    const urls = await this.handleGetOrigins(value);
+    console.log(urls.options);
+    this.setState({
+      urlSuggestions: urls.options,
     });
+  };
+
+  onUrlSuggestionsFetchRequested = ({ value }) => {
+    this.debouncedLoadSuggestions(value);
   };
 
   onSuggestionsClearRequested = () => {
@@ -238,14 +245,15 @@ class ResultComponent extends React.Component {
       placeholder: urlPlaceholder,
       value,
       onFocus: () => {this.setState({url: ''})},
-      onChange: debounce(this.handleOnURLChange, 500)
+      onChange: this.handleOnURLChange,
     };
+
     return (
       <div className="container">
         <div className="URLInput__wrapper">
         <Autosuggest 
           suggestions={this.state.urlSuggestions}
-          onSuggestionsFetchRequested={debounce(this.onUrlSuggestionsFetchRequested, 500)}
+          onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={this.getUrlSuggestionValue}
           renderSuggestion={this.renderUrlSuggestion}
@@ -256,7 +264,7 @@ class ResultComponent extends React.Component {
           <div className="DeviceInput__wrapper">
             <Select
               value={this.state.device}
-              onChange={debounce(this.handleOnDeviceChange, 500)}
+              onChange={this.handleOnDeviceChange}
               clearable={false}
               options={deviceList}
               searchable={false}
@@ -265,7 +273,7 @@ class ResultComponent extends React.Component {
           <div className="ConnectionInput__wrapper">
             <Select
               value={this.state.connection}
-              onChange={debounce(this.handleOnConnectionChange, 500)}
+              onChange={this.handleOnConnectionChange}
               clearable={false}
               searchable={false}
               options={connectionList}
