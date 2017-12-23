@@ -263,11 +263,8 @@ class ResultComponent extends React.Component {
     const inputProps = {
       placeholder: urlPlaceholder,
       value,
-      onFocus: () => {
-        // this.setState({
-        //   url: "",
-        //   urlSuggestions: [],
-        // });
+      onFocus: (ev) => {
+        ev.target.select();
       },
       onChange: this.handleOnURLChange,
     };
