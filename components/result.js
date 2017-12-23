@@ -51,7 +51,9 @@ class ResultComponent extends React.Component {
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
-    this.debouncedLoadSuggestions = _.debounce(this.loadSuggestionsFromServer, 1000);
+    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.debouncedLoadSuggestions = _.debounce(this.loadSuggestionsFromServer, 500);
   }
 
   componentDidMount() {
@@ -81,8 +83,17 @@ class ResultComponent extends React.Component {
     const originUrl = { newValue };
     this.setState({
       url: originUrl.newValue,
+      urlSuggestions: [],
     });
 
+    // update with new numbers
+    this.handleUpdateNumbers(
+      originUrl.newValue,
+      this.state.device,
+      this.state.connection,
+    );
+
+    // update the url
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
@@ -155,6 +166,11 @@ class ResultComponent extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
+    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+      // doesnt seem to be a valid url
+      return;
+    }
+
     this.setState({
       loading: true,
     });
@@ -171,14 +187,12 @@ class ResultComponent extends React.Component {
       }),
     });
     const responseJSON = await response.json();
-    if(responseJSON.bam.fcp && responseJSON.bam.onload) {
-      this.setState({
-        fcp: responseJSON.bam.fcp,
-        onload: responseJSON.bam.onload,
-        loading: false,
-      });
-      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
-    }
+    this.setState({
+      fcp: responseJSON.bam.fcp,
+      onload: responseJSON.bam.onload,
+      loading: false,
+    });
+    this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -190,39 +204,52 @@ class ResultComponent extends React.Component {
       });
       return;
     }
-    const fcp_prob = fcp[time];
-    const onload_prob = onload[time];
-    const onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
-    const fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+
+    let onloadHumanCount = 0;
+    let fcpHumanCount = 0;
+    let onload_prob = 0;
+    let fcp_prob = 0;
+
+    if (onload) {
+      onload_prob = onload[time];
+      onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
+    }
+
+    if (fcp) {
+      fcp_prob = fcp[time];
+      fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+    }
+
     const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
+
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
       loadingHumanCount,
     });
   }
-    
+
   async loadSuggestionsFromServer(value) {
     const urls = await this.handleGetOrigins(value);
     this.setState({
       urlSuggestions: urls.options,
     });
-  };
+  }
 
   onUrlSuggestionsFetchRequested({ value }) {
     this.debouncedLoadSuggestions(value);
-  };
+  }
 
   onSuggestionsClearRequested() {
     this.setState({
-      urlSuggestions: []
+      urlSuggestions: [],
     });
-  };
+  }
 
   getUrlSuggestionValue(url) {
     return url.origin;
   }
-  
+
   renderUrlSuggestion(url) {
     return (
       <span>{url.origin}</span>
@@ -231,19 +258,24 @@ class ResultComponent extends React.Component {
 
   render() {
     const urlPlaceholder = defaultUrl;
-    const formatsecond = value => value + " s";
-    const value = this.state.url
+    const formatsecond = value => `${value} s`;
+    const value = this.state.url;
     const inputProps = {
       placeholder: urlPlaceholder,
       value,
-      onFocus: () => {this.setState({url: ''})},
+      onFocus: () => {
+        // this.setState({
+        //   url: "",
+        //   urlSuggestions: [],
+        // });
+      },
       onChange: this.handleOnURLChange,
     };
 
     return (
       <div className="container">
         <div className="URLInput__wrapper">
-        <Autosuggest 
+        <Autosuggest
           suggestions={this.state.urlSuggestions}
           onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
