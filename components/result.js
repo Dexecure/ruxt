@@ -1,7 +1,8 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Select, { Async } from "react-select";
+import Autosuggest from 'react-autosuggest';
+import Select from "react-select";
 import Slider from "react-rangeslider";
 import debounce from "es6-promise-debounce";
 import { PulseLoader } from "react-spinners";
@@ -30,6 +31,7 @@ class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      urlSuggestions: [],
       url: defaultUrl,
       device: devAndconDefault,
       connection: devAndconDefault,
@@ -74,20 +76,22 @@ class ResultComponent extends React.Component {
     }
   }
 
-  handleOnURLChange(selectedOption) {
+  handleOnURLChange(event, { newValue }) {
+    const originUrl = { newValue };
     this.setState({
-      url: selectedOption,
+      url: originUrl.newValue,
     });
-    if (selectedOption) {
+    if (originUrl) {
       this.handleUpdateNumbers(
-        selectedOption,
+        originUrl.newValue,
         this.state.device,
         this.state.connection,
       );
     }
+
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: selectedOption.origin, device: device ? device : devAndconDefault,
+      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
         connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -171,12 +175,14 @@ class ResultComponent extends React.Component {
       }),
     });
     const responseJSON = await response.json();
-    this.setState({
-      fcp: responseJSON.bam.fcp,
-      onload: responseJSON.bam.onload,
-      loading: false,
-    });
-    this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    if(responseJSON.bam.fcp && responseJSON.bam.onload) {
+      this.setState({
+        fcp: responseJSON.bam.fcp,
+        onload: responseJSON.bam.onload,
+        loading: false,
+      });
+      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    }
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -199,23 +205,52 @@ class ResultComponent extends React.Component {
       loadingHumanCount,
     });
   }
+    
+  onUrlSuggestionsFetchRequested = ({ value }) => {
+    this.handleGetOrigins(value).then((urls) => {
+      this.setState({
+        urlSuggestions: urls.options
+      })
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      urlSuggestions: []
+    });
+  };
+
+  getUrlSuggestionValue(url) {
+    return url.origin;
+  }
+  
+  renderUrlSuggestion(url) {
+    return (
+      <span>{url.origin}</span>
+    );
+  }
 
   render() {
     const urlPlaceholder = defaultUrl;
     const formatsecond = value => value + " s";
+    const value = this.state.url
+    const inputProps = {
+      placeholder: urlPlaceholder,
+      value,
+      onFocus: () => {this.setState({url: ''})},
+      onChange: debounce(this.handleOnURLChange, 500)
+    };
     return (
       <div className="container">
         <div className="URLInput__wrapper">
-          <Async
-            placeholder={urlPlaceholder}
-            value={this.state.url}
-            onChange={debounce(this.handleOnURLChange, 500)}
-            valueKey="origin"
-            labelKey="origin"
-            clearable={false}
-            backspaceRemoves={true}
-            loadOptions={debounce(this.handleGetOrigins, 500)}
-          />
+        <Autosuggest 
+          suggestions={this.state.urlSuggestions}
+          onSuggestionsFetchRequested={debounce(this.onUrlSuggestionsFetchRequested, 500)}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={this.getUrlSuggestionValue}
+          renderSuggestion={this.renderUrlSuggestion}
+          inputProps={inputProps}
+        />
         </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
