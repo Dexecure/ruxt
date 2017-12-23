@@ -245,7 +245,7 @@ class ResultComponent extends React.Component {
         <div className="URLInput__wrapper">
         <Autosuggest 
           suggestions={this.state.urlSuggestions}
-          onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
+          onSuggestionsFetchRequested={debounce(this.onUrlSuggestionsFetchRequested, 500)}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={this.getUrlSuggestionValue}
           renderSuggestion={this.renderUrlSuggestion}
