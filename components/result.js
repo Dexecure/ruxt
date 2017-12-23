@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from "react-autosuggest";
 import Select from "react-select";
 import Slider from "react-rangeslider";
 import _ from "underscore";
@@ -67,7 +67,7 @@ class ResultComponent extends React.Component {
       this.setState({
         url: url,
         device: device,
-        connection: connection
+        connection: connection,
       });
       this.handleUpdateNumbers(
         url,
@@ -78,18 +78,10 @@ class ResultComponent extends React.Component {
   }
 
   handleOnURLChange(event, { newValue }) {
-    console.log('handle url change');
     const originUrl = { newValue };
     this.setState({
       url: originUrl.newValue,
     });
-    // if (originUrl) {
-    //   this.handleUpdateNumbers(
-    //     originUrl.newValue,
-    //     this.state.device,
-    //     this.state.connection,
-    //   );
-    // }
 
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
@@ -126,14 +118,18 @@ class ResultComponent extends React.Component {
         selectedOption.value,
       );
     }
-    const { device, connection, url, time } = Router.query;
+    const {
+      device,
+      connection,
+      url,
+      time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url, device, connection: selectedOption.value }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
-    if(typeof(selectedOption) === "number") {
+    if (typeof(selectedOption) === "number") {
       this.setState({
         time: selectedOption,
       });
@@ -155,9 +151,7 @@ class ResultComponent extends React.Component {
       }),
     })
       .then(response => response.json())
-      .then((json) => {
-        return { options: json };
-      });
+      .then(json => ({ options: json }));
   }
 
   async handleUpdateNumbers(url, device, connection) {
@@ -209,19 +203,17 @@ class ResultComponent extends React.Component {
   }
     
   async loadSuggestionsFromServer(value) {
-    console.log(value);
     const urls = await this.handleGetOrigins(value);
-    console.log(urls.options);
     this.setState({
       urlSuggestions: urls.options,
     });
   };
 
-  onUrlSuggestionsFetchRequested = ({ value }) => {
+  onUrlSuggestionsFetchRequested({ value }) {
     this.debouncedLoadSuggestions(value);
   };
 
-  onSuggestionsClearRequested = () => {
+  onSuggestionsClearRequested() {
     this.setState({
       urlSuggestions: []
     });
@@ -329,7 +321,7 @@ class ResultComponent extends React.Component {
           <div className="onloadProb__wrapper">
             <span className="table__header" title="The percentage of users completing document load within given time.">
               Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
+                : `<${this.state.time}s`}
             </span>
             <span className="table__content">
               {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
@@ -347,8 +339,8 @@ class ResultComponent extends React.Component {
               </div>
               <div className="explanation__section">
                 <span className="explanation__text">
-                  - Select a website using the autocomplete.<br></br>
-                  - (Optional) select a device and connection type. <br></br>
+                  - Select a website using the autocomplete.<br />
+                  - (Optional) select a device and connection type. <br />
                   - Use the time slider to select the user wait time.
                 </span>
               </div>
@@ -361,8 +353,8 @@ class ResultComponent extends React.Component {
               </div>
               <div className="explanation__section">
                 <span className="explanation__text">
-                  - <Human color="#ffffff" /> : no content loaded,<br></br>
-                  - <Human color="#5486AA" /> : some content loaded,<br></br>
+                  - <Human color="#ffffff" /> : no content loaded,<br />
+                  - <Human color="#5486AA" /> : some content loaded,<br />
                   - <Human color="#153B58" /> : document loaded.
                 </span>
               </div>
@@ -375,8 +367,8 @@ class ResultComponent extends React.Component {
           </div>
           <div className="explanation__section">
             <span className="explanation__text">
-              - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br></br>
-              - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br></br>
+              - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
+              - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
               - The percentage of users completing document load within given time.<br></br>
             </span>
           </div>
@@ -387,8 +379,8 @@ class ResultComponent extends React.Component {
           </div>
           <div className="explanation__section">
             <span className="explanation__text">
-              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br></br>
-              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br></br>
+              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br />
+              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br />
               - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
             </span>
           </div>
