@@ -186,13 +186,24 @@ class ResultComponent extends React.Component {
         connection,
       }),
     });
-    const responseJSON = await response.json();
-    this.setState({
-      fcp: responseJSON.bam.fcp,
-      onload: responseJSON.bam.onload,
-      loading: false,
-    });
-    this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+
+    if (response.ok) {
+      const responseJSON = await response.json();
+      this.setState({
+        fcp: responseJSON.bam.fcp,
+        onload: responseJSON.bam.onload,
+        loading: false,
+      });
+      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    } else {
+      // probably origin doesn't exist
+      this.setState({
+        onloadHumanCount: 0,
+        fcpHumanCount: 0,
+        loadingHumanCount: humanCount,
+        loading: false,
+      });
+    }
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -272,14 +283,14 @@ class ResultComponent extends React.Component {
     return (
       <div className="container">
         <div className="URLInput__wrapper">
-        <Autosuggest
-          suggestions={this.state.urlSuggestions}
-          onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getUrlSuggestionValue}
-          renderSuggestion={this.renderUrlSuggestion}
-          inputProps={inputProps}
-        />
+          <Autosuggest
+            suggestions={this.state.urlSuggestions}
+            onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={this.getUrlSuggestionValue}
+            renderSuggestion={this.renderUrlSuggestion}
+            inputProps={inputProps}
+          />
         </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
@@ -398,7 +409,7 @@ class ResultComponent extends React.Component {
             <span className="explanation__text">
               - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
               - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
-              - The percentage of users completing document load within given time.<br></br>
+              - The percentage of users completing document load within given time.<br />
             </span>
           </div>
           <div className="explanation__header">
