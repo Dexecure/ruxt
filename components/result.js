@@ -4,7 +4,7 @@ import Router from "next/router";
 import Autosuggest from "react-autosuggest";
 import Select from "react-select";
 import Slider from "react-rangeslider";
-import _ from "underscore";
+import { debounce } from "underscore";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Human from "../components/human";
@@ -53,7 +53,7 @@ class ResultComponent extends React.Component {
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
     this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
-    this.debouncedLoadSuggestions = _.debounce(this.loadSuggestionsFromServer, 500);
+    this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
   }
 
   componentDidMount() {
