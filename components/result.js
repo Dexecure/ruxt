@@ -53,6 +53,7 @@ class ResultComponent extends React.Component {
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
     this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
   }
 
@@ -67,9 +68,9 @@ class ResultComponent extends React.Component {
         connection: connection ? connection : devAndconDefault }, { encode: false });
       Router.push(newURL, newURL, { shallow: true });
       this.setState({
-        url: url,
-        device: device,
-        connection: connection,
+        url,
+        device,
+        connection,
       });
       this.handleUpdateNumbers(
         url,
@@ -83,15 +84,7 @@ class ResultComponent extends React.Component {
     const originUrl = { newValue };
     this.setState({
       url: originUrl.newValue,
-      urlSuggestions: [],
     });
-
-    // update with new numbers
-    this.handleUpdateNumbers(
-      originUrl.newValue,
-      this.state.device,
-      this.state.connection,
-    );
 
     // update the url
     const { device, connection, url, time } = Router.query;
@@ -166,6 +159,7 @@ class ResultComponent extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
+    console.log(url, device, connection);
     if (!(url.startsWith("http://") || url.startsWith("https://"))) {
       // doesnt seem to be a valid url
       return;
@@ -240,6 +234,14 @@ class ResultComponent extends React.Component {
     });
   }
 
+  async onSuggestionSelected(event, { suggestion }) {
+    this.handleUpdateNumbers(
+      suggestion.origin,
+      this.state.device,
+      this.state.connection,
+    );
+  }
+
   async loadSuggestionsFromServer(value) {
     const urls = await this.handleGetOrigins(value);
     this.setState({
@@ -287,6 +289,7 @@ class ResultComponent extends React.Component {
             suggestions={this.state.urlSuggestions}
             onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            onSuggestionSelected={this.onSuggestionSelected}
             getSuggestionValue={this.getUrlSuggestionValue}
             renderSuggestion={this.renderUrlSuggestion}
             inputProps={inputProps}
