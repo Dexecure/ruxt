@@ -36,13 +36,8 @@ class RUXtestApp extends React.Component {
           <h1>Real User Experience Test (rUXt)</h1>
           <h2>1,241,019 websites accessed by Google Chrome Users</h2>
         </div>
-        <div>
-          <div className="outer l">
-            <ResultComponent />
-          </div>
-          <div className="outer l">
-            <ResultComponent />
-          </div>
+        <div className="outer l">
+          <ResultComponent />
         </div>
         <div className="footer--content l">
           <p>Data from <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{ color: "#db3340" }}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>

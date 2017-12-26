@@ -85,22 +85,23 @@ const Meta = () => (
           position: relative;
       }
       .outer {
-          display: inline-block;
+          display: flex;
           justify-content: center;
           flex-direction: column;
           align-items: center;
           z-index: -999;
           padding: 1em;
-          max-width: 46%;
       }
       .container {
           padding: 1.5em 2em;
+          width: 80%;
           box-shadow: 0 5px 5px 0 rgba(0,0,0,0.4),
                       0 3px 1px -2px rgba(0,0,0,0.12),
                       0 1px 5px 0 rgba(0,0,0,0.4);
           background-color: #ffffff;
           z-index: 0;
           border-radius: 4px;
+          margin: 0 auto;
       }
     `}
     </style>
