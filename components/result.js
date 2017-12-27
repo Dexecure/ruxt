@@ -1,9 +1,10 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Select, { Async } from "react-select";
+import Autosuggest from "react-autosuggest";
+import Select from "react-select";
 import Slider from "react-rangeslider";
-import debounce from "es6-promise-debounce";
+import { debounce } from "underscore";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Human from "../components/human";
@@ -30,6 +31,7 @@ class ResultComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      urlSuggestions: [],
       url: defaultUrl,
       device: devAndconDefault,
       connection: devAndconDefault,
@@ -49,6 +51,10 @@ class ResultComponent extends React.Component {
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
+    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
   }
 
   componentDidMount() {
@@ -62,9 +68,9 @@ class ResultComponent extends React.Component {
         connection: connection ? connection : devAndconDefault }, { encode: false });
       Router.push(newURL, newURL, { shallow: true });
       this.setState({
-        url: url,
-        device: device,
-        connection: connection
+        url,
+        device,
+        connection,
       });
       this.handleUpdateNumbers(
         url,
@@ -74,20 +80,16 @@ class ResultComponent extends React.Component {
     }
   }
 
-  handleOnURLChange(selectedOption) {
+  handleOnURLChange(event, { newValue }) {
+    const originUrl = { newValue };
     this.setState({
-      url: selectedOption,
+      url: originUrl.newValue,
     });
-    if (selectedOption) {
-      this.handleUpdateNumbers(
-        selectedOption,
-        this.state.device,
-        this.state.connection,
-      );
-    }
+
+    // update the url
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: selectedOption.origin, device: device ? device : devAndconDefault,
+      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
         connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -120,14 +122,18 @@ class ResultComponent extends React.Component {
         selectedOption.value,
       );
     }
-    const { device, connection, url, time } = Router.query;
+    const {
+      device,
+      connection,
+      url,
+      time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url, device, connection: selectedOption.value }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
-    if(typeof(selectedOption) === "number") {
+    if (typeof(selectedOption) === "number") {
       this.setState({
         time: selectedOption,
       });
@@ -149,12 +155,16 @@ class ResultComponent extends React.Component {
       }),
     })
       .then(response => response.json())
-      .then((json) => {
-        return { options: json };
-      });
+      .then(json => ({ options: json }));
   }
 
   async handleUpdateNumbers(url, device, connection) {
+    console.log(url, device, connection);
+    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+      // doesnt seem to be a valid url
+      return;
+    }
+
     this.setState({
       loading: true,
     });
@@ -170,13 +180,24 @@ class ResultComponent extends React.Component {
         connection,
       }),
     });
-    const responseJSON = await response.json();
-    this.setState({
-      fcp: responseJSON.bam.fcp,
-      onload: responseJSON.bam.onload,
-      loading: false,
-    });
-    this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+
+    if (response.ok) {
+      const responseJSON = await response.json();
+      this.setState({
+        fcp: responseJSON.bam.fcp,
+        onload: responseJSON.bam.onload,
+        loading: false,
+      });
+      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+    } else {
+      // probably origin doesn't exist
+      this.setState({
+        onloadHumanCount: 0,
+        fcpHumanCount: 0,
+        loadingHumanCount: humanCount,
+        loading: false,
+      });
+    }
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -188,11 +209,24 @@ class ResultComponent extends React.Component {
       });
       return;
     }
-    const fcp_prob = fcp[time];
-    const onload_prob = onload[time];
-    const onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
-    const fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+
+    let onloadHumanCount = 0;
+    let fcpHumanCount = 0;
+    let onload_prob = 0;
+    let fcp_prob = 0;
+
+    if (onload) {
+      onload_prob = onload[time];
+      onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
+    }
+
+    if (fcp) {
+      fcp_prob = fcp[time];
+      fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+    }
+
     const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
+
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
@@ -200,28 +234,72 @@ class ResultComponent extends React.Component {
     });
   }
 
+  async onSuggestionSelected(event, { suggestion }) {
+    this.handleUpdateNumbers(
+      suggestion.origin,
+      this.state.device,
+      this.state.connection,
+    );
+  }
+
+  async loadSuggestionsFromServer(value) {
+    const urls = await this.handleGetOrigins(value);
+    this.setState({
+      urlSuggestions: urls.options,
+    });
+  }
+
+  onUrlSuggestionsFetchRequested({ value }) {
+    this.debouncedLoadSuggestions(value);
+  }
+
+  onSuggestionsClearRequested() {
+    this.setState({
+      urlSuggestions: [],
+    });
+  }
+
+  getUrlSuggestionValue(url) {
+    return url.origin;
+  }
+
+  renderUrlSuggestion(url) {
+    return (
+      <span>{url.origin}</span>
+    );
+  }
+
   render() {
     const urlPlaceholder = defaultUrl;
-    const formatsecond = value => value + " s";
+    const formatsecond = value => `${value} s`;
+    const value = this.state.url;
+    const inputProps = {
+      placeholder: urlPlaceholder,
+      value,
+      onFocus: (ev) => {
+        ev.target.select();
+      },
+      onChange: this.handleOnURLChange,
+    };
+
     return (
       <div className="container">
         <div className="URLInput__wrapper">
-          <Async
-            placeholder={urlPlaceholder}
-            value={this.state.url}
-            onChange={debounce(this.handleOnURLChange, 500)}
-            valueKey="origin"
-            labelKey="origin"
-            clearable={false}
-            backspaceRemoves={true}
-            loadOptions={debounce(this.handleGetOrigins, 500)}
+          <Autosuggest
+            suggestions={this.state.urlSuggestions}
+            onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            onSuggestionSelected={this.onSuggestionSelected}
+            getSuggestionValue={this.getUrlSuggestionValue}
+            renderSuggestion={this.renderUrlSuggestion}
+            inputProps={inputProps}
           />
         </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
               value={this.state.device}
-              onChange={debounce(this.handleOnDeviceChange, 500)}
+              onChange={this.handleOnDeviceChange}
               clearable={false}
               options={deviceList}
               searchable={false}
@@ -230,7 +308,7 @@ class ResultComponent extends React.Component {
           <div className="ConnectionInput__wrapper">
             <Select
               value={this.state.connection}
-              onChange={debounce(this.handleOnConnectionChange, 500)}
+              onChange={this.handleOnConnectionChange}
               clearable={false}
               searchable={false}
               options={connectionList}
@@ -286,7 +364,7 @@ class ResultComponent extends React.Component {
           <div className="onloadProb__wrapper">
             <span className="table__header" title="The percentage of users completing document load within given time.">
               Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
+                : `<${this.state.time}s`}
             </span>
             <span className="table__content">
               {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
@@ -304,8 +382,8 @@ class ResultComponent extends React.Component {
               </div>
               <div className="explanation__section">
                 <span className="explanation__text">
-                  - Select a website using the autocomplete.<br></br>
-                  - (Optional) select a device and connection type. <br></br>
+                  - Select a website using the autocomplete.<br />
+                  - (Optional) select a device and connection type. <br />
                   - Use the time slider to select the user wait time.
                 </span>
               </div>
@@ -318,8 +396,8 @@ class ResultComponent extends React.Component {
               </div>
               <div className="explanation__section">
                 <span className="explanation__text">
-                  - <Human color="#ffffff" /> : no content loaded,<br></br>
-                  - <Human color="#5486AA" /> : some content loaded,<br></br>
+                  - <Human color="#ffffff" /> : no content loaded,<br />
+                  - <Human color="#5486AA" /> : some content loaded,<br />
                   - <Human color="#153B58" /> : document loaded.
                 </span>
               </div>
@@ -332,9 +410,9 @@ class ResultComponent extends React.Component {
           </div>
           <div className="explanation__section">
             <span className="explanation__text">
-              - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br></br>
-              - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br></br>
-              - The percentage of users completing document load within given time.<br></br>
+              - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
+              - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
+              - The percentage of users completing document load within given time.<br />
             </span>
           </div>
           <div className="explanation__header">
@@ -344,8 +422,8 @@ class ResultComponent extends React.Component {
           </div>
           <div className="explanation__section">
             <span className="explanation__text">
-              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br></br>
-              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br></br>
+              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br />
+              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br />
               - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
             </span>
           </div>
