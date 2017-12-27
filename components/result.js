@@ -205,6 +205,18 @@ class ResultComponent extends React.Component {
     const formatsecond = value => value + " s";
     return (
       <div className="container">
+        <div className="URLInput__wrapper">
+          <Async
+            placeholder={urlPlaceholder}
+            value={this.state.url}
+            onChange={debounce(this.handleOnURLChange, 500)}
+            valueKey="origin"
+            labelKey="origin"
+            clearable={false}
+            backspaceRemoves={true}
+            loadOptions={debounce(this.handleGetOrigins, 500)}
+          />
+        </div>
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
             <Select
@@ -237,33 +249,21 @@ class ResultComponent extends React.Component {
             onChange={this.handleOnTimeChange}
           />
         </div>
-        <div className="URLCompare__wrapper">
-          <div className="URLInput__wrapper">
-            <Async
-              placeholder={urlPlaceholder}
-              value={this.state.url}
-              onChange={debounce(this.handleOnURLChange, 500)}
-              valueKey="origin"
-              labelKey="origin"
-              clearable={false}
-              backspaceRemoves={true}
-              loadOptions={debounce(this.handleGetOrigins, 500)}
+        <div className="visual__wrapper">
+          <div className="loader">
+            <PulseLoader
+              color="#db3340"
+              loading={this.state.loading}
+              size={30}
             />
-            <div className="visual__wrapper">
-              <div className="loader">
-                <PulseLoader
-                  color="#db3340"
-                  loading={this.state.loading}
-                  size={30}
-                />
-              </div>
-              <Visual
-                fcpHumanCount={this.state.fcpHumanCount}
-                onloadHumanCount={this.state.onloadHumanCount}
-                loadingHumanCount={this.state.loadingHumanCount}
-              />
-            </div>
-            <div className="table__wrapper">
+          </div>
+          <Visual
+            fcpHumanCount={this.state.fcpHumanCount}
+            onloadHumanCount={this.state.onloadHumanCount}
+            loadingHumanCount={this.state.loadingHumanCount}
+          />
+        </div>
+        <div className="table__wrapper">
           <div className="seb__wrapper">
             <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
             SEB score
@@ -294,96 +294,6 @@ class ResultComponent extends React.Component {
             </span>
           </div>
         </div>
-          </div>
-          <div className="URLInput__wrapper">
-            <Async
-              placeholder={urlPlaceholder}
-              value={this.state.url}
-              onChange={debounce(this.handleOnURLChange, 500)}
-              valueKey="origin"
-              labelKey="origin"
-              clearable={false}
-              backspaceRemoves={true}
-              loadOptions={debounce(this.handleGetOrigins, 500)}
-            />
-            <div className="visual__wrapper">
-              <div className="loader">
-                <PulseLoader
-                  color="#db3340"
-                  loading={this.state.loading}
-                  size={30}
-                />
-              </div>
-              <Visual
-                fcpHumanCount={this.state.fcpHumanCount}
-                onloadHumanCount={this.state.onloadHumanCount}
-                loadingHumanCount={this.state.loadingHumanCount}
-              />
-            </div>
-            <div className="table__wrapper">
-          <div className="seb__wrapper">
-            <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-            SEB score
-            </span>
-            <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                  : this.state.fcp["1"].toFixed(3)}
-            </span>
-          </div>
-          <div className="fcpProb__wrapper">
-            <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-              Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
-            </span>
-            <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
-            </span>
-          </div>
-          <div className="onloadProb__wrapper">
-            <span className="table__header" title="The percentage of users completing document load within given time.">
-              Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
-            </span>
-            <span className="table__content">
-              {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
-                : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
-            </span>
-          </div>
-        </div>
-          </div>
-        </div>
-        {/* <div className="table__wrapper">
-          <div className="seb__wrapper">
-            <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-            SEB score
-            </span>
-            <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                  : this.state.fcp["1"].toFixed(3)}
-            </span>
-          </div>
-          <div className="fcpProb__wrapper">
-            <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-              Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
-            </span>
-            <span className="table__content">
-              {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
-            </span>
-          </div>
-          <div className="onloadProb__wrapper">
-            <span className="table__header" title="The percentage of users completing document load within given time.">
-              Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
-                : "<" + this.state.time + "s"}
-            </span>
-            <span className="table__content">
-              {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
-                : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
-            </span>
-          </div>
-        </div> */}
         <div className="explanation__wrapper">
           <div className="explanation__row">
             <div className="explanation__item">
@@ -441,22 +351,10 @@ class ResultComponent extends React.Component {
           </div>
         </div>
         <style jsx>{`
-          .URLCompare__wrapper {
-            border: 1px solid #ccc;
-          }
           .URLInput__wrapper, .DeviceInput__wrapper,
           .ConnectionInput__wrapper, .TimeInput__wrapper,
           .visual__wrapper, .time__wrapper, .explanation__wrapper {
               margin: 1em .5em;
-          }
-          .URLInput__wrapper {
-            display: inline-block;
-            width: 47%;
-          }
-          .URLInput__wrapper:first-child {
-            float: left;
-            padding-right: 15px;
-            border-right: 1px solid #ccc;
           }
           .table__wrapper {                        
               display: flex;
@@ -472,10 +370,10 @@ class ResultComponent extends React.Component {
           }
           .table__header {
               color: #153B58;
-              font-size: 13px;
+              font-size: 1.2em;
           }
           .table__content {
-              font-size: 30px;
+              font-size: 3em;
               color: #db3340;
           }
           .explanation__header {
