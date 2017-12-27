@@ -34,6 +34,8 @@ class ResultComponent extends React.Component {
     this.state = {
       urlSuggestions: [],
       url: defaultUrl,
+      url1: defaultUrl,
+      url2: defaultUrl,
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
@@ -83,29 +85,41 @@ class ResultComponent extends React.Component {
 
   handleOnURLChange(event, { newValue }) {
     const originUrl = { newValue };
-    this.setState({
-      url: originUrl.newValue,
-    });
-
-    // update the url
-    const { device, connection, url, time } = Router.query;
+    const { device, connection, url1, url2, time } = Router.query;
+    if(event.target.id === "url1") {
+      this.setState({
+        url1: originUrl.newValue,
+      });
+      // update the url
     const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
-        connection: connection ? connection : devAndconDefault }, { encode: false });
+    qs.stringify({ url1: originUrl.newValue, url2: url2 ? url2 : defaultUrl, device: device ? device : devAndconDefault,
+      connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
+    } else {
+      this.setState({
+        url2: originUrl.newValue,
+      });
+      // update the url
+    const newURL = window.location.pathname + "?" +
+    qs.stringify({ url1: url1 ? url1 : defaultUrl, url2: originUrl.newValue, device: device ? device : devAndconDefault,
+      connection: connection ? connection : devAndconDefault }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
+    }
   }
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
       device: selectedOption,
     });
-    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
-      this.handleUpdateNumbers(
-        this.state.url,
-        selectedOption.value,
-        this.state.connection,
-      );
-    }
+    const urlQuery = this.state.url1 === defaultUrl ? this.state.url2 : this.state.url1;
+    this.handleUpdateNumbers(
+      urlQuery,
+      selectedOption.value,
+      this.state.connection,
+    );
+    // if ((this.state.url) || (!(this.state.url = defaultUrl))) {
+      
+    // }
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
@@ -274,12 +288,22 @@ class ResultComponent extends React.Component {
     const urlPlaceholder = defaultUrl;
     const formatsecond = value => `${value} s`;
     const value = this.state.url;
-    const inputProps = {
+    const inputProps1 = {
       placeholder: urlPlaceholder,
       value,
       onFocus: (ev) => {
         ev.target.select();
       },
+      id: "url1",
+      onChange: this.handleOnURLChange,
+    };
+    const inputProps2 = {
+      placeholder: urlPlaceholder,
+      value,
+      onFocus: (ev) => {
+        ev.target.select();
+      },
+      id: "url2",
       onChange: this.handleOnURLChange,
     };
 
@@ -337,7 +361,7 @@ class ResultComponent extends React.Component {
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
                 renderSuggestion={this.renderUrlSuggestion}
-                inputProps={inputProps}
+                inputProps={inputProps1}
               />
               <div className="result__wrapper">
                 <Visual
@@ -386,7 +410,7 @@ class ResultComponent extends React.Component {
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
                 renderSuggestion={this.renderUrlSuggestion}
-                inputProps={inputProps}
+                inputProps={inputProps2}
               />
             <div className="result__wrapper">
               <Visual
