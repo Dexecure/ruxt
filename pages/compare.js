@@ -39,11 +39,15 @@ class ResultComponent extends React.Component {
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-      fcp: null,
-      onload: null,
-      fcpHumanCount: 0,
       loadingHumanCount: humanCount,
-      onloadHumanCount: 0,
+      fcp1: null,
+      onload1: null,
+      fcpHumanCount1: 0,
+      onloadHumanCount1: 0,
+      fcp2: null,
+      onload2: null,
+      fcpHumanCount2: 0,
+      onloadHumanCount2: 0,
       loading: false,
     };
 
@@ -61,50 +65,30 @@ class ResultComponent extends React.Component {
   }
 
   componentDidMount() {
-    const { device, connection, url  } = Router.query;
-    if (url === undefined && device === undefined && connection === undefined) {
-      const basicURL = window.location.pathname;
-      Router.push(basicURL, basicURL, { shallow: true });
-    } else {
-      const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: url ? url : defaultUrl, device: device ? device : devAndconDefault,
-        connection: connection ? connection : devAndconDefault }, { encode: false });
-      Router.push(newURL, newURL, { shallow: true });
-      this.setState({
-        url,
-        device,
-        connection,
-      });
-      this.handleUpdateNumbers(
-        url,
-        device,
-        connection,
-      );
-    }
+    const newURL = window.location.pathname;
+    Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnURLChange(event, { newValue }) {
     const originUrl = { newValue };
-    const { device, connection, url1, url2, time } = Router.query;
-    if(event.target.id === "url1") {
+    if(event.target.id === 'url1') {
       this.setState({
-        url1: originUrl.newValue,
+        url: originUrl.newValue,
+        url1: originUrl.newValue
       });
-      // update the url
-    const newURL = window.location.pathname + "?" +
-    qs.stringify({ url1: originUrl.newValue, url2: url2 ? url2 : defaultUrl, device: device ? device : devAndconDefault,
-      connection: connection ? connection : devAndconDefault }, { encode: false });
-    Router.push(newURL, newURL, { shallow: true });
-    } else {
+    } else if(event.target.id === 'url2') {
       this.setState({
+        url: originUrl.newValue,
         url2: originUrl.newValue,
       });
-      // update the url
-    const newURL = window.location.pathname + "?" +
-    qs.stringify({ url1: url1 ? url1 : defaultUrl, url2: originUrl.newValue, device: device ? device : devAndconDefault,
-      connection: connection ? connection : devAndconDefault }, { encode: false });
-    Router.push(newURL, newURL, { shallow: true });
     }
+
+    // update the url
+    const { device, connection, url, time } = Router.query;
+    const newURL = window.location.pathname + "?" +
+      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
+        connection: connection ? connection : devAndconDefault }, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnDeviceChange(selectedOption) {
@@ -198,17 +182,28 @@ class ResultComponent extends React.Component {
 
     if (response.ok) {
       const responseJSON = await response.json();
-      this.setState({
-        fcp: responseJSON.bam.fcp,
-        onload: responseJSON.bam.onload,
-        loading: false,
-      });
-      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+      if(this.state.url === this.state.url1) {
+        this.setState({
+          fcp1: responseJSON.bam.fcp,
+          onload1: responseJSON.bam.onload,
+          loading: false,
+        });
+        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+      } else if(this.state.url === this.state.url2){
+        this.setState({
+          fcp2: responseJSON.bam.fcp,
+          onload2: responseJSON.bam.onload,
+          loading: false,
+        });
+        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+      }
     } else {
       // probably origin doesn't exist
       this.setState({
-        onloadHumanCount: 0,
-        fcpHumanCount: 0,
+        onloadHumanCount1: 0,
+        fcpHumanCount1: 0,
+        onloadHumanCount2: 0,
+        fcpHumanCount2: 0,
         loadingHumanCount: humanCount,
         loading: false,
       });
@@ -216,10 +211,14 @@ class ResultComponent extends React.Component {
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
+    console.log(fcp);
+    console.log(onload);
     if (time === 0) {
       this.setState({
-        onloadHumanCount: 0,
-        fcpHumanCount: 0,
+        onloadHumanCount1: 0,
+        fcpHumanCount1: 0,
+        onloadHumanCount2: 0,
+        fcpHumanCount2: 0,
         loadingHumanCount: humanCount,
       });
       return;
@@ -242,11 +241,19 @@ class ResultComponent extends React.Component {
 
     const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
 
-    this.setState({
-      onloadHumanCount,
-      fcpHumanCount,
-      loadingHumanCount,
-    });
+    if(this.state.url === this.state.url1) {
+      this.setState({
+        onloadHumanCount1: onloadHumanCount,
+        fcpHumanCount1: fcpHumanCount,
+        loadingHumanCount1: loadingHumanCount,
+      });
+    } else if(this.state.url === this.state.url2){
+      this.setState({
+        onloadHumanCount2: onloadHumanCount,
+        fcpHumanCount2: fcpHumanCount,
+        loadingHumanCount2: loadingHumanCount,
+      });
+    }
   }
 
   async onSuggestionSelected(event, { suggestion }) {
@@ -287,10 +294,9 @@ class ResultComponent extends React.Component {
   render() {
     const urlPlaceholder = defaultUrl;
     const formatsecond = value => `${value} s`;
-    const value = this.state.url;
     const inputProps1 = {
       placeholder: urlPlaceholder,
-      value,
+      value: this.state.url1,
       onFocus: (ev) => {
         ev.target.select();
       },
@@ -299,7 +305,7 @@ class ResultComponent extends React.Component {
     };
     const inputProps2 = {
       placeholder: urlPlaceholder,
-      value,
+      value: this.state.url2,
       onFocus: (ev) => {
         ev.target.select();
       },
@@ -365,8 +371,8 @@ class ResultComponent extends React.Component {
               />
               <div className="result__wrapper">
                 <Visual
-                  fcpHumanCount={this.state.fcpHumanCount}
-                  onloadHumanCount={this.state.onloadHumanCount}
+                  fcpHumanCount={this.state.fcpHumanCount1}
+                  onloadHumanCount={this.state.onloadHumanCount1}
                   loadingHumanCount={this.state.loadingHumanCount}
                 />
                 <div className="table__wrapper">
@@ -375,28 +381,28 @@ class ResultComponent extends React.Component {
                     SEB score
                     </span>
                     <span className="table__content">
-                      {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                          : this.state.fcp["1"].toFixed(3)}
+                      {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? "-"
+                          : this.state.fcp1["1"].toFixed(3)}
                     </span>
                   </div>
                   <div className="fcpProb__wrapper">
                     <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                      Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
+                      Users with FCP {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? ""
                         : "<" + this.state.time + "s"}
                     </span>
                     <span className="table__content">
-                      {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                        : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
+                      {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? "-"
+                        : (this.state.fcp1[this.state.time] * 100).toFixed(1) + "%"}
                     </span>
                   </div>
                   <div className="onloadProb__wrapper">
                     <span className="table__header" title="The percentage of users completing document load within given time.">
-                      Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
+                      Users with onload {((this.state.onload1 === null) || (this.state.time === 0) || this.state.onload1[this.state.time] === null) ? ""
                         : `<${this.state.time}s`}
                     </span>
                     <span className="table__content">
-                      {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
-                        : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
+                      {((this.state.onload1 === null) || (this.state.time === 0) || this.state.onload1[this.state.time] === null) ? "-"
+                        : (this.state.onload1[this.state.time]*100).toFixed(1)+"%"}
                     </span>
                   </div>
                 </div>
@@ -414,8 +420,8 @@ class ResultComponent extends React.Component {
               />
             <div className="result__wrapper">
               <Visual
-                fcpHumanCount={this.state.fcpHumanCount}
-                onloadHumanCount={this.state.onloadHumanCount}
+                fcpHumanCount={this.state.fcpHumanCount2}
+                onloadHumanCount={this.state.onloadHumanCount2}
                 loadingHumanCount={this.state.loadingHumanCount}
               />
               <div className="table__wrapper">
@@ -424,28 +430,28 @@ class ResultComponent extends React.Component {
                   SEB score
                   </span>
                   <span className="table__content">
-                    {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                        : this.state.fcp["1"].toFixed(3)}
+                    {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? "-"
+                        : this.state.fcp2["1"].toFixed(3)}
                   </span>
                 </div>
                 <div className="fcpProb__wrapper">
                   <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                    Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
+                    Users with FCP {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? ""
                       : "<" + this.state.time + "s"}
                   </span>
                   <span className="table__content">
-                    {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                      : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
+                    {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? "-"
+                      : (this.state.fcp2[this.state.time] * 100).toFixed(1) + "%"}
                   </span>
                 </div>
                 <div className="onloadProb__wrapper">
                   <span className="table__header" title="The percentage of users completing document load within given time.">
-                    Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
+                    Users with onload {((this.state.onload2 === null) || (this.state.time === 0) || this.state.onload2[this.state.time] === null) ? ""
                       : `<${this.state.time}s`}
                   </span>
                   <span className="table__content">
-                    {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
-                      : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
+                    {((this.state.onload2 === null) || (this.state.time === 0) || this.state.onload2[this.state.time] === null) ? "-"
+                      : (this.state.onload2[this.state.time]*100).toFixed(1)+"%"}
                   </span>
                 </div>
               </div>
@@ -512,6 +518,7 @@ class ResultComponent extends React.Component {
         <style jsx>{`
           .URLCompare__wrapper {
             border: 1px solid #ccc;
+            overflow: auto;
           }
           .URLInput__wrapper, .DeviceInput__wrapper,
           .ConnectionInput__wrapper, .TimeInput__wrapper,
@@ -520,6 +527,7 @@ class ResultComponent extends React.Component {
           }
           .result__wrapper {
             margin-top: 3%;
+            max-height: 60%;
           }
           .URLInput__wrapper {
             display: inline-block;
@@ -575,6 +583,14 @@ class ResultComponent extends React.Component {
           .table__content {
               font-size: 30px;
               color: #db3340;
+          }
+          @media all and (max-width: 890px) {
+            .table__header {
+              font-size: 9px;
+            }
+            .table__content {
+              font-size: 22px;
+            }
           }
           .explanation__header {
               color: #153B58;
