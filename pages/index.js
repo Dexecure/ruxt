@@ -141,6 +141,20 @@ class RUXtestApp extends React.Component {
             .slider.round:before {
               border-radius: 50%;
             }
+            @media all and (max-width: 900px) {
+              .switch {
+                right: 22%;
+              }
+            }
+            @media all and (max-width: 650px) {
+              .switch {
+                width: 101px;
+                right: 36%;
+              }
+              input:checked + .slider:before {
+                left: 18px;
+              }
+            }
             a {
                 color: #db3340;
                 border-bottom: 1px dotted;
