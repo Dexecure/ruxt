@@ -66,7 +66,22 @@ class ResultComponent extends React.Component {
 
   componentDidMount() {
     const newURL = window.location.pathname;
-    Router.push(newURL, newURL, { shallow: true });
+    const { device, connection, url1, url2, time } = Router.query;
+    if(url1 || url2) {
+      this.setState({
+        url: url1,
+        url1: url1,
+        url2: url2
+      });
+      this.handleUpdateNumbers(url1, device, connection).then(()=> {
+        this.setState({
+          url: url2
+        });
+        this.handleUpdateNumbers(url2, device, connection);
+      });
+    } else {
+      Router.push(newURL, newURL, { shallow: true });
+    }
   }
 
   handleOnURLChange(event, { newValue }) {
