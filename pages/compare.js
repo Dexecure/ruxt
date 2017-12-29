@@ -28,7 +28,7 @@ const connectionList = [
   { value: "offline", label: "offline" },
 ];
 
-class ResultComponent extends React.Component {
+class CompareComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -536,9 +536,6 @@ class ResultComponent extends React.Component {
         </div>
       </div>
         <style jsx>{`
-          .heading {
-            text-align: center;
-          }
           .URLCompare__wrapper {
             border: 1px solid #ccc;
             overflow: auto;
@@ -605,4 +602,4 @@ class ResultComponent extends React.Component {
   }
 }
 
-export default ResultComponent;
+export default CompareComponent;
