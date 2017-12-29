@@ -28,7 +28,7 @@ const connectionList = [
   { value: "offline", label: "offline" },
 ];
 
-class ResultComponent extends React.Component {
+class CompareComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,7 +66,22 @@ class ResultComponent extends React.Component {
 
   componentDidMount() {
     const newURL = window.location.pathname;
-    Router.push(newURL, newURL, { shallow: true });
+    const { device, connection, url1, url2, time } = Router.query;
+    if(url1 || url2) {
+      this.setState({
+        url: url1,
+        url1: url1,
+        url2: url2
+      });
+      this.handleUpdateNumbers(url1, device, connection).then(()=> {
+        this.setState({
+          url: url2
+        });
+        this.handleUpdateNumbers(url2, device, connection);
+      });
+    } else {
+      Router.push(newURL, newURL, { shallow: true });
+    }
   }
 
   handleOnURLChange(event, { newValue }) {
@@ -211,8 +226,6 @@ class ResultComponent extends React.Component {
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
-    console.log(fcp);
-    console.log(onload);
     if (time === 0) {
       this.setState({
         onloadHumanCount1: 0,
@@ -316,6 +329,13 @@ class ResultComponent extends React.Component {
     return (
       <div>
         <Meta />
+        <div className="svg-background">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 810" preserveAspectRatio="xMinYMin slice" aria-hidden="true"><path fill="#efefee" d="M592.66 0c-15 64.092-30.7 125.285-46.598 183.777C634.056 325.56 748.348 550.932 819.642 809.5h419.672C1184.518 593.727 1083.124 290.064 902.637 0H592.66z" /><path fill="#f6f6f6" d="M545.962 183.777c-53.796 196.576-111.592 361.156-163.49 490.74 11.7 44.494 22.8 89.49 33.1 134.883h404.07c-71.294-258.468-185.586-483.84-273.68-625.623z" /><path fill="#f7f7f7" d="M153.89 0c74.094 180.678 161.088 417.448 228.483 674.517C449.67 506.337 527.063 279.465 592.56 0H153.89z" /><path fill="#fbfbfc" d="M153.89 0H0v809.5h415.57C345.477 500.938 240.884 211.874 153.89 0z" /><path fill="#ebebec" d="M1144.22 501.538c52.596-134.583 101.492-290.964 134.09-463.343 1.2-6.1 2.3-12.298 3.4-18.497 0-.2.1-.4.1-.6 1.1-6.3 2.3-12.7 3.4-19.098H902.536c105.293 169.28 183.688 343.158 241.684 501.638v-.1z" /><path fill="#e1e1e1" d="M1285.31 0c-2.2 12.798-4.5 25.597-6.9 38.195C1321.507 86.39 1379.603 158.98 1440 257.168V0h-154.69z" /><path fill="#e7e7e7" d="M1278.31,38.196C1245.81,209.874 1197.22,365.556 1144.82,499.838L1144.82,503.638C1185.82,615.924 1216.41,720.211 1239.11,809.6L1439.7,810L1439.7,256.768C1379.4,158.78 1321.41,86.288 1278.31,38.195L1278.31,38.196z" /></svg>
+        </div>
+        <div className="heading">
+          <h1>Real User Experience Test (rUXt) - Comparison</h1>
+          <h2>Compare among 1,241,019 websites accessed by Google Chrome Users</h2>
+        </div>
         <div className="container">
         <div className="DeviceConnection__wrapper">
           <div className="DeviceInput__wrapper">
@@ -553,19 +573,11 @@ class ResultComponent extends React.Component {
               border-right: none;
             }
           }
-          @media all and (max-width: 650px) {
-            .URLInput__wrapper {
-              display: block;
-              width: 92%;
-            }
-          }
           .table__header {
-              color: #153B58;
               font-size: 13px;
           }
           .table__content {
               font-size: 30px;
-              color: #db3340;
           }
           @media all and (max-width: 890px) {
             .table__header {
@@ -575,6 +587,18 @@ class ResultComponent extends React.Component {
               font-size: 22px;
             }
           }
+          @media all and (max-width: 650px) {
+            .URLInput__wrapper {
+              display: block;
+              width: 92%;
+            }
+            .table__header {
+              font-size: 1.2em;
+            }
+            .table__content {
+              font-size: 3em;
+            }
+          }
         `}
         </style>
       </div>
@@ -582,4 +606,4 @@ class ResultComponent extends React.Component {
   }
 }
 
-export default ResultComponent;
+export default CompareComponent;
