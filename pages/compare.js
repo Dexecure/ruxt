@@ -573,19 +573,11 @@ class CompareComponent extends React.Component {
               border-right: none;
             }
           }
-          @media all and (max-width: 650px) {
-            .URLInput__wrapper {
-              display: block;
-              width: 92%;
-            }
-          }
           .table__header {
-              color: #153B58;
               font-size: 13px;
           }
           .table__content {
               font-size: 30px;
-              color: #db3340;
           }
           @media all and (max-width: 890px) {
             .table__header {
@@ -593,6 +585,18 @@ class CompareComponent extends React.Component {
             }
             .table__content {
               font-size: 22px;
+            }
+          }
+          @media all and (max-width: 650px) {
+            .URLInput__wrapper {
+              display: block;
+              width: 92%;
+            }
+            .table__header {
+              font-size: 1.2em;
+            }
+            .table__content {
+              font-size: 3em;
             }
           }
         `}
