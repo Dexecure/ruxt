@@ -520,11 +520,6 @@ class ResultComponent extends React.Component {
             border: 1px solid #ccc;
             overflow: auto;
           }
-          .URLInput__wrapper, .DeviceInput__wrapper,
-          .ConnectionInput__wrapper, .TimeInput__wrapper,
-          .visual__wrapper, .time__wrapper, .explanation__wrapper {
-              margin: 1em .5em;
-          }
           .result__wrapper {
             margin-top: 3%;
             max-height: 60%;
@@ -564,18 +559,6 @@ class ResultComponent extends React.Component {
               width: 92%;
             }
           }
-          .table__wrapper {
-              display: flex;
-              justify-content: space-around;
-              align-items: flex-start;
-          }
-          .seb__wrapper, .fcpProb__wrapper, .onloadProb__wrapper {
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              padding: 1em .3em;
-          }
           .table__header {
               color: #153B58;
               font-size: 13px;
@@ -591,60 +574,6 @@ class ResultComponent extends React.Component {
             .table__content {
               font-size: 22px;
             }
-          }
-          .explanation__header {
-              color: #153B58;
-              font-size: 1.2em;
-              padding: 1em 0 .5em 0;
-          }
-          @media all and (max-width: 40em) {
-              .table__wrapper {
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-              }
-          }
-          @media all and (min-width: 50em) {
-              .DeviceConnection__wrapper {
-                  display: flex;
-              }
-              .DeviceInput__wrapper, .ConnectionInput__wrapper {
-                  width: 50%;
-              }
-              .explanation__row {
-                display: block;
-                flex-direction: row;
-                align-items: flex-start;
-              }
-              .explanation__item {
-                padding-right: 2em;
-              }
-          }
-          .visual__wrapper {
-            position: relative;
-          }
-          .loader {
-              position: absolute;
-              top: 0;
-              bottom: 0;
-              left: 0;
-              right: 0;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-          }
-          .explanation__section {
-            padding: .3em 0;
-          }
-          .TimeInput__wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-          .TimeInput__label {
-            max-width: 150px;
-            width:100%;
-            margin-right: 5px;
           }
         `}
         </style>
