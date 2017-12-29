@@ -1,4 +1,6 @@
 import React from "react";
+import Router from "next/router";
+import qs from "qs";
 import Typekit from "react-typekit";
 import Meta from "../components/meta";
 import { logPageView, initGA } from "../utils/analytics";
@@ -24,7 +26,10 @@ class RUXtestApp extends React.Component {
   }
 
   handleClick(event) {
-    console.log(event.target.checked)
+    if(event.target.checked) {
+      const newURL = window.location.pathname + "/compare";
+      Router.push(newURL, newURL, { shallow: true });
+    }
     this.setState({
       checked: event.target.checked
     });
@@ -64,7 +69,9 @@ class RUXtestApp extends React.Component {
           <div className="outer l">
             <CompareComponent />
           </div>
-          ) : (<ResultComponent />)}
+          ) : (
+            <ResultComponent />
+            )}
         <div className="footer--content l">
           <p>Data from <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{ color: "#db3340" }}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>
         </div>
