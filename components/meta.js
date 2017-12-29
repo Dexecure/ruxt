@@ -61,6 +61,9 @@ const Meta = () => (
           -webkit-font-smoothing: antialiased;
 
       }
+      .heading {
+        text-align: center;
+      }
       .btn&:hover, .btn&:active {
           transition: .3s background-color ease-in-out;
           background-color: #b11622;
