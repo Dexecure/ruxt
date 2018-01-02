@@ -46,10 +46,10 @@ class RUXtestApp extends React.Component {
                 <input onClick={this.handleClick} checked={this.state.checked} type="checkbox" id="togBtn" />
                   <div className="slider round">
                     <span className="on">
-                      compare 
+                      Compare 
                     </span>
                     <span className="off">
-                      test
+                      Test
                     </span>
                   </div>
               </label>
