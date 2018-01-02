@@ -71,7 +71,7 @@ class RUXtestApp extends React.Component {
           <p>Data from <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">CrUX</a>. Made with <span style={{ color: "#db3340" }}>❤</span> by <a href="https://dexecure.com">Dexecure</a>.</p>
         </div>
         <Typekit kitId="rgu6gkq" />
-        <style jsx>
+        <style jsx global>
           {`
             .switch {
               position: absolute;
