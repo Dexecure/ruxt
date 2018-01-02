@@ -41,17 +41,19 @@ class RUXtestApp extends React.Component {
                 <img src="static/full-logo-white.png" alt="RUXtest | Dexecure" />
               </a>
             </div>
-            <label className="switch">
-              <input onClick={this.handleClick} checked={this.state.checked} type="checkbox" id="togBtn" />
-                <div className="slider round">
-                  <span className="on">
-                    compare 
-                  </span>
-                  <span className="off">
-                    test
-                  </span>
-                </div>
-            </label>
+            <div className="header--middle">
+              <label className="switch">
+                <input onClick={this.handleClick} checked={this.state.checked} type="checkbox" id="togBtn" />
+                  <div className="slider round">
+                    <span className="on">
+                      compare 
+                    </span>
+                    <span className="off">
+                      test
+                    </span>
+                  </div>
+              </label>
+            </div>
             <div className="header--right">
               <a className="btn" href="https://dexecure.com">Try Dexecure</a>
             </div>
@@ -86,7 +88,7 @@ class RUXtestApp extends React.Component {
               left: 0;
               right: 0;
               bottom: 0;
-              background-color: #ca2222;
+              background-color: #8bc34a;
               -webkit-transition: .4s;
               transition: .4s;
             }
@@ -105,7 +107,7 @@ class RUXtestApp extends React.Component {
               left: 39px;
             }
             input:checked + .slider {
-              background-color: #2ab934;
+              background-color: #b2a22d;
             }
             input:focus + .slider {
               box-shadow: 0 0 1px #2196F3;
@@ -163,6 +165,12 @@ class RUXtestApp extends React.Component {
             .header--right a {
                 color: #f2f2f2;
                 border-bottom: none;
+            }
+            .header--middle {              
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
             }
             .heading {
                 text-align: center;
