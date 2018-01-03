@@ -39,7 +39,8 @@ class CompareComponent extends React.Component {
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-      loadingHumanCount: humanCount,
+      loadingHumanCount1: humanCount,
+      loadingHumanCount2: humanCount,
       fcp1: null,
       onload1: null,
       fcpHumanCount1: 0,
@@ -130,7 +131,7 @@ class CompareComponent extends React.Component {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
-        selectedOption.value,
+        selectedOption.value
       );
     }
     const {
@@ -146,7 +147,7 @@ class CompareComponent extends React.Component {
   handleOnTimeChange(selectedOption) {
     if (typeof(selectedOption) === "number") {
       this.setState({
-        time: selectedOption,
+        time: selectedOption
       });
     }
     this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
@@ -162,7 +163,7 @@ class CompareComponent extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        origin: input,
+        origin: input
       }),
     })
       .then(response => response.json())
@@ -175,9 +176,8 @@ class CompareComponent extends React.Component {
       // doesnt seem to be a valid url
       return;
     }
-
     this.setState({
-      loading: true,
+      loading: true
     });
     const origin = url.origin || url;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
@@ -396,7 +396,7 @@ class CompareComponent extends React.Component {
                 <Visual
                   fcpHumanCount={this.state.fcpHumanCount1}
                   onloadHumanCount={this.state.onloadHumanCount1}
-                  loadingHumanCount={this.state.loadingHumanCount}
+                  loadingHumanCount={this.state.loadingHumanCount1}
                 />
                 <div className="table__wrapper">
                   <div className="seb__wrapper">
@@ -445,7 +445,7 @@ class CompareComponent extends React.Component {
               <Visual
                 fcpHumanCount={this.state.fcpHumanCount2}
                 onloadHumanCount={this.state.onloadHumanCount2}
-                loadingHumanCount={this.state.loadingHumanCount}
+                loadingHumanCount={this.state.loadingHumanCount2}
               />
               <div className="table__wrapper">
                 <div className="seb__wrapper">
