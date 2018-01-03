@@ -116,9 +116,6 @@ class CompareComponent extends React.Component {
       selectedOption.value,
       this.state.connection,
     );
-    // if ((this.state.url) || (!(this.state.url = defaultUrl))) {
-      
-    // }
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
@@ -298,9 +295,15 @@ class CompareComponent extends React.Component {
     return url.origin;
   }
 
-  renderUrlSuggestion(url) {
+  renderUrl1Suggestion(url) {
     return (
-      <span>{url.origin}</span>
+      <span id="url1">{url.origin}</span>
+    );
+  }
+
+  renderUrl2Suggestion(url) {
+    return (
+      <span id="url2">{url.origin}</span>
     );
   }
 
@@ -386,7 +389,7 @@ class CompareComponent extends React.Component {
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrlSuggestion}
+                renderSuggestion={this.renderUrl1Suggestion}
                 inputProps={inputProps1}
               />
               <div className="result__wrapper">
@@ -435,7 +438,7 @@ class CompareComponent extends React.Component {
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrlSuggestion}
+                renderSuggestion={this.renderUrl2Suggestion}
                 inputProps={inputProps2}
               />
             <div className="result__wrapper">
