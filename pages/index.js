@@ -5,7 +5,7 @@ import Typekit from "react-typekit";
 import Meta from "../components/meta";
 import { logPageView, initGA } from "../utils/analytics";
 import ResultComponent from "../components/result";
-import CompareComponent from "./compare";
+import CompareComponent from "../components/compare";
 
 class RUXtestApp extends React.Component {
   constructor(props) {
