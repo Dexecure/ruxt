@@ -97,7 +97,7 @@ class ResultComponent extends React.Component {
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
-      device: selectedOption,
+      device: selectedOption.value,
     });
     if ((this.state.url) || (!(this.state.url = defaultUrl))) {
       this.handleUpdateNumbers(
@@ -114,7 +114,7 @@ class ResultComponent extends React.Component {
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
-      connection: selectedOption,
+      connection: selectedOption.value,
     });
     if ((this.state.url) || (!(this.state.url = defaultUrl))) {
       this.handleUpdateNumbers(
