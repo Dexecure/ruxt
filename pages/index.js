@@ -26,10 +26,6 @@ class RUXtestApp extends React.Component {
   }
 
   handleClick(event) {
-    if(event.target.checked) {
-      const newURL = window.location.pathname + "/compare";
-      Router.push(newURL, newURL, { shallow: true });
-    }
     this.setState({
       checked: event.target.checked
     });
