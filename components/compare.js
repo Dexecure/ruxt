@@ -1,7 +1,7 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Meta from "../components/meta";
+import Meta from "./meta";
 import Autosuggest from "react-autosuggest";
 import Select from "react-select";
 import Slider from "react-rangeslider";
@@ -39,7 +39,8 @@ class CompareComponent extends React.Component {
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-      loadingHumanCount: humanCount,
+      loadingHumanCount1: humanCount,
+      loadingHumanCount2: humanCount,
       fcp1: null,
       onload1: null,
       fcpHumanCount1: 0,
@@ -116,9 +117,6 @@ class CompareComponent extends React.Component {
       selectedOption.value,
       this.state.connection,
     );
-    // if ((this.state.url) || (!(this.state.url = defaultUrl))) {
-      
-    // }
     const { device, connection, url, time } = Router.query;
     const newURL = window.location.pathname + "?" +
       qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
@@ -133,7 +131,7 @@ class CompareComponent extends React.Component {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
-        selectedOption.value,
+        selectedOption.value
       );
     }
     const {
@@ -149,7 +147,7 @@ class CompareComponent extends React.Component {
   handleOnTimeChange(selectedOption) {
     if (typeof(selectedOption) === "number") {
       this.setState({
-        time: selectedOption,
+        time: selectedOption
       });
     }
     this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
@@ -165,7 +163,7 @@ class CompareComponent extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        origin: input,
+        origin: input
       }),
     })
       .then(response => response.json())
@@ -178,9 +176,8 @@ class CompareComponent extends React.Component {
       // doesnt seem to be a valid url
       return;
     }
-
     this.setState({
-      loading: true,
+      loading: true
     });
     const origin = url.origin || url;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
@@ -298,9 +295,15 @@ class CompareComponent extends React.Component {
     return url.origin;
   }
 
-  renderUrlSuggestion(url) {
+  renderUrl1Suggestion(url) {
     return (
-      <span>{url.origin}</span>
+      <span id="url1">{url.origin}</span>
+    );
+  }
+
+  renderUrl2Suggestion(url) {
+    return (
+      <span id="url2">{url.origin}</span>
     );
   }
 
@@ -386,14 +389,14 @@ class CompareComponent extends React.Component {
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrlSuggestion}
+                renderSuggestion={this.renderUrl1Suggestion}
                 inputProps={inputProps1}
               />
               <div className="result__wrapper">
                 <Visual
                   fcpHumanCount={this.state.fcpHumanCount1}
                   onloadHumanCount={this.state.onloadHumanCount1}
-                  loadingHumanCount={this.state.loadingHumanCount}
+                  loadingHumanCount={this.state.loadingHumanCount1}
                 />
                 <div className="table__wrapper">
                   <div className="seb__wrapper">
@@ -435,14 +438,14 @@ class CompareComponent extends React.Component {
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                 onSuggestionSelected={this.onSuggestionSelected}
                 getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrlSuggestion}
+                renderSuggestion={this.renderUrl2Suggestion}
                 inputProps={inputProps2}
               />
             <div className="result__wrapper">
               <Visual
                 fcpHumanCount={this.state.fcpHumanCount2}
                 onloadHumanCount={this.state.onloadHumanCount2}
-                loadingHumanCount={this.state.loadingHumanCount}
+                loadingHumanCount={this.state.loadingHumanCount2}
               />
               <div className="table__wrapper">
                 <div className="seb__wrapper">
