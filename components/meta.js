@@ -185,6 +185,151 @@ const Meta = () => (
         width:100%;
         margin-right: 5px;
       }
+      .switch {
+        position: absolute;
+        display: inline-block;
+        right: 17%;
+        width: 125px;
+        height: 34px;
+      }
+      .switch input {display:none;}
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #8bc34a;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+      input:checked + .slider:before {
+        left: 39px;
+      }
+      input:checked + .slider {
+        background-color: #b2a22d;
+      }
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+      }
+      input:checked + .slider:before {
+        -webkit-transform: translateX(55px);
+        -ms-transform: translateX(55px);
+        transform: translateX(55px);
+      }
+      .on {
+        padding-right: 17px;
+        display: none;
+      }
+      .on, .off {
+        color: white;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        font-size: 13px;
+        font-family: Verdana, sans-serif;
+      }
+      input:checked+ .slider .on {
+        display: block;
+      }
+      input:checked + .slider .off {
+        display: none;
+      }
+      /* Rounded sliders */
+      .slider.round {
+        border-radius: 34px;
+      }
+      .slider.round:before {
+        border-radius: 50%;
+      }
+      @media all and (max-width: 900px) {
+        .switch {
+          right: 22%;
+        }
+      }
+      @media all and (max-width: 650px) {
+        .switch {
+          width: 101px;
+          right: 36%;
+        }
+        input:checked + .slider:before {
+          left: 18px;
+        }
+      }
+      a {
+          color: #db3340;
+          border-bottom: 1px dotted;
+          text-decoration: none;
+      }
+      .header--right a {
+          color: #f2f2f2;
+          border-bottom: none;
+      }
+      .header--middle {              
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+      .heading {
+          text-align: center;
+          max-width: 55em;
+          padding: 0 .5em;
+          margin: 0 auto;
+          font-family: "Europa", "source-sans-pro", sans-serif;
+          font-weight: normal;
+      }
+      .heading h2 {
+          font-weight: normal;
+      }
+      .dashboard--header {
+      background-color: #153B58;
+      }
+      .dashboard--header .l {
+      display: flex;
+      justify-content: space-between;
+      padding: 1em;
+      align-items: center;
+      }
+      .header--logo {
+      max-width: 8em;
+      display: inline-block;
+      border-bottom: none;
+      }
+      .svg-background {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: #fafafa;
+          z-index: -999;
+          overflow: hidden;
+      }
+      .svg-background svg {
+          height: 100%;
+          width: 100%;
+          position: relative;
+      }
+      .footer--content {
+          padding: 2em 1em;
+          margin: 0 auto;
+          text-align: center;
+          max-width: 45em;
+      }
     `}
     </style>
   </div>
