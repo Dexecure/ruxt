@@ -10,7 +10,7 @@ const Meta = () => (
       <meta property="og:description" content="User experience results from more than 1.2 million websites accessed from Google Chrome." />
       <meta property="og:type" content="website" />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content="/static/dexecure-cover.png" />
+      <meta property="og:image" content="/static/dexecure-facebook-visual.png" />
 
       <link rel="icon" type="image/png" href="/static/favicon-32x32.png" sizes="32x32" />
       <link rel="icon" type="image/png" href="/static/favicon-16x16.png" sizes="16x16" />
