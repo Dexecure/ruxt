@@ -330,6 +330,12 @@ const Meta = () => (
           text-align: center;
           max-width: 45em;
       }
+      .gitHub-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 0; 
+      }
     `}
     </style>
   </div>
