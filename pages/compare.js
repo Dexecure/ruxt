@@ -69,7 +69,7 @@ class CompareComponent extends React.Component {
   componentDidMount() {
     const newURL = window.location.pathname;
     const { device, connection, url1, url2, time } = Router.query;
-    if(url1 || url2) {
+    if (url1 || url2) {
       this.setState({
         url: url1,
         url1: url1,
@@ -119,7 +119,7 @@ class CompareComponent extends React.Component {
       this.state.connection,
     );
     const { device, connection, url, time } = Router.query;
-    const newURL = window.location.pathname + "?" +
+    const newURL = Window.location.pathname + "?" +
       qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -178,7 +178,7 @@ class CompareComponent extends React.Component {
       return;
     }
     this.setState({
-      loading: true
+      loading: true,
     });
     const origin = url.origin || url;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
@@ -195,14 +195,14 @@ class CompareComponent extends React.Component {
 
     if (response.ok) {
       const responseJSON = await response.json();
-      if(this.state.url === this.state.url1) {
+      if (this.state.url === this.state.url1) {
         this.setState({
           fcp1: responseJSON.bam.fcp,
           onload1: responseJSON.bam.onload,
           loading: false,
         });
         this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
-      } else if(this.state.url === this.state.url2){
+      } else if (this.state.url === this.state.url2) {
         this.setState({
           fcp2: responseJSON.bam.fcp,
           onload2: responseJSON.bam.onload,
@@ -252,13 +252,13 @@ class CompareComponent extends React.Component {
 
     const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
 
-    if(this.state.url === this.state.url1) {
+    if (this.state.url === this.state.url1) {
       this.setState({
         onloadHumanCount1: onloadHumanCount,
         fcpHumanCount1: fcpHumanCount,
         loadingHumanCount1: loadingHumanCount,
       });
-    } else if(this.state.url === this.state.url2){
+    } else if (this.state.url === this.state.url2) {
       this.setState({
         onloadHumanCount2: onloadHumanCount,
         fcpHumanCount2: fcpHumanCount,
@@ -347,14 +347,14 @@ class CompareComponent extends React.Component {
             <div className="header--middle">
               <label className="switch">
                 <input onClick={this.handleToggleClick} defaultChecked={this.state.checked} type="checkbox" id="togBtn" />
-                  <div className="slider round">
-                    <span className="on">
-                      Compare 
-                    </span>
-                    <span className="off">
-                      Test
-                    </span>
-                  </div>
+                <div className="slider round">
+                  <span className="on">
+                    Compare
+                  </span>
+                  <span className="off">
+                    Test
+                  </span>
+                </div>
               </label>
             </div>
             <div className="header--right">
