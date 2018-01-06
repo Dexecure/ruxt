@@ -414,6 +414,7 @@ class CompareComponent extends React.Component {
           <div className="URLCompare__wrapper">
             <div className="URLInput__wrapper">
               <Autosuggest
+                id="autosuggest1"
                 suggestions={this.state.urlSuggestions}
                 onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -463,6 +464,7 @@ class CompareComponent extends React.Component {
             </div>
             <div className="URLInput__wrapper">
               <Autosuggest
+                id="autosuggest2"
                 suggestions={this.state.urlSuggestions}
                 onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
