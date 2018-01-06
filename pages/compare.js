@@ -309,8 +309,7 @@ class CompareComponent extends React.Component {
   }
 
   handleToggleClick(event) {
-    const newURL = '/';
-    Router.push(newURL, newURL, { shallow: true });
+    Router.push("/");
   }
 
   render() {
@@ -346,7 +345,7 @@ class CompareComponent extends React.Component {
             </div>
             <div className="header--middle">
               <label className="switch">
-                <input onClick={this.handleToggleClick} defaultChecked={this.state.checked} type="checkbox" id="togBtn" />
+                <input onClick={this.handleToggleClick} defaultChecked type="checkbox" id="togBtn" />
                   <div className="slider round">
                     <span className="on">
                       Compare 
