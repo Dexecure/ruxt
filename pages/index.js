@@ -10,9 +10,10 @@ import CompareComponent from "./compare";
 class RUXtestApp extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      checked: false,
-    };
+      checked: false
+    }
 
     this.handleClick = this.handleClick.bind(this);
   }
@@ -25,13 +26,7 @@ class RUXtestApp extends React.Component {
   }
 
   handleClick(event) {
-    if (event.target.checked) {
-      const newURL = Window.location.pathname + "compare";
-      Router.push(newURL, newURL);
-    }
-    this.setState({
-      checked: event.target.checked,
-    });
+    Router.push("/compare");
   }
 
   render() {
@@ -46,16 +41,16 @@ class RUXtestApp extends React.Component {
               </a>
             </div>
             <div className="header--middle">
-              <label htmlFor="toggle" className="switch">
-                <input onClick={this.handleClick} checked={this.state.checked} type="checkbox" id="togBtn" />
-                <div id="toggle" className="slider round">
-                  <span className="on">
-                    Compare
-                  </span>
-                  <span className="off">
-                    Test
-                  </span>
-                </div>
+              <label className="switch">
+                <input onClick={this.handleClick} defaultChecked={false} type="checkbox" id="togBtn" />
+                  <div className="slider round">
+                    <span className="on">
+                      Compare 
+                    </span>
+                    <span className="off">
+                      Test
+                    </span>
+                  </div>
               </label>
             </div>
             <div className="header--right">

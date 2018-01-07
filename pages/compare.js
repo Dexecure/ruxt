@@ -309,8 +309,7 @@ class CompareComponent extends React.Component {
   }
 
   handleToggleClick(event) {
-    const newURL = '/';
-    Router.push(newURL, newURL, { shallow: true });
+    Router.push("/");
   }
 
   render() {
@@ -346,15 +345,15 @@ class CompareComponent extends React.Component {
             </div>
             <div className="header--middle">
               <label className="switch">
-                <input onClick={this.handleToggleClick} defaultChecked={this.state.checked} type="checkbox" id="togBtn" />
-                <div className="slider round">
-                  <span className="on">
-                    Compare
-                  </span>
-                  <span className="off">
-                    Test
-                  </span>
-                </div>
+                <input onClick={this.handleToggleClick} defaultChecked type="checkbox" id="togBtn" />
+                  <div className="slider round">
+                    <span className="on">
+                      Compare 
+                    </span>
+                    <span className="off">
+                      Test
+                    </span>
+                  </div>
               </label>
             </div>
             <div className="header--right">
@@ -414,6 +413,7 @@ class CompareComponent extends React.Component {
           <div className="URLCompare__wrapper">
             <div className="URLInput__wrapper">
               <Autosuggest
+                id="autosuggest1"
                 suggestions={this.state.urlSuggestions}
                 onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -463,6 +463,7 @@ class CompareComponent extends React.Component {
             </div>
             <div className="URLInput__wrapper">
               <Autosuggest
+                id="autosuggest2"
                 suggestions={this.state.urlSuggestions}
                 onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
                 onSuggestionsClearRequested={this.onSuggestionsClearRequested}
