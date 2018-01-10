@@ -27,13 +27,24 @@ class CompareComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      url1: null,
+      url2: null,
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-    }
+    };
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
     this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { query } = Router;
+    const device = query["device"] || "all";
+    const connection = query["connection"] || "all";
+    const url1 = query["url1"] || query["url"];
+    url1 ? this.setState({url1}) : null
+    const url2 = query["url2"] ? this.setState({url2: query["url2"]}) : null;
   }
 
   handleOnDeviceChange(selectedOption) {
@@ -128,7 +139,7 @@ class CompareComponent extends React.Component {
             </div>
             <div className="ConnectionInput__wrapper">
               <Select
-                value={this.state.connection}
+                url={this.state.connection}
                 onChange={this.handleOnConnectionChange}
                 clearable={false}
                 searchable={false}
@@ -151,12 +162,14 @@ class CompareComponent extends React.Component {
           <div className="URLCompare__wrapper">
             <ResultGraph
               id="1"
+              url={this.state.url1}
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}
             />
             <ResultGraph
               id="2"
+              value={this.state.url2}
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}

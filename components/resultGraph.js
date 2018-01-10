@@ -34,13 +34,10 @@ class ResultGraph extends React.Component {
     this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
   }
 
-  componentWillMount() {
-
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.device !== nextProps.device || this.props.connection !== nextProps.connection) {
-      this.handleUpdateNumbers(this.state.url, nextProps.device, nextProps.connection);
+    if (this.props.url !== nextProps.url || this.props.device !== nextProps.device ||
+        this.props.connection !== nextProps.connection) {
+      this.handleUpdateNumbers(nextProps.url, nextProps.device, nextProps.connection);
     }
     if (this.props.time !== nextProps.time) {
       this.handleUpdateHumanCount(this.state.fcp, this.state.onload, nextProps.time);
@@ -88,7 +85,6 @@ class ResultGraph extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
-    console.log(url, device, connection);
     if (!(url.startsWith("http://") || url.startsWith("https://"))) {
       // doesnt seem to be a valid url
       return;
@@ -191,14 +187,13 @@ class ResultGraph extends React.Component {
   render() {
     const inputProps = {
       placeholder: defaultUrl,
-      value: this.state.url,
+      value: this.props.value || this.state.url,
       onFocus: (ev) => {
         ev.target.select();
       },
       id: this.props.id,
       onChange: this.handleOnURLChange,
     };
-    console.log(this.state.fcp);
     return (
       <div className="URLInput__wrapper">
         <Autosuggest
