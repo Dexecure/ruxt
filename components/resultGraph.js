@@ -187,7 +187,7 @@ class ResultGraph extends React.Component {
   render() {
     const inputProps = {
       placeholder: defaultUrl,
-      value: this.props.value || this.state.url,
+      value: this.props.url || this.state.url,
       onFocus: (ev) => {
         ev.target.select();
       },
