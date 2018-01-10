@@ -1,17 +1,12 @@
 import React from "react";
 import qs from "qs";
 import Router from "next/router";
-import Meta from "../components/meta";
-import Autosuggest from "react-autosuggest";
 import Select from "react-select";
 import Slider from "react-rangeslider";
-import { debounce } from "underscore";
-import { PulseLoader } from "react-spinners";
-import Visual from "../components/visual";
+import Meta from "../components/meta";
 import Human from "../components/human";
+import ResultGraph from "../components/resultGraph";
 
-const humanCount = 1000;
-const defaultUrl = "https://google.com";
 const devAndconDefault = "all";
 const deviceList = [
   { value: "all", label: "All device types" },
@@ -32,32 +27,15 @@ class CompareComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      urlSuggestions: [],
-      url: defaultUrl,
-      url1: defaultUrl,
-      url2: defaultUrl,
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-      loadingHumanCount1: humanCount,
-      loadingHumanCount2: humanCount,
-      fcp1: null,
-      onload1: null,
-      fcpHumanCount1: 0,
-      onloadHumanCount1: 0,
-      fcp2: null,
-      onload2: null,
-      fcpHumanCount2: 0,
-      onloadHumanCount2: 0,
-      loading: false,
-      checked: true
     };
 
-    this.handleOnURLChange = this.handleOnURLChange.bind(this);
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
     this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
-    this.handleGetOrigins = this.handleGetOrigins.bind(this);
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
+<<<<<<< HEAD
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
     this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
@@ -106,12 +84,15 @@ class CompareComponent extends React.Component {
       qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
         connection: connection ? connection : devAndconDefault }, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
+=======
+>>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
   }
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
-      device: selectedOption,
+      device: selectedOption.value,
     });
+<<<<<<< HEAD
     const urlQuery = this.state.url1 === defaultUrl ? this.state.url2 : this.state.url1;
     this.handleUpdateNumbers(
       urlQuery,
@@ -121,39 +102,36 @@ class CompareComponent extends React.Component {
     const { device, connection, url, time } = Router.query;
     const newURL = Window.location.pathname + "?" +
       qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
+=======
+
+    // update the url
+    const { query } = Router;
+    query.device = selectedOption.value;
+    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+>>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
-      connection: selectedOption,
+      connection: selectedOption.value,
     });
-    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
-      this.handleUpdateNumbers(
-        this.state.url,
-        this.state.device,
-        selectedOption.value
-      );
-    }
-    const {
-      device,
-      connection,
-      url,
-      time } = Router.query;
-    const newURL = window.location.pathname + "?" +
-      qs.stringify({ url, device, connection: selectedOption.value }, { encode: false });
+
+    // update the url
+    const { query } = Router;
+    query.connection = selectedOption.value;
+    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
     if (typeof(selectedOption) === "number") {
       this.setState({
-        time: selectedOption
+        time: selectedOption,
       });
     }
-    this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
-  }
 
+<<<<<<< HEAD
   handleGetOrigins(input) {
     if (!input) {
       return Promise.resolve({ options: [] });
@@ -306,33 +284,21 @@ class CompareComponent extends React.Component {
     return (
       <span id="url2">{url.origin}</span>
     );
+=======
+    // update the url
+    const { query } = Router;
+    query.time = selectedOption;
+    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    Router.push(newURL, newURL, { shallow: true });
+>>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
   }
 
-  handleToggleClick(event) {
+  handleToggleClick() {
     Router.push("/");
   }
 
   render() {
-    const urlPlaceholder = defaultUrl;
     const formatsecond = value => `${value} s`;
-    const inputProps1 = {
-      placeholder: urlPlaceholder,
-      value: this.state.url1,
-      onFocus: (ev) => {
-        ev.target.select();
-      },
-      id: "url1",
-      onChange: this.handleOnURLChange,
-    };
-    const inputProps2 = {
-      placeholder: urlPlaceholder,
-      value: this.state.url2,
-      onFocus: (ev) => {
-        ev.target.select();
-      },
-      id: "url2",
-      onChange: this.handleOnURLChange,
-    };
     return (
       <div>
         <Meta />
@@ -348,7 +314,7 @@ class CompareComponent extends React.Component {
                 <input onClick={this.handleToggleClick} defaultChecked type="checkbox" id="togBtn" />
                   <div className="slider round">
                     <span className="on">
-                      Compare 
+                      Compare
                     </span>
                     <span className="off">
                       Test
@@ -369,269 +335,113 @@ class CompareComponent extends React.Component {
           <h2>Compare among 1,241,019 websites accessed by Google Chrome Users</h2>
         </div>
         <div className="container">
-        <div className="DeviceConnection__wrapper">
-          <div className="DeviceInput__wrapper">
-            <Select
-              value={this.state.device}
-              onChange={this.handleOnDeviceChange}
-              clearable={false}
-              options={deviceList}
-              searchable={false}
+          <div className="DeviceConnection__wrapper">
+            <div className="DeviceInput__wrapper">
+              <Select
+                value={this.state.device}
+                onChange={this.handleOnDeviceChange}
+                clearable={false}
+                options={deviceList}
+                searchable={false}
+              />
+            </div>
+            <div className="ConnectionInput__wrapper">
+              <Select
+                value={this.state.connection}
+                onChange={this.handleOnConnectionChange}
+                clearable={false}
+                searchable={false}
+                options={connectionList}
+              />
+            </div>
+          </div>
+          <div className="TimeInput__wrapper">
+            <span className="TimeInput__label">Time (in seconds):</span>
+            <Slider
+              min={0}
+              max={10}
+              value={Number(this.state.time)}
+              format={formatsecond}
+              tooltip={false}
+              handleLabel={this.state.time.toString()}
+              onChange={this.handleOnTimeChange}
             />
           </div>
-          <div className="ConnectionInput__wrapper">
-            <Select
-              value={this.state.connection}
-              onChange={this.handleOnConnectionChange}
-              clearable={false}
-              searchable={false}
-              options={connectionList}
-            />
-          </div>
-        </div>
-        <div className="TimeInput__wrapper">
-          <span className="TimeInput__label">Time (in seconds):</span>
-          <Slider
-            min={0}
-            max={10}
-            value={Number(this.state.time)}
-            format={formatsecond}
-            tooltip={false}
-            handleLabel={this.state.time.toString()}
-            onChange={this.handleOnTimeChange}
-          />
-        </div>
-        <div className="visual__wrapper">
-          <div className="loader">
-            <PulseLoader
-              color="#db3340"
-              loading={this.state.loading}
-              size={30}
-            />
-          </div>
-        </div>
           <div className="URLCompare__wrapper">
-            <div className="URLInput__wrapper">
-              <Autosuggest
-                id="autosuggest1"
-                suggestions={this.state.urlSuggestions}
-                onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                onSuggestionSelected={this.onSuggestionSelected}
-                getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrl1Suggestion}
-                inputProps={inputProps1}
-              />
-              <div className="result__wrapper">
-                <Visual
-                  fcpHumanCount={this.state.fcpHumanCount1}
-                  onloadHumanCount={this.state.onloadHumanCount1}
-                  loadingHumanCount={this.state.loadingHumanCount1}
-                />
-                <div className="table__wrapper">
-                  <div className="seb__wrapper">
-                    <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-                    SEB score
-                    </span>
-                    <span className="table__content">
-                      {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? "-"
-                          : this.state.fcp1["1"].toFixed(3)}
-                    </span>
-                  </div>
-                  <div className="fcpProb__wrapper">
-                    <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                      Users with FCP {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? ""
-                        : "<" + this.state.time + "s"}
-                    </span>
-                    <span className="table__content">
-                      {((this.state.fcp1 === null) || (this.state.time === 0) || this.state.fcp1[this.state.time] === null) ? "-"
-                        : (this.state.fcp1[this.state.time] * 100).toFixed(1) + "%"}
-                    </span>
-                  </div>
-                  <div className="onloadProb__wrapper">
-                    <span className="table__header" title="The percentage of users completing document load within given time.">
-                      Users with onload {((this.state.onload1 === null) || (this.state.time === 0) || this.state.onload1[this.state.time] === null) ? ""
-                        : `<${this.state.time}s`}
-                    </span>
-                    <span className="table__content">
-                      {((this.state.onload1 === null) || (this.state.time === 0) || this.state.onload1[this.state.time] === null) ? "-"
-                        : (this.state.onload1[this.state.time]*100).toFixed(1)+"%"}
-                    </span>
-                  </div>
+            <ResultGraph
+              id="1"
+              device={this.state.device}
+              connection={this.state.connection}
+              time={this.state.time}
+            />
+            <ResultGraph
+              id="2"
+              device={this.state.device}
+              connection={this.state.connection}
+              time={this.state.time}
+            />
+          </div>
+          <div className="explanation__wrapper">
+            <div className="explanation__row">
+              <div className="explanation__item">
+                <div className="explanation__header">
+                  <span className="explanation__text">
+                    How to use the tool
+                  </span>
+                </div>
+                <div className="explanation__section">
+                  <span className="explanation__text">
+                    - Select a website using the autocomplete.<br />
+                    - (Optional) select a device and connection type. <br />
+                    - Use the time slider to select the user wait time.
+                  </span>
+                </div>
+              </div>
+              <div className="explanation__item">
+                <div className="explanation__header">
+                  <span className="explanation__text">
+                    Assume 1000 website visitors
+                  </span>
+                </div>
+                <div className="explanation__section">
+                  <span className="explanation__text">
+                    - <Human color="#ffffff" /> : no content loaded,<br />
+                    - <Human color="#5486AA" /> : some content loaded,<br />
+                    - <Human color="#153B58" /> : document loaded.
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="URLInput__wrapper">
-              <Autosuggest
-                id="autosuggest2"
-                suggestions={this.state.urlSuggestions}
-                onSuggestionsFetchRequested={this.onUrlSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                onSuggestionSelected={this.onSuggestionSelected}
-                getSuggestionValue={this.getUrlSuggestionValue}
-                renderSuggestion={this.renderUrl2Suggestion}
-                inputProps={inputProps2}
-              />
-            <div className="result__wrapper">
-              <Visual
-                fcpHumanCount={this.state.fcpHumanCount2}
-                onloadHumanCount={this.state.onloadHumanCount2}
-                loadingHumanCount={this.state.loadingHumanCount2}
-              />
-              <div className="table__wrapper">
-                <div className="seb__wrapper">
-                  <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-                  SEB score
-                  </span>
-                  <span className="table__content">
-                    {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? "-"
-                        : this.state.fcp2["1"].toFixed(3)}
-                  </span>
-                </div>
-                <div className="fcpProb__wrapper">
-                  <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                    Users with FCP {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? ""
-                      : "<" + this.state.time + "s"}
-                  </span>
-                  <span className="table__content">
-                    {((this.state.fcp2 === null) || (this.state.time === 0) || this.state.fcp2[this.state.time] === null) ? "-"
-                      : (this.state.fcp2[this.state.time] * 100).toFixed(1) + "%"}
-                  </span>
-                </div>
-                <div className="onloadProb__wrapper">
-                  <span className="table__header" title="The percentage of users completing document load within given time.">
-                    Users with onload {((this.state.onload2 === null) || (this.state.time === 0) || this.state.onload2[this.state.time] === null) ? ""
-                      : `<${this.state.time}s`}
-                  </span>
-                  <span className="table__content">
-                    {((this.state.onload2 === null) || (this.state.time === 0) || this.state.onload2[this.state.time] === null) ? "-"
-                      : (this.state.onload2[this.state.time]*100).toFixed(1)+"%"}
-                  </span>
-                </div>
-              </div>
+            <div className="explanation__header">
+              <span className="explanation__text">
+                Metrics
+              </span>
+            </div>
+            <div className="explanation__section">
+              <span className="explanation__text">
+                - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
+                - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
+                - The percentage of users completing document load within given time.<br />
+              </span>
+            </div>
+            <div className="explanation__header">
+              <span className="explanation__text">
+                Learn more
+              </span>
+            </div>
+            <div className="explanation__section">
+              <span className="explanation__text">
+                - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br />
+                - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br />
+                - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
+              </span>
             </div>
           </div>
         </div>
-        <div className="explanation__wrapper">
-          <div className="explanation__row">
-            <div className="explanation__item">
-              <div className="explanation__header">
-                <span className="explanation__text">
-                  How to use the tool
-                </span>
-              </div>
-              <div className="explanation__section">
-                <span className="explanation__text">
-                  - Select a website using the autocomplete.<br />
-                  - (Optional) select a device and connection type. <br />
-                  - Use the time slider to select the user wait time.
-                </span>
-              </div>
-            </div>
-            <div className="explanation__item">
-              <div className="explanation__header">
-                <span className="explanation__text">
-                  Assume 1000 website visitors
-                </span>
-              </div>
-              <div className="explanation__section">
-                <span className="explanation__text">
-                  - <Human color="#ffffff" /> : no content loaded,<br />
-                  - <Human color="#5486AA" /> : some content loaded,<br />
-                  - <Human color="#153B58" /> : document loaded.
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="explanation__header">
-            <span className="explanation__text">
-              Metrics
-            </span>
-          </div>
-          <div className="explanation__section">
-            <span className="explanation__text">
-              - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
-              - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
-              - The percentage of users completing document load within given time.<br />
-            </span>
-          </div>
-          <div className="explanation__header">
-            <span className="explanation__text">
-              Learn more
-            </span>
-          </div>
-          <div className="explanation__section">
-            <span className="explanation__text">
-              - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br />
-              - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br />
-              - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
-            </span>
-          </div>
-        </div>
-      </div>
         <style jsx>{`
           .URLCompare__wrapper {
             border: 1px solid #ccc;
             overflow: auto;
-          }
-          .result__wrapper {
-            margin-top: 3%;
-            max-height: 60%;
-          }
-          .URLInput__wrapper {
-            display: inline-block;
-            width: 47%;
-          }
-          .URLInput__wrapper:first-child {
-            float: left;
-            padding-right: 15px;
-            border-right: 1px solid #ccc;
-          }
-          @media all and (max-width: 1049px) {
-            .URLInput__wrapper {
-              width: 46%;
-            }
-          }
-          @media all and (max-width: 800px) {
-            .URLInput__wrapper {
-              width: 45%;
-            }
-          }
-          @media all and (max-width: 650px) {
-            .URLInput__wrapper {
-              padding-left: 6px;
-            }
-            .URLInput__wrapper:first-child {
-              float: none;
-              padding-right: 0;
-              border-right: none;
-            }
-          }
-          .table__header {
-              font-size: 13px;
-          }
-          .table__content {
-              font-size: 30px;
-          }
-          @media all and (max-width: 890px) {
-            .table__header {
-              font-size: 9px;
-            }
-            .table__content {
-              font-size: 22px;
-            }
-          }
-          @media all and (max-width: 650px) {
-            .URLInput__wrapper {
-              display: block;
-              width: 92%;
-            }
-            .table__header {
-              font-size: 1.2em;
-            }
-            .table__content {
-              font-size: 3em;
-            }
           }
         `}
         </style>

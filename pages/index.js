@@ -40,7 +40,7 @@ class RUXtestApp extends React.Component {
                 <img src="static/full-logo-white.png" alt="RUXtest | Dexecure" />
               </a>
             </div>
-            <div className="header--middle">
+            { /* <div className="header--middle">
               <label className="switch">
                 <input onClick={this.handleClick} defaultChecked={false} type="checkbox" id="togBtn" />
                   <div className="slider round">
@@ -52,7 +52,7 @@ class RUXtestApp extends React.Component {
                     </span>
                   </div>
               </label>
-            </div>
+            </div> */ }
             <div className="header--right">
               <a className="btn" href="https://dexecure.com">Try Dexecure</a>
             </div>
