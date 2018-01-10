@@ -30,85 +30,21 @@ class CompareComponent extends React.Component {
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
-    };
-
+    }
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
     this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
-<<<<<<< HEAD
-    this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
-    this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
-    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
-    this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
-  }
-
-  componentDidMount() {
-    const newURL = window.location.pathname;
-    const { device, connection, url1, url2, time } = Router.query;
-    if (url1 || url2) {
-      this.setState({
-        url: url1,
-        url1: url1,
-        url2: url2
-      });
-      this.handleUpdateNumbers(url1, device, connection).then(()=> {
-        this.setState({
-          url: url2
-        });
-        this.handleUpdateNumbers(url2, device, connection);
-      });
-    } else {
-      Router.push(newURL, newURL, { shallow: true });
-    }
-  }
-
-  handleOnURLChange(event, { newValue }) {
-    const originUrl = { newValue };
-    if(event.target.id === 'url1') {
-      this.setState({
-        url: originUrl.newValue,
-        url1: originUrl.newValue
-      });
-    } else if(event.target.id === 'url2') {
-      this.setState({
-        url: originUrl.newValue,
-        url2: originUrl.newValue,
-      });
-    }
-
-    // update the url
-    const { device, connection, url, time } = Router.query;
-    const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
-        connection: connection ? connection : devAndconDefault }, { encode: false });
-    Router.push(newURL, newURL, { shallow: true });
-=======
->>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
   }
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
       device: selectedOption.value,
     });
-<<<<<<< HEAD
-    const urlQuery = this.state.url1 === defaultUrl ? this.state.url2 : this.state.url1;
-    this.handleUpdateNumbers(
-      urlQuery,
-      selectedOption.value,
-      this.state.connection,
-    );
-    const { device, connection, url, time } = Router.query;
-    const newURL = Window.location.pathname + "?" +
-      qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
-=======
 
     // update the url
     const { query } = Router;
     query.device = selectedOption.value;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
->>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -120,177 +56,22 @@ class CompareComponent extends React.Component {
     // update the url
     const { query } = Router;
     query.connection = selectedOption.value;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
-    if (typeof(selectedOption) === "number") {
+    if (typeof (selectedOption) === "number") {
       this.setState({
         time: selectedOption,
       });
     }
 
-<<<<<<< HEAD
-  handleGetOrigins(input) {
-    if (!input) {
-      return Promise.resolve({ options: [] });
-    }
-    return fetch(`${process.env.BACKEND_URL}/search`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        origin: input
-      }),
-    })
-      .then(response => response.json())
-      .then(json => ({ options: json }));
-  }
-
-  async handleUpdateNumbers(url, device, connection) {
-    console.log(url, device, connection);
-    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
-      // doesnt seem to be a valid url
-      return;
-    }
-    this.setState({
-      loading: true,
-    });
-    const origin = url.origin || url;
-    const response = await fetch(`${process.env.BACKEND_URL}/content`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        origin,
-        device,
-        connection,
-      }),
-    });
-
-    if (response.ok) {
-      const responseJSON = await response.json();
-      if (this.state.url === this.state.url1) {
-        this.setState({
-          fcp1: responseJSON.bam.fcp,
-          onload1: responseJSON.bam.onload,
-          loading: false,
-        });
-        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
-      } else if (this.state.url === this.state.url2) {
-        this.setState({
-          fcp2: responseJSON.bam.fcp,
-          onload2: responseJSON.bam.onload,
-          loading: false,
-        });
-        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
-      }
-    } else {
-      // probably origin doesn't exist
-      this.setState({
-        onloadHumanCount1: 0,
-        fcpHumanCount1: 0,
-        onloadHumanCount2: 0,
-        fcpHumanCount2: 0,
-        loadingHumanCount: humanCount,
-        loading: false,
-      });
-    }
-  }
-
-  handleUpdateHumanCount(fcp, onload, time) {
-    if (time === 0) {
-      this.setState({
-        onloadHumanCount1: 0,
-        fcpHumanCount1: 0,
-        onloadHumanCount2: 0,
-        fcpHumanCount2: 0,
-        loadingHumanCount: humanCount,
-      });
-      return;
-    }
-
-    let onloadHumanCount = 0;
-    let fcpHumanCount = 0;
-    let onload_prob = 0;
-    let fcp_prob = 0;
-
-    if (onload) {
-      onload_prob = onload[time];
-      onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
-    }
-
-    if (fcp) {
-      fcp_prob = fcp[time];
-      fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
-    }
-
-    const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
-
-    if (this.state.url === this.state.url1) {
-      this.setState({
-        onloadHumanCount1: onloadHumanCount,
-        fcpHumanCount1: fcpHumanCount,
-        loadingHumanCount1: loadingHumanCount,
-      });
-    } else if (this.state.url === this.state.url2) {
-      this.setState({
-        onloadHumanCount2: onloadHumanCount,
-        fcpHumanCount2: fcpHumanCount,
-        loadingHumanCount2: loadingHumanCount,
-      });
-    }
-  }
-
-  async onSuggestionSelected(event, { suggestion }) {
-    this.handleUpdateNumbers(
-      suggestion.origin,
-      this.state.device,
-      this.state.connection,
-    );
-  }
-
-  async loadSuggestionsFromServer(value) {
-    const urls = await this.handleGetOrigins(value);
-    this.setState({
-      urlSuggestions: urls.options,
-    });
-  }
-
-  onUrlSuggestionsFetchRequested({ value }) {
-    this.debouncedLoadSuggestions(value);
-  }
-
-  onSuggestionsClearRequested() {
-    this.setState({
-      urlSuggestions: [],
-    });
-  }
-
-  getUrlSuggestionValue(url) {
-    return url.origin;
-  }
-
-  renderUrl1Suggestion(url) {
-    return (
-      <span id="url1">{url.origin}</span>
-    );
-  }
-
-  renderUrl2Suggestion(url) {
-    return (
-      <span id="url2">{url.origin}</span>
-    );
-=======
     // update the url
     const { query } = Router;
     query.time = selectedOption;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
->>>>>>> 19b80267aaef2905729b9dab3e55f3cf00f60566
   }
 
   handleToggleClick() {
@@ -310,16 +91,16 @@ class CompareComponent extends React.Component {
               </a>
             </div>
             <div className="header--middle">
-              <label className="switch">
+              <label htmlFor="togBtn" className="switch">
                 <input onClick={this.handleToggleClick} defaultChecked type="checkbox" id="togBtn" />
-                  <div className="slider round">
-                    <span className="on">
-                      Compare
-                    </span>
-                    <span className="off">
-                      Test
-                    </span>
-                  </div>
+                <div className="slider round">
+                  <span className="on">
+                    Compare
+                  </span>
+                  <span className="off">
+                    Test
+                  </span>
+                </div>
               </label>
             </div>
             <div className="header--right">

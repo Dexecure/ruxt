@@ -293,7 +293,7 @@ class ResultGraph extends React.Component {
             }
           }
           .table__header {
-              font-size: 13px;
+              font-size: 12px;
           }
           .table__content {
               font-size: 30px;
