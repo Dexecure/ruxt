@@ -34,6 +34,10 @@ class ResultGraph extends React.Component {
     this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
   }
 
+  componentWillMount() {
+
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.device !== nextProps.device || this.props.connection !== nextProps.connection) {
       this.handleUpdateNumbers(this.state.url, nextProps.device, nextProps.connection);
@@ -194,7 +198,7 @@ class ResultGraph extends React.Component {
       id: this.props.id,
       onChange: this.handleOnURLChange,
     };
-
+    console.log(this.state.fcp);
     return (
       <div className="URLInput__wrapper">
         <Autosuggest
@@ -228,7 +232,8 @@ class ResultGraph extends React.Component {
               SEB score
               </span>
               <span className="table__content">
-                {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
+                {((this.state.fcp === null) || this.state.fcp["1"] === null || (this.props.time === 0) ||
+                  this.state.fcp[this.state.time] === null) ? "-"
                     : this.state.fcp["1"].toFixed(3)}
               </span>
             </div>
@@ -297,6 +302,11 @@ class ResultGraph extends React.Component {
           }
           .table__content {
               font-size: 30px;
+          }
+          @media all and (max-width: 965px) {
+            .table__header {
+              font-size: 10px;
+            }
           }
           @media all and (max-width: 890px) {
             .table__header {
