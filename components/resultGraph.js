@@ -179,7 +179,7 @@ class ResultGraph extends React.Component {
     // update the url
     const { query } = Router;
     query[`url${this.props.id}`] = originUrl.newValue;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -235,11 +235,11 @@ class ResultGraph extends React.Component {
             <div className="fcpProb__wrapper">
               <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
                 Users with FCP {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? ""
-                  : "<" + this.props.time + "s"}
+                  : `<${window.location.pathname}s`}
               </span>
               <span className="table__content">
                 {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? "-"
-                  : (this.state.fcp[this.props.time] * 100).toFixed(1) + "%"}
+                  : `${(this.state.fcp[this.props.time] * 100).toFixed(1)}%`}
               </span>
             </div>
             <div className="onloadProb__wrapper">
@@ -249,7 +249,7 @@ class ResultGraph extends React.Component {
               </span>
               <span className="table__content">
                 {((this.state.onload === null) || (this.props.time === 0) || this.state.onload[this.props.time] === null) ? "-"
-                  : (this.state.onload[this.props.time]*100).toFixed(1)+"%"}
+                  : `${(this.state.onload[this.props.time] * 100).toFixed(1)}%`}
               </span>
             </div>
           </div>
