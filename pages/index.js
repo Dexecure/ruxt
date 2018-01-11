@@ -12,8 +12,8 @@ class RUXtestApp extends React.Component {
     super(props);
 
     this.state = {
-      checked: false
-    }
+      checked: false,
+    };
 
     this.handleClick = this.handleClick.bind(this);
   }
@@ -25,7 +25,7 @@ class RUXtestApp extends React.Component {
     logPageView();
   }
 
-  handleClick(event) {
+  handleClick() {
     Router.push("/compare");
   }
 
@@ -40,19 +40,19 @@ class RUXtestApp extends React.Component {
                 <img src="static/full-logo-white.png" alt="RUXtest | Dexecure" />
               </a>
             </div>
-            { /* <div className="header--middle">
-              <label className="switch">
+            <div className="header--middle">
+              <label htmlFor="togBtn" className="switch">
                 <input onClick={this.handleClick} defaultChecked={false} type="checkbox" id="togBtn" />
-                  <div className="slider round">
-                    <span className="on">
-                      Compare 
-                    </span>
-                    <span className="off">
-                      Test
-                    </span>
-                  </div>
+                <div className="slider round">
+                  <span className="on">
+                    Compare
+                  </span>
+                  <span className="off">
+                    Test
+                  </span>
+                </div>
               </label>
-            </div> */ }
+            </div>
             <div className="header--right">
               <a className="btn" href="https://dexecure.com">Try Dexecure</a>
             </div>

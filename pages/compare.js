@@ -4,7 +4,7 @@ import Router from "next/router";
 import Select from "react-select";
 import Slider from "react-rangeslider";
 import Meta from "../components/meta";
-import Human from "../components/human";
+import Explanation from "../components/explanation";
 import ResultGraph from "../components/resultGraph";
 
 const devAndconDefault = "all";
@@ -27,14 +27,24 @@ class CompareComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      url1: null,
+      url2: null,
       device: devAndconDefault,
       connection: devAndconDefault,
       time: 1,
     };
-
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
     this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
+  }
+
+  componentDidMount() {
+    const { query } = Router;
+    const device = query["device"] || "all";
+    const connection = query["connection"] || "all";
+    const url1 = query["url1"] || query["url"];
+    url1 ? this.setState({url1}) : null
+    const url2 = query["url2"] ? this.setState({url2: query["url2"]}) : null;
   }
 
   handleOnDeviceChange(selectedOption) {
@@ -45,7 +55,7 @@ class CompareComponent extends React.Component {
     // update the url
     const { query } = Router;
     query.device = selectedOption.value;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -57,12 +67,12 @@ class CompareComponent extends React.Component {
     // update the url
     const { query } = Router;
     query.connection = selectedOption.value;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
-    if (typeof(selectedOption) === "number") {
+    if (typeof (selectedOption) === "number") {
       this.setState({
         time: selectedOption,
       });
@@ -71,7 +81,7 @@ class CompareComponent extends React.Component {
     // update the url
     const { query } = Router;
     query.time = selectedOption;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -92,16 +102,16 @@ class CompareComponent extends React.Component {
               </a>
             </div>
             <div className="header--middle">
-              <label className="switch">
+              <label htmlFor="togBtn" className="switch">
                 <input onClick={this.handleToggleClick} defaultChecked type="checkbox" id="togBtn" />
-                  <div className="slider round">
-                    <span className="on">
-                      Compare
-                    </span>
-                    <span className="off">
-                      Test
-                    </span>
-                  </div>
+                <div className="slider round">
+                  <span className="on">
+                    Compare
+                  </span>
+                  <span className="off">
+                    Test
+                  </span>
+                </div>
               </label>
             </div>
             <div className="header--right">
@@ -129,7 +139,7 @@ class CompareComponent extends React.Component {
             </div>
             <div className="ConnectionInput__wrapper">
               <Select
-                value={this.state.connection}
+                url={this.state.connection}
                 onChange={this.handleOnConnectionChange}
                 clearable={false}
                 searchable={false}
@@ -152,73 +162,20 @@ class CompareComponent extends React.Component {
           <div className="URLCompare__wrapper">
             <ResultGraph
               id="1"
+              url={this.state.url1}
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}
             />
             <ResultGraph
               id="2"
+              value={this.state.url2}
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}
             />
           </div>
-          <div className="explanation__wrapper">
-            <div className="explanation__row">
-              <div className="explanation__item">
-                <div className="explanation__header">
-                  <span className="explanation__text">
-                    How to use the tool
-                  </span>
-                </div>
-                <div className="explanation__section">
-                  <span className="explanation__text">
-                    - Select a website using the autocomplete.<br />
-                    - (Optional) select a device and connection type. <br />
-                    - Use the time slider to select the user wait time.
-                  </span>
-                </div>
-              </div>
-              <div className="explanation__item">
-                <div className="explanation__header">
-                  <span className="explanation__text">
-                    Assume 1000 website visitors
-                  </span>
-                </div>
-                <div className="explanation__section">
-                  <span className="explanation__text">
-                    - <Human color="#ffffff" /> : no content loaded,<br />
-                    - <Human color="#5486AA" /> : some content loaded,<br />
-                    - <Human color="#153B58" /> : document loaded.
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="explanation__header">
-              <span className="explanation__text">
-                Metrics
-              </span>
-            </div>
-            <div className="explanation__section">
-              <span className="explanation__text">
-                - <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/#diving-into-the-important-questions-wheee">Site Experience Benchmark (SEB)</a> score: the fraction of users completing first contentful paint within first second.<br />
-                - The percentage of users completing <a href="https://developers.google.com/web/updates/2017/06/user-centric-performance-metrics#first_paint_and_first_contentful_paint">first contentful paint</a> within given time.<br />
-                - The percentage of users completing document load within given time.<br />
-              </span>
-            </div>
-            <div className="explanation__header">
-              <span className="explanation__text">
-                Learn more
-              </span>
-            </div>
-            <div className="explanation__section">
-              <span className="explanation__text">
-                - Read more on CrUX and the metrics for user experience in <a href="https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/">the introductory article on CrUX</a>.<br />
-                - Contribute at <a href="https://github.com/dexecure/ruxt">GitHub</a>. Suggestions welcome.<br />
-                - Reach out at <a href="mailto:coffee@dexecure.com">coffee@dexecure.com</a>.
-              </span>
-            </div>
-          </div>
+          <Explanation />
         </div>
         <style jsx>{`
           .URLCompare__wrapper {

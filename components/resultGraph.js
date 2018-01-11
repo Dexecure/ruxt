@@ -35,8 +35,9 @@ class ResultGraph extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.device !== nextProps.device || this.props.connection !== nextProps.connection) {
-      this.handleUpdateNumbers(this.state.url, nextProps.device, nextProps.connection);
+    if (this.props.url !== nextProps.url || this.props.device !== nextProps.device ||
+        this.props.connection !== nextProps.connection) {
+      this.handleUpdateNumbers(nextProps.url, nextProps.device, nextProps.connection);
     }
     if (this.props.time !== nextProps.time) {
       this.handleUpdateHumanCount(this.state.fcp, this.state.onload, nextProps.time);
@@ -84,7 +85,6 @@ class ResultGraph extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
-    console.log(url, device, connection);
     if (!(url.startsWith("http://") || url.startsWith("https://"))) {
       // doesnt seem to be a valid url
       return;
@@ -179,7 +179,7 @@ class ResultGraph extends React.Component {
     // update the url
     const { query } = Router;
     query[`url${this.props.id}`] = originUrl.newValue;
-    const newURL = window.location.pathname + "?" + qs.stringify(query, { encode: false });
+    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -187,14 +187,13 @@ class ResultGraph extends React.Component {
   render() {
     const inputProps = {
       placeholder: defaultUrl,
-      value: this.state.url,
+      value: this.props.url || this.state.url,
       onFocus: (ev) => {
         ev.target.select();
       },
       id: this.props.id,
       onChange: this.handleOnURLChange,
     };
-
     return (
       <div className="URLInput__wrapper">
         <Autosuggest
@@ -228,18 +227,19 @@ class ResultGraph extends React.Component {
               SEB score
               </span>
               <span className="table__content">
-                {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
+                {((this.state.fcp === null) || this.state.fcp["1"] === null || (this.props.time === 0) ||
+                  this.state.fcp[this.state.time] === null) ? "-"
                     : this.state.fcp["1"].toFixed(3)}
               </span>
             </div>
             <div className="fcpProb__wrapper">
               <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
                 Users with FCP {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? ""
-                  : "<" + this.props.time + "s"}
+                  : `<${window.location.pathname}s`}
               </span>
               <span className="table__content">
                 {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? "-"
-                  : (this.state.fcp[this.props.time] * 100).toFixed(1) + "%"}
+                  : `${(this.state.fcp[this.props.time] * 100).toFixed(1)}%`}
               </span>
             </div>
             <div className="onloadProb__wrapper">
@@ -249,7 +249,7 @@ class ResultGraph extends React.Component {
               </span>
               <span className="table__content">
                 {((this.state.onload === null) || (this.props.time === 0) || this.state.onload[this.props.time] === null) ? "-"
-                  : (this.state.onload[this.props.time]*100).toFixed(1)+"%"}
+                  : `${(this.state.onload[this.props.time] * 100).toFixed(1)}%`}
               </span>
             </div>
           </div>
@@ -293,10 +293,15 @@ class ResultGraph extends React.Component {
             }
           }
           .table__header {
-              font-size: 13px;
+              font-size: 12px;
           }
           .table__content {
               font-size: 30px;
+          }
+          @media all and (max-width: 965px) {
+            .table__header {
+              font-size: 10px;
+            }
           }
           @media all and (max-width: 890px) {
             .table__header {
