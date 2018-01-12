@@ -86,42 +86,43 @@ class ResultGraph extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
-    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
-      // doesnt seem to be a valid url
-      return;
-    }
-    this.setState({
-      loading: true,
-    });
-    const origin = url.origin || url;
-    const response = await fetch(`${process.env.BACKEND_URL}/content`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        origin,
-        device,
-        connection,
-      }),
-    });
-
-    if (response.ok) {
-      const responseJSON = await response.json();
+    if (url) {
+      if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+        // doesnt seem to be a valid url
+        return;
+      }
       this.setState({
-        fcp: responseJSON.bam.fcp,
-        onload: responseJSON.bam.onload,
-        loading: false,
+        loading: true,
       });
-      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.props.time);
-    } else {
-      // probably origin doesn't exist
-      this.setState({
-        onloadHumanCount: 0,
-        fcpHumanCount: 0,
-        loadingHumanCount: humanCount,
-        loading: false,
+      const origin = url.origin || url;
+      const response = await fetch(`${process.env.BACKEND_URL}/content`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          origin,
+          device,
+          connection,
+        }),
       });
+      if (response.ok) {
+        const responseJSON = await response.json();
+        this.setState({
+          fcp: responseJSON.bam.fcp,
+          onload: responseJSON.bam.onload,
+          loading: false,
+        });
+        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.props.time);
+      } else {
+        // probably origin doesn't exist
+        this.setState({
+          onloadHumanCount: 0,
+          fcpHumanCount: 0,
+          loadingHumanCount: humanCount,
+          loading: false,
+        });
+      }
     }
   }
 
