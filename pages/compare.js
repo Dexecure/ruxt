@@ -42,21 +42,21 @@ class CompareComponent extends React.Component {
 
   componentDidMount() {
     const { query } = Router;
-    
+
     const device = query["device"] || this.state.device;
     device ? this.setState({device}) : null;
 
     const connection = query["connection"] || this.state.connection;
-    connection ? this.setState({connection}) : null;
+    connection ? this.setState({ connection }) : null;
 
     const time = query["time"] || this.state.time;
-    time ? this.setState({time}) : null;
+    time ? this.setState({ time }) : null;
 
     const url1 = query["url1"] || query["url"];
-    url1 ? this.setState({url1}) : null;
+    url1 ? this.setState({ url1 } ) : null;
 
-    const url2 = query["url2"];
-    url2 ? this.setState({url2}) : null;
+    const { url2 } = query["url2"];
+    url2 ? this.setState({ url2 }) : null;
   }
 
   handleOnDeviceChange(selectedOption) {
