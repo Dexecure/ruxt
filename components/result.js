@@ -286,11 +286,11 @@ class ResultComponent extends React.Component {
     return (
       <div>
         <Meta />
+        <div className="heading">
+          <h1>Real User Experience Test (rUXt)</h1>
+          <h2>1,241,019 websites accessed by Google Chrome Users</h2>
+        </div>
         <div className="container">
-          <div className="heading">
-            <h1>Real User Experience Test (rUXt)</h1>
-            <h2>1,241,019 websites accessed by Google Chrome Users</h2>
-          </div>
           <div className="URLInput__wrapper">
             <Autosuggest
               suggestions={this.state.urlSuggestions}
