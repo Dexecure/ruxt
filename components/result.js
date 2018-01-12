@@ -9,6 +9,7 @@ import { debounce } from "underscore";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Explanation from "./explanation";
+import ResultScore from "./resultScore";
 
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
@@ -348,37 +349,11 @@ class ResultComponent extends React.Component {
               loadingHumanCount={this.state.loadingHumanCount}
             />
           </div>
-          <div className="table__wrapper">
-            <div className="seb__wrapper">
-              <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-              SEB score
-              </span>
-              <span className="table__content">
-                {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                    : this.state.fcp["1"].toFixed(3)}
-              </span>
-            </div>
-            <div className="fcpProb__wrapper">
-              <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                Users with FCP {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? ""
-                  : "<" + this.state.time + "s"}
-              </span>
-              <span className="table__content">
-                {((this.state.fcp === null) || (this.state.time === 0) || this.state.fcp[this.state.time] === null) ? "-"
-                  : (this.state.fcp[this.state.time] * 100).toFixed(1) + "%"}
-              </span>
-            </div>
-            <div className="onloadProb__wrapper">
-              <span className="table__header" title="The percentage of users completing document load within given time.">
-                Users with onload {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? ""
-                  : `<${this.state.time}s`}
-              </span>
-              <span className="table__content">
-                {((this.state.onload === null) || (this.state.time === 0) || this.state.onload[this.state.time] === null) ? "-"
-                  : (this.state.onload[this.state.time]*100).toFixed(1)+"%"}
-              </span>
-            </div>
-          </div>
+          <ResultScore
+            fcp={this.state.fcp}
+            time={this.state.time}
+            onload={this.state.onload}
+          />
           <Explanation />
         </div>
       </div>
