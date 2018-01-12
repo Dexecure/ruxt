@@ -55,7 +55,7 @@ class CompareComponent extends React.Component {
     const url1 = query["url1"] || query["url"];
     url1 ? this.setState({ url1 } ) : null;
 
-    const { url2 } = query["url2"];
+    const url2 = query["url2"];
     url2 ? this.setState({ url2 }) : null;
   }
 
