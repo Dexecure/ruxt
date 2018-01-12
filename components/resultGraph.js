@@ -266,6 +266,40 @@ class ResultGraph extends React.Component {
               border-right: none;
             }
           }
+<<<<<<< HEAD
+=======
+          .table__header {
+              font-size: 12px;
+          }
+          .table__content {
+              font-size: 30px;
+          }
+          @media all and (max-width: 965px) {
+            .table__header {
+              font-size: 10px;
+            }
+          }
+          @media all and (max-width: 890px) {
+            .table__header {
+              font-size: 9px;
+            }
+            .table__content {
+              font-size: 22px;
+            }
+          }
+          @media all and (max-width: 650px) {
+            .URLInput__wrapper {
+              display: block;
+              width: 92%;
+            }
+            .table__header {
+              font-size: 1.2em;
+            }
+            .table__content {
+              font-size: 3em;
+            }
+          }
+>>>>>>> f28349627ccb7fea33f2de431c96ead34eb55e81
         `}
         </style>
       </div>
