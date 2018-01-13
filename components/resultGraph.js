@@ -5,6 +5,7 @@ import { debounce } from "underscore";
 import Autosuggest from "react-autosuggest";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
+import ResultScore from "./resultScore";
 
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
@@ -85,42 +86,43 @@ class ResultGraph extends React.Component {
   }
 
   async handleUpdateNumbers(url, device, connection) {
-    if (!(url.startsWith("http://") || url.startsWith("https://"))) {
-      // doesnt seem to be a valid url
-      return;
-    }
-    this.setState({
-      loading: true,
-    });
-    const origin = url.origin || url;
-    const response = await fetch(`${process.env.BACKEND_URL}/content`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        origin,
-        device,
-        connection,
-      }),
-    });
-
-    if (response.ok) {
-      const responseJSON = await response.json();
+    if (url) {
+      if (!(url.startsWith("http://") || url.startsWith("https://"))) {
+        // doesnt seem to be a valid url
+        return;
+      }
       this.setState({
-        fcp: responseJSON.bam.fcp,
-        onload: responseJSON.bam.onload,
-        loading: false,
+        loading: true,
       });
-      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.props.time);
-    } else {
-      // probably origin doesn't exist
-      this.setState({
-        onloadHumanCount: 0,
-        fcpHumanCount: 0,
-        loadingHumanCount: humanCount,
-        loading: false,
+      const origin = url.origin || url;
+      const response = await fetch(`${process.env.BACKEND_URL}/content`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          origin,
+          device,
+          connection,
+        }),
       });
+      if (response.ok) {
+        const responseJSON = await response.json();
+        this.setState({
+          fcp: responseJSON.bam.fcp,
+          onload: responseJSON.bam.onload,
+          loading: false,
+        });
+        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.props.time);
+      } else {
+        // probably origin doesn't exist
+        this.setState({
+          onloadHumanCount: 0,
+          fcpHumanCount: 0,
+          loadingHumanCount: humanCount,
+          loading: false,
+        });
+      }
     }
   }
 
@@ -221,38 +223,11 @@ class ResultGraph extends React.Component {
               loadingHumanCount={this.state.loadingHumanCount}
             />
           </div>
-          <div className="table__wrapper">
-            <div className="seb__wrapper">
-              <span className="table__header" title="Site Experience Benchmark (SEB) score: the fraction of users completing first contentful paint within first second.">
-              SEB score
-              </span>
-              <span className="table__content">
-                {((this.state.fcp === null) || this.state.fcp["1"] === null || (this.props.time === 0) ||
-                  this.state.fcp[this.state.time] === null) ? "-"
-                    : this.state.fcp["1"].toFixed(3)}
-              </span>
-            </div>
-            <div className="fcpProb__wrapper">
-              <span className="table__header" title="The percentage of users completing first contentful paint within given time.">
-                Users with FCP {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? ""
-                  : `<${window.location.pathname}s`}
-              </span>
-              <span className="table__content">
-                {((this.state.fcp === null) || (this.props.time === 0) || this.state.fcp[this.props.time] === null) ? "-"
-                  : `${(this.state.fcp[this.props.time] * 100).toFixed(1)}%`}
-              </span>
-            </div>
-            <div className="onloadProb__wrapper">
-              <span className="table__header" title="The percentage of users completing document load within given time.">
-                Users with onload {((this.state.onload === null) || (this.props.time === 0) || this.state.onload[this.props.time] === null) ? ""
-                  : `<${this.props.time}s`}
-              </span>
-              <span className="table__content">
-                {((this.state.onload === null) || (this.props.time === 0) || this.state.onload[this.props.time] === null) ? "-"
-                  : `${(this.state.onload[this.props.time] * 100).toFixed(1)}%`}
-              </span>
-            </div>
-          </div>
+          <ResultScore
+            fcp={this.state.fcp}
+            time={this.props.time}
+            onload={this.state.onload}
+          />
         </div>
         <style jsx>{`
           .URLCompare__wrapper {
@@ -290,37 +265,6 @@ class ResultGraph extends React.Component {
               float: none;
               padding-right: 0;
               border-right: none;
-            }
-          }
-          .table__header {
-              font-size: 12px;
-          }
-          .table__content {
-              font-size: 30px;
-          }
-          @media all and (max-width: 965px) {
-            .table__header {
-              font-size: 10px;
-            }
-          }
-          @media all and (max-width: 890px) {
-            .table__header {
-              font-size: 9px;
-            }
-            .table__content {
-              font-size: 22px;
-            }
-          }
-          @media all and (max-width: 650px) {
-            .URLInput__wrapper {
-              display: block;
-              width: 92%;
-            }
-            .table__header {
-              font-size: 1.2em;
-            }
-            .table__content {
-              font-size: 3em;
             }
           }
         `}
