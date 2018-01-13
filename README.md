@@ -31,6 +31,10 @@ We use [Next.js](https://github.com/zeit/next.js/) for the frontend.
 - `npm install` to install all dependencies.
 - `npm run dev` to run locally.
 
+# Contributing
+
+Send a PR to the develop branch of the repo. The master branch tracks the version actually deployed on https://ruxt.dexecure.com/
+
 # Learn more
 - Read more on CrUX and the metrics for user experience in the [introductory article on CrUX](https://dexecure.com/blog/chrome-user-experience-report-explained-google-bigquery/).
 - This is the repo for the frontend. The repo for backend is [here](https://github.com/Dexecure/ruxt-backend). Feedback and pull requests welcome.
