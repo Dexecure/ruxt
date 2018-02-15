@@ -187,10 +187,11 @@ const Meta = () => (
       }
       .switch {
         position: absolute;
-        display: inline-block;
-        right: 17%;
+        display: block;
+        right: 7.5%;
         width: 125px;
         height: 34px;
+        margin-top: 20px;
       }
       .switch input {display:none;}
       .slider {
@@ -335,6 +336,9 @@ const Meta = () => (
         top: 0;
         left: 0;
         border: 0; 
+      }
+      .compare--button {
+        margin-bottom: 50px;
       }
     `}
     </style>
