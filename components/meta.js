@@ -188,8 +188,8 @@ const Meta = () => (
       .switch {
         position: absolute;
         display: block;
-        right: 7.5%;
-        width: 125px;
+        right: 7%;
+        width: 70px;
         height: 34px;
         margin-top: 20px;
       }
@@ -217,7 +217,7 @@ const Meta = () => (
         transition: .4s;
       }
       input:checked + .slider:before {
-        left: 39px;
+        left: 1px;
       }
       input:checked + .slider {
         background-color: #b2a22d;
@@ -226,25 +226,26 @@ const Meta = () => (
         box-shadow: 0 0 1px #2196F3;
       }
       input:checked + .slider:before {
-        -webkit-transform: translateX(55px);
-        -ms-transform: translateX(55px);
-        transform: translateX(55px);
-      }
-      .on {
-        padding-right: 17px;
-        display: none;
+        -webkit-transform: translateX(40px);
+        -ms-transform: translateX(40px);
+        transform: translateX(40px);
       }
       .on, .off {
         color: white;
         position: absolute;
         transform: translate(-50%,-50%);
         top: 50%;
-        left: 50%;
+        left: 60%;
         font-size: 13px;
         font-family: Verdana, sans-serif;
       }
       input:checked+ .slider .on {
         display: block;
+      }
+      .on {
+        padding-right: 17px;
+        display: none;
+        left: 40%;
       }
       input:checked + .slider .off {
         display: none;
@@ -339,6 +340,24 @@ const Meta = () => (
       }
       .compare--button {
         margin-bottom: 50px;
+      }
+      .compare--label {
+        position: absolute;
+        display: block;
+        right: 8%;
+        width: 125px;
+        height: 34px;
+        margin-top: 26px;
+      }
+      @media all and (max-width: 900px) {
+        .compare--label {
+          right: 30%;
+        }
+      }
+      @media all and (max-width: 650px) {
+        .compare--label {
+          right: 50%;
+        }
       }
     `}
     </style>
