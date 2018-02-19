@@ -37,6 +37,7 @@ class RUXtestApp extends React.Component {
   }
 
   handleOpenSubscribeModal() {
+    return; //disabling for now
     if (typeof window !== "undefined") {
       const script = document.createElement("script");
       script.src = "http://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js";
