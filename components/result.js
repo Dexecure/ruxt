@@ -10,6 +10,14 @@ import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import Explanation from "./explanation";
 import ResultScore from "./resultScore";
+import { ToastContainer } from "react-toastify";
+import { style, toast } from "react-toastify";
+
+style({
+  colorDefault: "#153B58",
+  colorProgressDefault: "#db3340",
+  width: "500px",
+});
 
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
@@ -182,7 +190,6 @@ class ResultComponent extends React.Component {
         connection,
       }),
     });
-
     if (response.ok) {
       const responseJSON = await response.json();
       this.setState({
@@ -191,6 +198,11 @@ class ResultComponent extends React.Component {
         loading: false,
       });
       this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+      if (responseJSON.bam.fcp === null) {
+        toast("We don't have any data for a particular site", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      }
     } else {
       // probably origin doesn't exist
       this.setState({
@@ -198,6 +210,9 @@ class ResultComponent extends React.Component {
         fcpHumanCount: 0,
         loadingHumanCount: humanCount,
         loading: false,
+      });
+      toast("Sorry, this site isn't exist", {
+        position: toast.POSITION.BOTTOM_LEFT,
       });
     }
   }
@@ -287,6 +302,7 @@ class ResultComponent extends React.Component {
     return (
       <div>
         <Meta />
+        <ToastContainer closeButton={false} />
         <div className="heading">
           <h1>Real User Experience Test (rUXt)</h1>
           <h2>1,241,019 websites accessed by Google Chrome Users</h2>

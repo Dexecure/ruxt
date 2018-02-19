@@ -11,19 +11,6 @@ class Header extends React.Component {
                 <img src="static/full-logo-white.png" alt="RUXtest | Dexecure" />
               </a>
             </div>
-            <div className="header--middle">
-              <label htmlFor="togBtn" className="switch">
-                <input onClick={this.props.handleClick} defaultChecked={this.props.checked} type="checkbox" id="togBtn" />
-                <div className="slider round">
-                  <span className="on">
-                    Compare
-                  </span>
-                  <span className="off">
-                    Test
-                  </span>
-                </div>
-              </label>
-            </div>
             <div className="header--right">
               <a className="btn" href="https://dexecure.com">Try Dexecure</a>
             </div>
