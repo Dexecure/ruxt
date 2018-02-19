@@ -199,7 +199,7 @@ class ResultComponent extends React.Component {
       });
       this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
       if (responseJSON.bam.fcp === null) {
-        toast("We don't have any data for a particular site", {
+        toast("We don't have data for that particular website", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
       }
@@ -211,7 +211,7 @@ class ResultComponent extends React.Component {
         loadingHumanCount: humanCount,
         loading: false,
       });
-      toast("Sorry, this site isn't exist", {
+      toast("We don't have data for that particular website", {
         position: toast.POSITION.BOTTOM_LEFT,
       });
     }
