@@ -1,7 +1,7 @@
 Real User Experience Test (rUXt)
 =================
 
-A tool to visualize the Real User Monitoring (RUM) data for 1,241,019 websites from Google Chrome users under various device and connection types.
+A tool to visualize the Real User Monitoring (RUM) data for 3,237,526 websites from Google Chrome users under various device and connection types.
 
 # How to use rUXt
 
