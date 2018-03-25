@@ -305,7 +305,7 @@ class ResultComponent extends React.Component {
         <ToastContainer closeButton={false} />
         <div className="heading">
           <h1>Real User Experience Test (rUXt)</h1>
-          <h2>1,241,019 websites accessed by Google Chrome Users</h2>
+          <h2>3,237,526 websites accessed by Google Chrome Users</h2>
         </div>
         <div className="container">
           <div className="URLInput__wrapper">
