@@ -114,7 +114,7 @@ class CompareComponent extends React.Component {
         </div>
         <div className="heading">
           <h1>Real User Experience Test (rUXt) - Comparison</h1>
-          <h2>Compare among 1,241,019 websites accessed by Google Chrome Users</h2>
+          <h2>Compare among 3,237,526 websites accessed by Google Chrome Users</h2>
         </div>
         <div className="container">
           <div className="DeviceConnection__wrapper">
