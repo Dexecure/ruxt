@@ -12,6 +12,8 @@ import Explanation from "./explanation";
 import ResultScore from "./resultScore";
 import { ToastContainer } from "react-toastify";
 import { style, toast } from "react-toastify";
+import { countryList } from "../data/countryList";
+import { deviceList, connectionList } from "../data/devAndConList";
 
 style({
   colorDefault: "#153B58",
@@ -21,21 +23,7 @@ style({
 
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
-const devAndconDefault = "all";
-const deviceList = [
-  { value: "all", label: "All device types" },
-  { value: "phone", label: "Phone" },
-  { value: "tablet", label: "Tablet" },
-  { value: "desktop", label: "Desktop" },
-];
-const connectionList = [
-  { value: "all", label: "All connection types" },
-  { value: "4G", label: "4G" },
-  { value: "3G", label: "3G" },
-  { value: "2G", label: "2G" },
-  { value: "slow-2G", label: "slow-2G" },
-  { value: "offline", label: "offline" },
-];
+const devAndconAndconuDefault = "all";
 
 class ResultComponent extends React.Component {
   constructor(props) {
@@ -43,8 +31,8 @@ class ResultComponent extends React.Component {
     this.state = {
       urlSuggestions: [],
       url: defaultUrl,
-      device: devAndconDefault,
-      connection: devAndconDefault,
+      device: devAndconAndconuDefault,
+      connection: devAndconAndconuDefault,
       time: 1,
       fcp: null,
       onload: null,
@@ -52,9 +40,11 @@ class ResultComponent extends React.Component {
       loadingHumanCount: humanCount,
       onloadHumanCount: 0,
       loading: false,
+      country: countryList[0],
     };
 
     this.handleOnURLChange = this.handleOnURLChange.bind(this);
+    this.handleOnCountryChange = this.handleOnCountryChange.bind(this);
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
     this.handleOnConnectionChange = this.handleOnConnectionChange.bind(this);
     this.handleGetOrigins = this.handleGetOrigins.bind(this);
@@ -64,29 +54,36 @@ class ResultComponent extends React.Component {
     this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
-    this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
+    this.debouncedLoadSuggestions = debounce(
+      this.loadSuggestionsFromServer,
+      500,
+    );
   }
 
   componentDidMount() {
-    const { device, connection, url  } = Router.query;
+    const { device, connection, url, country } = Router.query;
     if (url === undefined && device === undefined && connection === undefined) {
       const basicURL = window.location.pathname;
       Router.push(basicURL, basicURL, { shallow: true });
     } else {
-      const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: url ? url : defaultUrl, device: device ? device : devAndconDefault,
-        connection: connection ? connection : devAndconDefault }, { encode: false });
+      const newURL = `${window.location.pathname}?${qs.stringify(
+        {
+          url: url || defaultUrl,
+          device: device || devAndconAndconuDefault,
+          connection: connection || devAndconAndconuDefault,
+          country:
+            country === "All countries" ? devAndconAndconuDefault : country,
+        },
+        { encode: false },
+      )}`;
       Router.push(newURL, newURL, { shallow: true });
       this.setState({
         url,
         device,
         connection,
+        country: country === "all" ? countryList[0] : country,
       });
-      this.handleUpdateNumbers(
-        url,
-        device,
-        connection,
-      );
+      this.handleUpdateNumbers(url, device, connection, country);
     }
   }
 
@@ -97,10 +94,17 @@ class ResultComponent extends React.Component {
     });
 
     // update the url
-    const { device, connection, url, time } = Router.query;
-    const newURL = window.location.pathname + "?" +
-      qs.stringify({ url: originUrl.newValue, device: device ? device : devAndconDefault,
-        connection: connection ? connection : devAndconDefault }, { encode: false });
+    const { device, connection, url, time, country } = Router.query;
+    const newURL = `${window.location.pathname}?${qs.stringify(
+      {
+        url: originUrl.newValue,
+        device: device || devAndconAndconuDefault,
+        connection: connection || devAndconAndconuDefault,
+        country:
+          country === "All countries" ? devAndconAndconuDefault : country,
+      },
+      { encode: false },
+    )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -108,16 +112,26 @@ class ResultComponent extends React.Component {
     this.setState({
       device: selectedOption.value,
     });
-    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
+    if (this.state.url || !(this.state.url = defaultUrl)) {
       this.handleUpdateNumbers(
         this.state.url,
         selectedOption.value,
         this.state.connection,
+        this.state.country =
+          country === "All countries" ? devAndconAndconuDefault : this.state.country,
       );
     }
-    const { device, connection, url, time } = Router.query;
-    const newURL = window.location.pathname + "?" +
-      qs.stringify({ url, device: selectedOption.value, connection }, { encode: false });
+    const { device, connection, url, time, country } = Router.query;
+    const newURL = `${window.location.pathname}?${qs.stringify(
+      { 
+        url,
+        device: selectedOption.value,
+        connection,
+        time,
+        country: country === "All countries" ? devAndconAndconuDefault : country,
+      },
+      { encode: false },
+    )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
@@ -125,30 +139,68 @@ class ResultComponent extends React.Component {
     this.setState({
       connection: selectedOption.value,
     });
-    if ((this.state.url) || (!(this.state.url = defaultUrl))) {
+    if (this.state.url || !(this.state.url = defaultUrl)) {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
         selectedOption.value,
+        this.state.country =
+          country === "All countries" ? devAndconAndconuDefault : this.state.country,
       );
     }
-    const {
-      device,
-      connection,
-      url,
-      time } = Router.query;
-    const newURL = window.location.pathname + "?" +
-      qs.stringify({ url, device, connection: selectedOption.value }, { encode: false });
+    const { device, connection, url, time, country } = Router.query;
+    const newURL = `${window.location.pathname}?${qs.stringify(
+      {
+        url,
+        device,
+        connection: selectedOption.value,
+        time,
+        country:
+          country === "All countries" ? devAndconAndconuDefault : country,
+      },
+      { encode: false },
+    )}`;
+    Router.push(newURL, newURL, { shallow: true });
+  }
+
+  handleOnCountryChange(selectedOption) {
+    this.setState({
+      country: selectedOption.value,
+    });
+    if (this.state.url || !(this.state.url = defaultUrl)) {
+      this.handleUpdateNumbers(
+        this.state.url,
+        this.state.device,
+        this.state.connection,
+        selectedOption.value,
+      );
+    }
+    const { device, connection, url, time, country } = Router.query;
+    const newURL = `${window.location.pathname}?${qs.stringify(
+      {
+        url,
+        device,
+        connection,
+        time,
+        country:
+          selectedOption.value === "All countries" ? devAndconAndconuDefault : selectedOption.value,
+      },
+      { encode: false },
+    )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnTimeChange(selectedOption) {
-    if (typeof(selectedOption) === "number") {
+    if (typeof selectedOption === "number") {
       this.setState({
         time: selectedOption,
       });
     }
-    this.handleUpdateHumanCount(this.state.fcp, this.state.onload, selectedOption);
+    this.handleUpdateHumanCount(
+      this.state.fcp,
+      this.state.onload,
+      selectedOption,
+    );
   }
 
   handleGetOrigins(input) {
@@ -168,7 +220,7 @@ class ResultComponent extends React.Component {
       .then(json => ({ options: json }));
   }
 
-  async handleUpdateNumbers(url, device, connection) {
+  async handleUpdateNumbers(url, device, connection, country) {
     console.log(url, device, connection);
     if (!(url.startsWith("http://") || url.startsWith("https://"))) {
       // doesnt seem to be a valid url
@@ -188,6 +240,7 @@ class ResultComponent extends React.Component {
         origin,
         device,
         connection,
+        country,
       }),
     });
     if (response.ok) {
@@ -197,7 +250,11 @@ class ResultComponent extends React.Component {
         onload: responseJSON.bam.onload,
         loading: false,
       });
-      this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.state.time);
+      this.handleUpdateHumanCount(
+        responseJSON.bam.fcp,
+        responseJSON.bam.onload,
+        this.state.time,
+      );
       if (responseJSON.bam.fcp === null) {
         toast("We don't have data for that particular website", {
           position: toast.POSITION.BOTTOM_LEFT,
@@ -234,15 +291,21 @@ class ResultComponent extends React.Component {
 
     if (onload) {
       onload_prob = onload[time];
-      onloadHumanCount = Math.max(0, Math.floor(onload_prob*humanCount));
+      onloadHumanCount = Math.max(0, Math.floor(onload_prob * humanCount));
     }
 
     if (fcp) {
       fcp_prob = fcp[time];
-      fcpHumanCount = Math.max(0, Math.floor((fcp_prob-onload_prob)*humanCount));
+      fcpHumanCount = Math.max(
+        0,
+        Math.floor((fcp_prob - onload_prob) * humanCount),
+      );
     }
 
-    const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcp_prob*humanCount));
+    const loadingHumanCount = Math.max(
+      0,
+      Math.floor(humanCount - fcp_prob * humanCount),
+    );
 
     this.setState({
       onloadHumanCount,
@@ -256,6 +319,7 @@ class ResultComponent extends React.Component {
       suggestion.origin,
       this.state.device,
       this.state.connection,
+      this.state.country,
     );
   }
 
@@ -281,9 +345,7 @@ class ResultComponent extends React.Component {
   }
 
   renderUrlSuggestion(url) {
-    return (
-      <span>{url.origin}</span>
-    );
+    return <span>{url.origin}</span>;
   }
 
   render() {
@@ -298,6 +360,10 @@ class ResultComponent extends React.Component {
       },
       onChange: this.handleOnURLChange,
     };
+    const countries = countryList.map(country => ({
+      value: country,
+      label: country,
+    }));
 
     return (
       <div>
@@ -320,6 +386,15 @@ class ResultComponent extends React.Component {
             />
           </div>
           <div className="DeviceConnection__wrapper">
+            <div className="DeviceInput__wrapper">
+              <Select
+                value={this.state.country}
+                onChange={this.handleOnCountryChange}
+                clearable={false}
+                options={countries}
+                searchable
+              />
+            </div>
             <div className="DeviceInput__wrapper">
               <Select
                 value={this.state.device}
