@@ -227,6 +227,10 @@ class ResultComponent extends React.Component {
       return;
     }
 
+    if (country === "All countries") {
+      country = "all";
+    }
+
     this.setState({
       loading: true,
     });
