@@ -46,12 +46,14 @@ class ResultGraph extends React.Component {
     if (
       this.props.url !== nextProps.url ||
       this.props.device !== nextProps.device ||
-      this.props.connection !== nextProps.connection
+      this.props.connection !== nextProps.connection ||
+      this.props.country !== nextProps.country
     ) {
       this.handleUpdateNumbers(
         nextProps.url,
         nextProps.device,
-        nextProps.connection
+        nextProps.connection,
+        nextProps.country
       );
     }
     if (this.props.time !== nextProps.time) {
@@ -107,11 +109,15 @@ class ResultGraph extends React.Component {
     });
   }
 
-  async handleUpdateNumbers(url, device, connection) {
+  async handleUpdateNumbers(url, device, connection, country) {
     if (url) {
       if (!(url.startsWith("http://") || url.startsWith("https://"))) {
         // doesnt seem to be a valid url
         return;
+      }
+
+      if (country === "All countries") {
+        country = "all";
       }
       this.setState({
         loading: true
@@ -125,7 +131,8 @@ class ResultGraph extends React.Component {
         body: JSON.stringify({
           origin,
           device,
-          connection
+          connection,
+          country
         })
       });
       if (response.ok) {
@@ -177,7 +184,8 @@ class ResultGraph extends React.Component {
     this.handleUpdateNumbers(
       suggestion.origin,
       this.props.device,
-      this.props.connection
+      this.props.connection,
+      this.props.country
     );
   }
 

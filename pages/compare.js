@@ -222,6 +222,7 @@ class CompareComponent extends React.Component {
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}
+              country={this.state.country}
             />
             <ResultGraph
               id="2"
@@ -229,6 +230,7 @@ class CompareComponent extends React.Component {
               device={this.state.device}
               connection={this.state.connection}
               time={this.state.time}
+              country={this.state.country}
             />
           </div>
           <Explanation />
