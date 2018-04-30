@@ -18,7 +18,7 @@ import { deviceList, connectionList } from "../data/devAndConList";
 style({
   colorDefault: "#153B58",
   colorProgressDefault: "#db3340",
-  width: "500px",
+  width: "500px"
 });
 
 const humanCount = 1000;
@@ -40,7 +40,7 @@ class ResultComponent extends React.Component {
       loadingHumanCount: humanCount,
       onloadHumanCount: 0,
       loading: false,
-      country: countryList[0],
+      country: countryList[0]
     };
 
     this.handleOnURLChange = this.handleOnURLChange.bind(this);
@@ -51,12 +51,16 @@ class ResultComponent extends React.Component {
     this.handleOnTimeChange = this.handleOnTimeChange.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
-    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(
+      this
+    );
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
+      this
+    );
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
     this.debouncedLoadSuggestions = debounce(
       this.loadSuggestionsFromServer,
-      500,
+      500
     );
   }
 
@@ -72,16 +76,16 @@ class ResultComponent extends React.Component {
           device: device || devAndconAndconuDefault,
           connection: connection || devAndconAndconuDefault,
           country:
-            country === "All countries" ? devAndconAndconuDefault : country,
+            country === "All countries" ? devAndconAndconuDefault : country
         },
-        { encode: false },
+        { encode: false }
       )}`;
       Router.push(newURL, newURL, { shallow: true });
       this.setState({
         url,
         device,
         connection,
-        country: country === "all" ? countryList[0] : country,
+        country: country === "all" ? countryList[0] : country
       });
       this.handleUpdateNumbers(url, device, connection, country);
     }
@@ -90,7 +94,7 @@ class ResultComponent extends React.Component {
   handleOnURLChange(event, { newValue }) {
     const originUrl = { newValue };
     this.setState({
-      url: originUrl.newValue,
+      url: originUrl.newValue
     });
 
     // update the url
@@ -100,52 +104,55 @@ class ResultComponent extends React.Component {
         url: originUrl.newValue,
         device: device || devAndconAndconuDefault,
         connection: connection || devAndconAndconuDefault,
-        country:
-          country === "All countries" ? devAndconAndconuDefault : country,
+        country: country === "All countries" ? devAndconAndconuDefault : country
       },
-      { encode: false },
+      { encode: false }
     )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
-      device: selectedOption.value,
+      device: selectedOption.value
     });
     if (this.state.url || !(this.state.url = defaultUrl)) {
       this.handleUpdateNumbers(
         this.state.url,
         selectedOption.value,
         this.state.connection,
-        this.state.country =
-          country === "All countries" ? devAndconAndconuDefault : this.state.country,
+        (this.state.country =
+          country === "All countries"
+            ? devAndconAndconuDefault
+            : this.state.country)
       );
     }
     const { device, connection, url, time, country } = Router.query;
     const newURL = `${window.location.pathname}?${qs.stringify(
-      { 
+      {
         url,
         device: selectedOption.value,
         connection,
         time,
-        country: country === "All countries" ? devAndconAndconuDefault : country,
+        country: country === "All countries" ? devAndconAndconuDefault : country
       },
-      { encode: false },
+      { encode: false }
     )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
-      connection: selectedOption.value,
+      connection: selectedOption.value
     });
     if (this.state.url || !(this.state.url = defaultUrl)) {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
         selectedOption.value,
-        this.state.country =
-          country === "All countries" ? devAndconAndconuDefault : this.state.country,
+        (this.state.country =
+          country === "All countries"
+            ? devAndconAndconuDefault
+            : this.state.country)
       );
     }
     const { device, connection, url, time, country } = Router.query;
@@ -155,24 +162,23 @@ class ResultComponent extends React.Component {
         device,
         connection: selectedOption.value,
         time,
-        country:
-          country === "All countries" ? devAndconAndconuDefault : country,
+        country: country === "All countries" ? devAndconAndconuDefault : country
       },
-      { encode: false },
+      { encode: false }
     )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnCountryChange(selectedOption) {
     this.setState({
-      country: selectedOption.value,
+      country: selectedOption.value
     });
     if (this.state.url || !(this.state.url = defaultUrl)) {
       this.handleUpdateNumbers(
         this.state.url,
         this.state.device,
         this.state.connection,
-        selectedOption.value,
+        selectedOption.value
       );
     }
     const { device, connection, url, time, country } = Router.query;
@@ -183,9 +189,11 @@ class ResultComponent extends React.Component {
         connection,
         time,
         country:
-          selectedOption.value === "All countries" ? devAndconAndconuDefault : selectedOption.value,
+          selectedOption.value === "All countries"
+            ? devAndconAndconuDefault
+            : selectedOption.value
       },
-      { encode: false },
+      { encode: false }
     )}`;
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -193,13 +201,13 @@ class ResultComponent extends React.Component {
   handleOnTimeChange(selectedOption) {
     if (typeof selectedOption === "number") {
       this.setState({
-        time: selectedOption,
+        time: selectedOption
       });
     }
     this.handleUpdateHumanCount(
       this.state.fcp,
       this.state.onload,
-      selectedOption,
+      selectedOption
     );
   }
 
@@ -210,11 +218,11 @@ class ResultComponent extends React.Component {
     return fetch(`${process.env.BACKEND_URL}/search`, {
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        origin: input,
-      }),
+        origin: input
+      })
     })
       .then(response => response.json())
       .then(json => ({ options: json }));
@@ -232,36 +240,36 @@ class ResultComponent extends React.Component {
     }
 
     this.setState({
-      loading: true,
+      loading: true
     });
     const origin = url.origin || url;
     const response = await fetch(`${process.env.BACKEND_URL}/content`, {
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         origin,
         device,
         connection,
-        country,
-      }),
+        country
+      })
     });
     if (response.ok) {
       const responseJSON = await response.json();
       this.setState({
         fcp: responseJSON.bam.fcp,
         onload: responseJSON.bam.onload,
-        loading: false,
+        loading: false
       });
       this.handleUpdateHumanCount(
         responseJSON.bam.fcp,
         responseJSON.bam.onload,
-        this.state.time,
+        this.state.time
       );
       if (responseJSON.bam.fcp === null) {
         toast("We don't have data for that particular website", {
-          position: toast.POSITION.BOTTOM_LEFT,
+          position: toast.POSITION.BOTTOM_LEFT
         });
       }
     } else {
@@ -270,10 +278,10 @@ class ResultComponent extends React.Component {
         onloadHumanCount: 0,
         fcpHumanCount: 0,
         loadingHumanCount: humanCount,
-        loading: false,
+        loading: false
       });
       toast("We don't have data for that particular website", {
-        position: toast.POSITION.BOTTOM_LEFT,
+        position: toast.POSITION.BOTTOM_LEFT
       });
     }
   }
@@ -283,7 +291,7 @@ class ResultComponent extends React.Component {
       this.setState({
         onloadHumanCount: 0,
         fcpHumanCount: 0,
-        loadingHumanCount: humanCount,
+        loadingHumanCount: humanCount
       });
       return;
     }
@@ -302,19 +310,19 @@ class ResultComponent extends React.Component {
       fcp_prob = fcp[time];
       fcpHumanCount = Math.max(
         0,
-        Math.floor((fcp_prob - onload_prob) * humanCount),
+        Math.floor((fcp_prob - onload_prob) * humanCount)
       );
     }
 
     const loadingHumanCount = Math.max(
       0,
-      Math.floor(humanCount - fcp_prob * humanCount),
+      Math.floor(humanCount - fcp_prob * humanCount)
     );
 
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
-      loadingHumanCount,
+      loadingHumanCount
     });
   }
 
@@ -323,14 +331,14 @@ class ResultComponent extends React.Component {
       suggestion.origin,
       this.state.device,
       this.state.connection,
-      this.state.country,
+      this.state.country
     );
   }
 
   async loadSuggestionsFromServer(value) {
     const urls = await this.handleGetOrigins(value);
     this.setState({
-      urlSuggestions: urls.options,
+      urlSuggestions: urls.options
     });
   }
 
@@ -340,7 +348,7 @@ class ResultComponent extends React.Component {
 
   onSuggestionsClearRequested() {
     this.setState({
-      urlSuggestions: [],
+      urlSuggestions: []
     });
   }
 
@@ -359,14 +367,14 @@ class ResultComponent extends React.Component {
     const inputProps = {
       placeholder: urlPlaceholder,
       value,
-      onFocus: (ev) => {
+      onFocus: ev => {
         ev.target.select();
       },
-      onChange: this.handleOnURLChange,
+      onChange: this.handleOnURLChange
     };
     const countries = countryList.map(country => ({
       value: country,
-      label: country,
+      label: country
     }));
 
     return (

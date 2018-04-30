@@ -5,27 +5,27 @@ function OnloadHumans(props) {
   if (typeof props.count !== "number") {
     return null;
   }
-  return Array
-    .from(Array(props.count).keys())
-    .map((item, i) => <Human key={`onload-${i}`} color="#153B58" />);
+  return Array.from(Array(props.count).keys()).map((item, i) => (
+    <Human key={`onload-${i}`} color="#153B58" />
+  ));
 }
 
 function FcpHumans(props) {
   if (typeof props.count !== "number") {
     return null;
   }
-  return Array
-    .from(Array(props.count).keys())
-    .map((item, i) => <Human key={`onload-${i}`} color="#5486AA" />);
+  return Array.from(Array(props.count).keys()).map((item, i) => (
+    <Human key={`onload-${i}`} color="#5486AA" />
+  ));
 }
 
 function LoadingHumans(props) {
   if (typeof props.count !== "number") {
     return null;
   }
-  return Array
-    .from(Array(props.count).keys())
-    .map((item, i) => <Human key={`onload-${i}`} color="#ffffff" />);
+  return Array.from(Array(props.count).keys()).map((item, i) => (
+    <Human key={`onload-${i}`} color="#ffffff" />
+  ));
 }
 
 class Visual extends React.Component {

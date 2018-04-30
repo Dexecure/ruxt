@@ -204,5 +204,5 @@ exports.countryList = [
   "Virgin Islands (US)",
   "Yemen",
   "Zambia",
-  "Zimbabwe",
+  "Zimbabwe"
 ];

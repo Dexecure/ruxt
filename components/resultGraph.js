@@ -22,33 +22,49 @@ class ResultGraph extends React.Component {
       fcpHumanCount: 0,
       loadingHumanCount: humanCount,
       onloadHumanCount: 0,
-      loading: false,
+      loading: false
     };
 
     this.handleOnURLChange = this.handleOnURLChange.bind(this);
     this.handleGetOrigins = this.handleGetOrigins.bind(this);
     this.handleUpdateHumanCount = this.handleUpdateHumanCount.bind(this);
     this.handleUpdateNumbers = this.handleUpdateNumbers.bind(this);
-    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    this.onUrlSuggestionsFetchRequested = this.onUrlSuggestionsFetchRequested.bind(
+      this
+    );
+    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(
+      this
+    );
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
-    this.debouncedLoadSuggestions = debounce(this.loadSuggestionsFromServer, 500);
+    this.debouncedLoadSuggestions = debounce(
+      this.loadSuggestionsFromServer,
+      500
+    );
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.url !== nextProps.url || this.props.device !== nextProps.device ||
-        this.props.connection !== nextProps.connection) {
-      this.handleUpdateNumbers(nextProps.url, nextProps.device, nextProps.connection);
+    if (
+      this.props.url !== nextProps.url ||
+      this.props.device !== nextProps.device ||
+      this.props.connection !== nextProps.connection
+    ) {
+      this.handleUpdateNumbers(
+        nextProps.url,
+        nextProps.device,
+        nextProps.connection
+      );
     }
     if (this.props.time !== nextProps.time) {
-      this.handleUpdateHumanCount(this.state.fcp, this.state.onload, nextProps.time);
+      this.handleUpdateHumanCount(
+        this.state.fcp,
+        this.state.onload,
+        nextProps.time
+      );
     }
   }
 
   renderUrlSuggestion(url) {
-    return (
-      <span>{url.origin}</span>
-    );
+    return <span>{url.origin}</span>;
   }
 
   handleUpdateHumanCount(fcp, onload, time) {
@@ -56,7 +72,7 @@ class ResultGraph extends React.Component {
       this.setState({
         onloadHumanCount: 0,
         fcpHumanCount: 0,
-        loadingHumanCount: humanCount,
+        loadingHumanCount: humanCount
       });
       return;
     }
@@ -73,15 +89,21 @@ class ResultGraph extends React.Component {
 
     if (fcp) {
       fcpProb = fcp[time];
-      fcpHumanCount = Math.max(0, Math.floor((fcpProb - onloadProb) * humanCount));
+      fcpHumanCount = Math.max(
+        0,
+        Math.floor((fcpProb - onloadProb) * humanCount)
+      );
     }
 
-    const loadingHumanCount = Math.max(0, Math.floor(humanCount - fcpProb * humanCount));
+    const loadingHumanCount = Math.max(
+      0,
+      Math.floor(humanCount - fcpProb * humanCount)
+    );
 
     this.setState({
       onloadHumanCount,
       fcpHumanCount,
-      loadingHumanCount,
+      loadingHumanCount
     });
   }
 
@@ -92,35 +114,39 @@ class ResultGraph extends React.Component {
         return;
       }
       this.setState({
-        loading: true,
+        loading: true
       });
       const origin = url.origin || url;
       const response = await fetch(`${process.env.BACKEND_URL}/content`, {
         method: "post",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           origin,
           device,
-          connection,
-        }),
+          connection
+        })
       });
       if (response.ok) {
         const responseJSON = await response.json();
         this.setState({
           fcp: responseJSON.bam.fcp,
           onload: responseJSON.bam.onload,
-          loading: false,
+          loading: false
         });
-        this.handleUpdateHumanCount(responseJSON.bam.fcp, responseJSON.bam.onload, this.props.time);
+        this.handleUpdateHumanCount(
+          responseJSON.bam.fcp,
+          responseJSON.bam.onload,
+          this.props.time
+        );
       } else {
         // probably origin doesn't exist
         this.setState({
           onloadHumanCount: 0,
           fcpHumanCount: 0,
           loadingHumanCount: humanCount,
-          loading: false,
+          loading: false
         });
       }
     }
@@ -129,7 +155,7 @@ class ResultGraph extends React.Component {
   async loadSuggestionsFromServer(value) {
     const urls = await this.handleGetOrigins(value);
     this.setState({
-      urlSuggestions: urls.options,
+      urlSuggestions: urls.options
     });
   }
 
@@ -143,7 +169,7 @@ class ResultGraph extends React.Component {
 
   onSuggestionsClearRequested() {
     this.setState({
-      urlSuggestions: [],
+      urlSuggestions: []
     });
   }
 
@@ -151,7 +177,7 @@ class ResultGraph extends React.Component {
     this.handleUpdateNumbers(
       suggestion.origin,
       this.props.device,
-      this.props.connection,
+      this.props.connection
     );
   }
 
@@ -162,11 +188,11 @@ class ResultGraph extends React.Component {
     return fetch(`${process.env.BACKEND_URL}/search`, {
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        origin: input,
-      }),
+        origin: input
+      })
     })
       .then(response => response.json())
       .then(json => ({ options: json }));
@@ -175,26 +201,27 @@ class ResultGraph extends React.Component {
   handleOnURLChange(event, { newValue }) {
     const originUrl = { newValue };
     this.setState({
-      url: originUrl.newValue,
+      url: originUrl.newValue
     });
 
     // update the url
     const { query } = Router;
     query[`url${this.props.id}`] = originUrl.newValue;
-    const newURL = `${window.location.pathname}?${qs.stringify(query, { encode: false })}`;
+    const newURL = `${window.location.pathname}?${qs.stringify(query, {
+      encode: false
+    })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
-
 
   render() {
     const inputProps = {
       placeholder: defaultUrl,
       value: this.props.url || this.state.url,
-      onFocus: (ev) => {
+      onFocus: ev => {
         ev.target.select();
       },
       id: this.props.id,
-      onChange: this.handleOnURLChange,
+      onChange: this.handleOnURLChange
     };
     return (
       <div className="URLInput__wrapper">
@@ -229,45 +256,46 @@ class ResultGraph extends React.Component {
             onload={this.state.onload}
           />
         </div>
-        <style jsx>{`
-          .URLCompare__wrapper {
-            border: 1px solid #ccc;
-            overflow: auto;
-          }
-          .result__wrapper {
-            margin-top: 3%;
-            max-height: 60%;
-          }
-          .URLInput__wrapper {
-            display: inline-block;
-            width: 47%;
-          }
-          .URLInput__wrapper:first-child {
-            float: left;
-            padding-right: 15px;
-            border-right: 1px solid #ccc;
-          }
-          @media all and (max-width: 1049px) {
-            .URLInput__wrapper {
-              width: 46%;
+        <style jsx>
+          {`
+            .URLCompare__wrapper {
+              border: 1px solid #ccc;
+              overflow: auto;
             }
-          }
-          @media all and (max-width: 800px) {
-            .URLInput__wrapper {
-              width: 45%;
+            .result__wrapper {
+              margin-top: 3%;
+              max-height: 60%;
             }
-          }
-          @media all and (max-width: 650px) {
             .URLInput__wrapper {
-              padding-left: 6px;
+              display: inline-block;
+              width: 47%;
             }
             .URLInput__wrapper:first-child {
-              float: none;
-              padding-right: 0;
-              border-right: none;
+              float: left;
+              padding-right: 15px;
+              border-right: 1px solid #ccc;
             }
-          }
-        `}
+            @media all and (max-width: 1049px) {
+              .URLInput__wrapper {
+                width: 46%;
+              }
+            }
+            @media all and (max-width: 800px) {
+              .URLInput__wrapper {
+                width: 45%;
+              }
+            }
+            @media all and (max-width: 650px) {
+              .URLInput__wrapper {
+                padding-left: 6px;
+              }
+              .URLInput__wrapper:first-child {
+                float: none;
+                padding-right: 0;
+                border-right: none;
+              }
+            }
+          `}
         </style>
       </div>
     );

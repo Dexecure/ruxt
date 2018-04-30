@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb",
+  "extends": ["airbnb", "plugin:prettier/recommended"],
   "env": {
     "browser": true,
     "node": true
@@ -7,6 +7,6 @@
   "rules": {
     "react/jsx-filename-extension": 0,
     "no-else-return": 0,
-    "quotes": ["error", "double"],
+    "no-console": 0
   }
 }

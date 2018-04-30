@@ -23,7 +23,7 @@ class CompareComponent extends React.Component {
       connection: devAndconAndDefault,
       country: countryList[0],
       time: 1,
-      checked: true,
+      checked: true
     };
     this.handleOnCountryChange = this.handleOnCountryChange.bind(this);
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
@@ -55,21 +55,21 @@ class CompareComponent extends React.Component {
 
   handleOnDeviceChange(selectedOption) {
     this.setState({
-      device: selectedOption.value,
+      device: selectedOption.value
     });
 
     // update the url
     const { query } = Router;
     query.device = selectedOption.value;
     const newURL = `${window.location.pathname}?${qs.stringify(query, {
-      encode: false,
+      encode: false
     })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnCountryChange(selectedOption) {
     this.setState({
-      country: selectedOption.value,
+      country: selectedOption.value
     });
 
     // update the url
@@ -77,21 +77,21 @@ class CompareComponent extends React.Component {
     query.country =
       selectedOption.value === "All countries" ? "all" : selectedOption.value;
     const newURL = `${window.location.pathname}?${qs.stringify(query, {
-      encode: false,
+      encode: false
     })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
 
   handleOnConnectionChange(selectedOption) {
     this.setState({
-      connection: selectedOption.value,
+      connection: selectedOption.value
     });
 
     // update the url
     const { query } = Router;
     query.connection = selectedOption.value;
     const newURL = `${window.location.pathname}?${qs.stringify(query, {
-      encode: false,
+      encode: false
     })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -99,7 +99,7 @@ class CompareComponent extends React.Component {
   handleOnTimeChange(selectedOption) {
     if (typeof selectedOption === "number") {
       this.setState({
-        time: selectedOption,
+        time: selectedOption
       });
     }
 
@@ -107,7 +107,7 @@ class CompareComponent extends React.Component {
     const { query } = Router;
     query.time = selectedOption;
     const newURL = `${window.location.pathname}?${qs.stringify(query, {
-      encode: false,
+      encode: false
     })}`;
     Router.push(newURL, newURL, { shallow: true });
   }
@@ -120,7 +120,7 @@ class CompareComponent extends React.Component {
     const formatsecond = value => `${value} s`;
     const countries = countryList.map(country => ({
       value: country,
-      label: country,
+      label: country
     }));
     return (
       <div>

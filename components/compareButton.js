@@ -6,14 +6,15 @@ class CompareButton extends React.Component {
       <div className="compare--button">
         <label className="compare--label"> Compare </label>
         <label htmlFor="togBtn" className="switch">
-          <input onClick={this.props.handleClick} defaultChecked={this.props.checked} type="checkbox" id="togBtn" />
+          <input
+            onClick={this.props.handleClick}
+            defaultChecked={this.props.checked}
+            type="checkbox"
+            id="togBtn"
+          />
           <div className="slider round">
-            <span className="on">
-              On
-            </span>
-            <span className="off">
-              Off
-            </span>
+            <span className="on">On</span>
+            <span className="off">Off</span>
           </div>
         </label>
       </div>
