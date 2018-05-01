@@ -307,7 +307,7 @@ const Meta = () => (
             right: 36%;
           }
           input:checked + .slider:before {
-            left: 18px;
+            left: 29px;
           }
         }
         a {
