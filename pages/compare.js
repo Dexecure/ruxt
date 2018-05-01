@@ -21,7 +21,7 @@ class CompareComponent extends React.Component {
       url2: null,
       device: devAndconAndDefault,
       connection: devAndconAndDefault,
-      country: countryList[0],
+      country: devAndconAndDefault,
       time: 1,
       checked: true
     };
@@ -74,8 +74,7 @@ class CompareComponent extends React.Component {
 
     // update the url
     const { query } = Router;
-    query.country =
-      selectedOption.value === "All countries" ? "all" : selectedOption.value;
+    query.country = selectedOption.value;
     const newURL = `${window.location.pathname}?${qs.stringify(query, {
       encode: false
     })}`;
@@ -118,10 +117,6 @@ class CompareComponent extends React.Component {
 
   render() {
     const formatsecond = value => `${value} s`;
-    const countries = countryList.map(country => ({
-      value: country,
-      label: country
-    }));
     return (
       <div>
         <Meta />
@@ -180,7 +175,7 @@ class CompareComponent extends React.Component {
                 value={this.state.country}
                 onChange={this.handleOnCountryChange}
                 clearable={false}
-                options={countries}
+                options={countryList}
                 searchable
               />
             </div>

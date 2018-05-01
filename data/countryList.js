@@ -1,5 +1,4 @@
-exports.countryList = [
-  "All countries",
+const countries = [
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -206,3 +205,15 @@ exports.countryList = [
   "Zambia",
   "Zimbabwe"
 ];
+
+const countryList = countries.map(country => ({
+  value: country,
+  label: country
+}));
+
+countryList.unshift({
+  value: "all",
+  label: "All countries"
+});
+
+exports.countryList = countryList;

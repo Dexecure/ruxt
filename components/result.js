@@ -42,7 +42,7 @@ class ResultComponent extends React.Component {
       loadingHumanCount: humanCount,
       onloadHumanCount: 0,
       loading: false,
-      country: countryList[0]
+      country: devAndconAndconuDefault
     };
 
     this.handleOnURLChange = this.handleOnURLChange.bind(this);
@@ -77,8 +77,7 @@ class ResultComponent extends React.Component {
           url: url || defaultUrl,
           device: device || devAndconAndconuDefault,
           connection: connection || devAndconAndconuDefault,
-          country:
-            country === "All countries" ? devAndconAndconuDefault : country
+          country: country || devAndconAndconuDefault
         },
         { encode: false }
       )}`;
@@ -87,7 +86,7 @@ class ResultComponent extends React.Component {
         url,
         device,
         connection,
-        country: country === "all" ? countryList[0] : country
+        country
       });
       this.handleUpdateNumbers(url, device, connection, country);
     }
@@ -106,7 +105,7 @@ class ResultComponent extends React.Component {
         url: originUrl.newValue,
         device: device || devAndconAndconuDefault,
         connection: connection || devAndconAndconuDefault,
-        country: country === "All countries" ? devAndconAndconuDefault : country
+        country: country || devAndconAndconuDefault
       },
       { encode: false }
     )}`;
@@ -374,10 +373,6 @@ class ResultComponent extends React.Component {
       },
       onChange: this.handleOnURLChange
     };
-    const countries = countryList.map(country => ({
-      value: country,
-      label: country
-    }));
 
     return (
       <div>
@@ -405,7 +400,7 @@ class ResultComponent extends React.Component {
                 value={this.state.country}
                 onChange={this.handleOnCountryChange}
                 clearable={false}
-                options={countries}
+                options={countryList}
                 searchable
               />
             </div>
