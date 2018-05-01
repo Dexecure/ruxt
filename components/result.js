@@ -270,7 +270,7 @@ class ResultComponent extends React.Component {
         this.state.time
       );
       if (responseJSON.bam.fcp === null) {
-        toast("We don't have data for that particular website", {
+        toast("We don't have data for that particular configuration", {
           position: toast.POSITION.BOTTOM_LEFT
         });
       }
@@ -282,7 +282,7 @@ class ResultComponent extends React.Component {
         loadingHumanCount: humanCount,
         loading: false
       });
-      toast("We don't have data for that particular website", {
+      toast("We don't have data for that particular configuration", {
         position: toast.POSITION.BOTTOM_LEFT
       });
     }
