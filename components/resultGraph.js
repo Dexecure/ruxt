@@ -287,7 +287,7 @@ class ResultGraph extends React.Component {
               padding-right: 15px;
               border-right: 1px solid #ccc;
             }
-            @media all and (max-width: 1049px) and (min-width: 750px) {
+            @media all and (min-width: 770px) {
               .URLInput__wrapper {
                 width: 46%;
               }
