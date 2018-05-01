@@ -239,7 +239,7 @@ const Meta = () => (
           left: 0;
           right: 0;
           bottom: 0;
-          background-color: #8bc34a;
+          background-color: #b2a22d;
           -webkit-transition: 0.4s;
           transition: 0.4s;
         }
@@ -258,7 +258,7 @@ const Meta = () => (
           left: 1px;
         }
         input:checked + .slider {
-          background-color: #b2a22d;
+          background-color: #8bc34a;
         }
         input:focus + .slider {
           box-shadow: 0 0 1px #2196f3;
