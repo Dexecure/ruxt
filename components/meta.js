@@ -15,7 +15,7 @@ const Meta = () => (
       />
       <meta
         property="og:description"
-        content="User experience results from more than 3,237,526 million websites accessed from Google Chrome."
+        content="User experience results from more than 3,237,526 websites accessed from Google Chrome."
       />
       <meta property="og:type" content="website" />
       <meta property="og:locale" content="en_US" />
