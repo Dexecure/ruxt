@@ -1,11 +1,9 @@
 import ReactGA from "react-ga";
-
-const dev = process.env.NODE_ENV !== "production";
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
 
 export const initGA = () => {
-  ReactGA.initialize(process.env.GA_ID, {
-    debug: dev
-  });
+  ReactGA.initialize(publicRuntimeConfig.ga_id);
 };
 
 export const logPageView = (
@@ -14,5 +12,3 @@ export const logPageView = (
   ReactGA.set({ page: pageName });
   ReactGA.pageview(pageName);
 };
-
-export default undefined;
