@@ -37,12 +37,6 @@ const Meta = () => (
         sizes="16x16"
       />
       <link rel="stylesheet" href="../static/css/main.css" />
-      {/* <link
-        href="http://cdn-images.mailchimp.com/embedcode/classic-10_7.css"
-        rel="stylesheet"
-        type="text/css"
-      /> */}
-      <script src="https://code.jquery.com/jquery-2.1.3.min.js" />
       <title>Real User Experience Test (RUXtest) | Dexecure</title>
     </Head>
     <style jsx global>

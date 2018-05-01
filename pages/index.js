@@ -5,7 +5,6 @@ import { logPageView, initGA } from "../utils/analytics";
 import ResultComponent from "../components/result";
 import Header from "../components/header";
 import CompareComponent from "./compare";
-import SubscribeModal from "../components/subscribeModal";
 import CompareButton from "../components/compareButton";
 import Footer from "../components/footer";
 
@@ -13,13 +12,7 @@ class RUXtestApp extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      showSubscribeModal: false
-    };
-
     this.handleClick = this.handleClick.bind(this);
-    this.handleCloseSubscribeModal = this.handleCloseSubscribeModal.bind(this);
-    this.handleOpenSubscribeModal = this.handleOpenSubscribeModal.bind(this);
   }
 
   componentDidMount() {
@@ -28,27 +21,11 @@ class RUXtestApp extends React.Component {
       window.GA_INITIALIZED = true;
     }
     logPageView();
-    setTimeout(this.handleOpenSubscribeModal, 5000);
+    Router.prefetch("/compare");
   }
 
   handleClick() {
     Router.push("/compare");
-  }
-
-  handleOpenSubscribeModal() {
-    return; //disabling for now
-    if (typeof window !== "undefined") {
-      const script = document.createElement("script");
-      script.src =
-        "http://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-    this.setState({ showSubscribeModal: true });
-  }
-
-  handleCloseSubscribeModal() {
-    this.setState({ showSubscribeModal: false });
   }
 
   render() {
@@ -94,10 +71,6 @@ class RUXtestApp extends React.Component {
             />
           </svg>
         </div>
-        {/* <SubscribeModal
-          isOpen={this.state.showSubscribeModal}
-          handleCloseModal={this.handleCloseSubscribeModal}
-        /> */}
         <ResultComponent />
         <Footer />
       </div>
