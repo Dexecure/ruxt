@@ -56,7 +56,7 @@ class RUXtestApp extends React.Component {
       <div>
         <Meta />
         <Header />
-        <CompareButton handleClick={this.handleClick} />
+        <CompareButton handleClick={this.handleClick} checked={false} />
         <div className="svg-background">
           <svg
             xmlns="http://www.w3.org/2000/svg"

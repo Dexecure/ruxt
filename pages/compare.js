@@ -24,8 +24,7 @@ class CompareComponent extends React.Component {
       device: devAndconAndDefault,
       connection: devAndconAndDefault,
       country: devAndconAndDefault,
-      time: 1,
-      checked: true
+      time: 1
     };
     this.handleOnCountryChange = this.handleOnCountryChange.bind(this);
     this.handleOnDeviceChange = this.handleOnDeviceChange.bind(this);
@@ -123,10 +122,7 @@ class CompareComponent extends React.Component {
       <div>
         <Meta />
         <Header />
-        <CompareButton
-          handleClick={this.handleToggleClick}
-          checked={this.state.checked}
-        />
+        <CompareButton handleClick={this.handleToggleClick} checked />
         <div className="svg-background">
           <svg
             xmlns="http://www.w3.org/2000/svg"
