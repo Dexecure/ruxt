@@ -276,23 +276,18 @@ class ResultGraph extends React.Component {
             }
             .URLInput__wrapper {
               display: inline-block;
-              width: 47%;
             }
             .URLInput__wrapper:first-child {
               float: left;
               padding-right: 15px;
               border-right: 1px solid #ccc;
             }
-            @media all and (max-width: 1049px) {
+            @media all and (max-width: 1049px) and (min-width: 750px) {
               .URLInput__wrapper {
                 width: 46%;
               }
             }
-            @media all and (max-width: 800px) {
-              .URLInput__wrapper {
-                width: 45%;
-              }
-            }
+
             @media all and (max-width: 650px) {
               .URLInput__wrapper {
                 padding-left: 6px;
