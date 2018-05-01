@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import { style, toast } from "react-toastify";
 import { countryList } from "../data/countryList";
 import { deviceList, connectionList } from "../data/devAndConList";
+import getConfig from "next/config";
 
 style({
   colorDefault: "#153B58",
@@ -21,6 +22,7 @@ style({
   width: "500px"
 });
 
+const { publicRuntimeConfig } = getConfig();
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
 const devAndconAndconuDefault = "all";
@@ -215,7 +217,7 @@ class ResultComponent extends React.Component {
     if (!input) {
       return Promise.resolve({ options: [] });
     }
-    return fetch(`${process.env.BACKEND_URL}/search`, {
+    return fetch(`${publicRuntimeConfig.backend_url}/search`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"
@@ -243,7 +245,7 @@ class ResultComponent extends React.Component {
       loading: true
     });
     const origin = url.origin || url;
-    const response = await fetch(`${process.env.BACKEND_URL}/content`, {
+    const response = await fetch(`${publicRuntimeConfig.backend_url}/content`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"

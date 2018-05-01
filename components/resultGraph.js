@@ -6,7 +6,9 @@ import Autosuggest from "react-autosuggest";
 import { PulseLoader } from "react-spinners";
 import Visual from "../components/visual";
 import ResultScore from "./resultScore";
+import getConfig from "next/config";
 
+const { publicRuntimeConfig } = getConfig();
 const humanCount = 1000;
 const defaultUrl = "https://google.com";
 
@@ -123,18 +125,21 @@ class ResultGraph extends React.Component {
         loading: true
       });
       const origin = url.origin || url;
-      const response = await fetch(`${process.env.BACKEND_URL}/content`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          origin,
-          device,
-          connection,
-          country
-        })
-      });
+      const response = await fetch(
+        `${publicRuntimeConfig.backend_url}/content`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            origin,
+            device,
+            connection,
+            country
+          })
+        }
+      );
       if (response.ok) {
         const responseJSON = await response.json();
         this.setState({
@@ -193,7 +198,7 @@ class ResultGraph extends React.Component {
     if (!input) {
       return Promise.resolve({ options: [] });
     }
-    return fetch(`${process.env.BACKEND_URL}/search`, {
+    return fetch(`${publicRuntimeConfig.backend_url}/search`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"
