@@ -8,6 +8,8 @@ import Explanation from "../components/explanation";
 import ResultGraph from "../components/resultGraph";
 import Header from "../components/header";
 import CompareButton from "../components/compareButton";
+import Footer from "../components/footer";
+
 import { countryList } from "../data/countryList";
 import { deviceList, connectionList } from "../data/devAndConList";
 
@@ -165,7 +167,7 @@ class CompareComponent extends React.Component {
         <div className="heading">
           <h1>Real User Experience Test (rUXt) - Comparison</h1>
           <h2>
-            Compare among 3,237,526 websites accessed by Google Chrome Users
+            Compare between 3,237,526 websites accessed by Google Chrome Users
           </h2>
         </div>
         <div className="container">
@@ -230,6 +232,7 @@ class CompareComponent extends React.Component {
           </div>
           <Explanation />
         </div>
+        <Footer />
         <style jsx>
           {`
             .URLCompare__wrapper {

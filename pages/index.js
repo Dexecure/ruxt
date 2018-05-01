@@ -1,6 +1,5 @@
 import React from "react";
 import Router from "next/router";
-import Typekit from "react-typekit";
 import Meta from "../components/meta";
 import { logPageView, initGA } from "../utils/analytics";
 import ResultComponent from "../components/result";
@@ -8,13 +7,13 @@ import Header from "../components/header";
 import CompareComponent from "./compare";
 import SubscribeModal from "../components/subscribeModal";
 import CompareButton from "../components/compareButton";
+import Footer from "../components/footer";
 
 class RUXtestApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      checked: false,
       showSubscribeModal: false
     };
 
@@ -57,10 +56,7 @@ class RUXtestApp extends React.Component {
       <div>
         <Meta />
         <Header />
-        <CompareButton
-          handleClick={this.handleClick}
-          checked={this.state.checked}
-        />
+        <CompareButton handleClick={this.handleClick} />
         <div className="svg-background">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -102,23 +98,8 @@ class RUXtestApp extends React.Component {
           isOpen={this.state.showSubscribeModal}
           handleCloseModal={this.handleCloseSubscribeModal}
         /> */}
-        {this.state.checked ? (
-          <div className="outer l">
-            <CompareComponent />
-          </div>
-        ) : (
-          <ResultComponent />
-        )}
-        <div className="footer--content l">
-          <p>
-            Data from{" "}
-            <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">
-              CrUX
-            </a>. Made with <span style={{ color: "#db3340" }}>❤</span> by{" "}
-            <a href="https://dexecure.com">Dexecure</a>.
-          </p>
-        </div>
-        <Typekit kitId="rgu6gkq" />
+        <ResultComponent />
+        <Footer />
       </div>
     );
   }
