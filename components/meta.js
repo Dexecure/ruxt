@@ -38,6 +38,14 @@ const Meta = () => (
       />
       <link rel="stylesheet" href="../static/css/main.css" />
       <title>Real User Experience Test (RUXtest) | Dexecure</title>
+      {/* Hubspot */}
+      <script
+        type="text/javascript"
+        id="hs-script-loader"
+        async
+        defer
+        src="//js.hs-scripts.com/3845998.js"
+      />
     </Head>
     <style jsx global>
       {`
