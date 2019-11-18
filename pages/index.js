@@ -1,12 +1,11 @@
-import React from "react";
 import Router from "next/router";
-import Meta from "../components/meta";
-import { logPageView, initGA } from "../utils/analytics";
-import ResultComponent from "../components/result";
-import Header from "../components/header";
-import CompareComponent from "./compare";
+import React from "react";
 import CompareButton from "../components/compareButton";
 import Footer from "../components/footer";
+import Header from "../components/header";
+import Meta from "../components/meta";
+import ResultComponent from "../components/result";
+import { initGA, logPageView } from "../utils/analytics";
 
 class RUXtestApp extends React.Component {
   constructor(props) {

@@ -1,26 +1,20 @@
-import React from "react";
-import qs from "qs";
-import Router from "next/router";
-import Meta from "./meta";
-import Autosuggest from "react-autosuggest";
-import Select from "react-select";
-import Slider from "react-rangeslider";
-import { debounce } from "underscore";
-import { PulseLoader } from "react-spinners";
-import Visual from "../components/visual";
-import Explanation from "./explanation";
-import ResultScore from "./resultScore";
-import { ToastContainer } from "react-toastify";
-import { style, toast } from "react-toastify";
-import { countryList } from "../data/countryList";
-import { deviceList, connectionList } from "../data/devAndConList";
 import getConfig from "next/config";
-
-style({
-  colorDefault: "#153B58",
-  colorProgressDefault: "#db3340",
-  width: "500px"
-});
+import Router from "next/router";
+import qs from "qs";
+import React from "react";
+import Autosuggest from "react-autosuggest";
+import Slider from "react-rangeslider";
+import Select from "react-select";
+import { PulseLoader } from "react-spinners";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { debounce } from "underscore";
+import Visual from "../components/visual";
+import { countryList } from "../data/countryList";
+import { connectionList, deviceList } from "../data/devAndConList";
+import Explanation from "./explanation";
+import Meta from "./meta";
+import ResultScore from "./resultScore";
 
 const { publicRuntimeConfig } = getConfig();
 const humanCount = 1000;
@@ -377,7 +371,14 @@ class ResultComponent extends React.Component {
     return (
       <div>
         <Meta />
-        <ToastContainer closeButton={false} />
+        <ToastContainer
+          closeButton={false}
+          style={{
+            colorDefault: "#153B58",
+            colorProgressDefault: "#db3340",
+            width: "500px"
+          }}
+        />
         <div className="heading">
           <h1>Real User Experience Test (rUXt)</h1>
           <h2>

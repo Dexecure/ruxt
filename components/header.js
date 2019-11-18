@@ -9,7 +9,7 @@ class Header extends React.Component {
             <div className="header--left">
               <a className="header--logo" href="/">
                 <img
-                  src="static/full-logo-white.png"
+                  src="/static/full-logo-white.png"
                   alt="RUXtest | Dexecure"
                 />
               </a>

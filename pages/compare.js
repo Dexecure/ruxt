@@ -1,17 +1,16 @@
-import React from "react";
-import qs from "qs";
 import Router from "next/router";
-import Select from "react-select";
+import qs from "qs";
+import React from "react";
 import Slider from "react-rangeslider";
-import Meta from "../components/meta";
-import Explanation from "../components/explanation";
-import ResultGraph from "../components/resultGraph";
-import Header from "../components/header";
+import Select from "react-select";
 import CompareButton from "../components/compareButton";
+import Explanation from "../components/explanation";
 import Footer from "../components/footer";
-
+import Header from "../components/header";
+import Meta from "../components/meta";
+import ResultGraph from "../components/resultGraph";
 import { countryList } from "../data/countryList";
-import { deviceList, connectionList } from "../data/devAndConList";
+import { connectionList, deviceList } from "../data/devAndConList";
 
 const devAndconAndDefault = "all";
 

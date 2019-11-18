@@ -21,22 +21,22 @@ const Meta = () => (
       <meta property="og:locale" content="en_US" />
       <meta
         property="og:image"
-        content="../static/dexecure-facebook-visual.png"
+        content="/static/dexecure-facebook-visual.png"
       />
 
       <link
         rel="icon"
         type="image/png"
-        href="../static/favicon-32x32.png"
+        href="/static/favicon-32x32.png"
         sizes="32x32"
       />
       <link
         rel="icon"
         type="image/png"
-        href="../static/favicon-16x16.png"
+        href="/static/favicon-16x16.png"
         sizes="16x16"
       />
-      <link rel="stylesheet" href="../static/css/main.css" />
+      <link rel="stylesheet" href="/static/css/main.css" />
       <title>Real User Experience Test (RUXtest) | Dexecure</title>
       {/* Hubspot */}
       <script

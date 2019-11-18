@@ -9,7 +9,8 @@ class Footer extends React.Component {
           Data from{" "}
           <a href="https://developers.google.com/web/tools/chrome-user-experience-report/">
             CrUX
-          </a>. Made with <span style={{ color: "#db3340" }}>❤</span> by{" "}
+          </a>
+          . Made with <span style={{ color: "#db3340" }}>❤</span> by{" "}
           <a href="https://dexecure.com">Dexecure</a>.
         </p>
         <Typekit kitId="rgu6gkq" />
